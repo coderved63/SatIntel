@@ -8,25 +8,45 @@ export default function LayerControl({ layers, onToggle }) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="bg-slate-800/90 backdrop-blur-sm border border-slate-600 rounded-lg p-2 hover:bg-slate-700 transition-colors"
+        className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl px-3 py-2 text-sm text-white/80 hover:bg-slate-800/90 hover:border-white/20 transition-all shadow-lg"
       >
-        <Layers className="h-5 w-5 text-slate-300" />
+        <Layers className="h-4 w-4" />
+        <span className="font-medium text-xs">Data Layers</span>
       </button>
 
       {open && (
-        <div className="absolute top-full right-0 mt-2 bg-slate-800/95 backdrop-blur-sm border border-slate-600 rounded-lg p-3 min-w-[220px] shadow-xl">
-          <p className="text-xs font-medium text-slate-400 uppercase mb-2">Map Layers</p>
-          <div className="space-y-2">
+        <div className="absolute top-full right-0 mt-2 bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-3 min-w-[220px]">
+          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-wider mb-2 px-1">Satellite Layers</p>
+          <div className="space-y-0.5">
             {layers.map(layer => (
-              <label key={layer.id} className="flex items-center gap-3 cursor-pointer hover:bg-slate-700/50 rounded px-2 py-1.5">
-                <input
-                  type="checkbox"
-                  checked={layer.enabled}
-                  onChange={() => onToggle(layer.id)}
-                  className="rounded border-slate-500"
+              <label
+                key={layer.id}
+                className={`flex items-center gap-3 cursor-pointer rounded-xl px-2.5 py-2 transition-all ${
+                  layer.enabled ? 'bg-white/5' : 'hover:bg-white/[0.03]'
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full transition-all ${layer.enabled ? 'scale-125 shadow-lg' : 'opacity-40'}`}
+                  style={{
+                    backgroundColor: layer.color,
+                    boxShadow: layer.enabled ? `0 0 8px ${layer.color}60` : 'none',
+                  }}
                 />
-                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: layer.color }} />
-                <span className="text-sm text-slate-300">{layer.label}</span>
+                <span className={`text-sm flex-1 transition-colors ${
+                  layer.enabled ? 'text-white/90 font-medium' : 'text-white/40'
+                }`}>
+                  {layer.label}
+                </span>
+                <span
+                  className={`w-7 h-4 rounded-full transition-colors relative cursor-pointer ${
+                    layer.enabled ? 'bg-cyan-500' : 'bg-white/10'
+                  }`}
+                  onClick={(e) => { e.preventDefault(); onToggle(layer.id); }}
+                >
+                  <span className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow-sm transition-transform ${
+                    layer.enabled ? 'translate-x-3.5' : 'translate-x-0.5'
+                  }`} />
+                </span>
               </label>
             ))}
           </div>
