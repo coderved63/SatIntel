@@ -7,7 +7,8 @@ import AnomalyList from '../components/analytics/AnomalyList';
 import TrendChart from '../components/analytics/TrendChart';
 import HotspotMap from '../components/analytics/HotspotMap';
 import { analyticsService } from '../services/analyticsService';
-import { AlertTriangle, TrendingUp, MapPin } from 'lucide-react';
+import SpecializedAnalysis from '../components/analytics/SpecializedAnalysis';
+import { AlertTriangle, TrendingUp, MapPin, Layers } from 'lucide-react';
 import { useCity } from '../context/CityContext';
 
 const PARAMETERS = [
@@ -52,6 +53,7 @@ export default function AnalyticsPage() {
     { id: 'anomalies', label: 'Anomalies', icon: AlertTriangle, count: anomalies?.anomaly_count },
     { id: 'trends', label: 'Trends', icon: TrendingUp },
     { id: 'hotspots', label: 'Hotspots', icon: MapPin, count: hotspots?.cluster_count },
+    { id: 'specialized', label: 'Domain Analysis', icon: Layers },
   ];
 
   return (
@@ -107,6 +109,7 @@ export default function AnalyticsPage() {
             {activeTab === 'anomalies' && <AnomalyList data={anomalies} />}
             {activeTab === 'trends' && <TrendChart data={trends} />}
             {activeTab === 'hotspots' && <HotspotMap data={hotspots} />}
+            {activeTab === 'specialized' && <SpecializedAnalysis />}
           </div>
         )}
       </div>

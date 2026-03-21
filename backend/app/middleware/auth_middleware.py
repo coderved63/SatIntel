@@ -11,7 +11,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         email = payload.get("email")
         if email is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-        user = get_user_by_email(email)
+        user = await get_user_by_email(email)
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
         return {"id": user["id"], "name": user["name"], "email": user["email"]}

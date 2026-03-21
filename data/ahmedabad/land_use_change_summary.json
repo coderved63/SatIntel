@@ -1,0 +1,17 @@
+{
+  "year_from": 2020,
+  "year_to": 2024,
+  "total_cells": 198,
+  "water_2020_pct": 6.1,
+  "water_2024_pct": 6.1,
+  "water_change_pct": 0.0,
+  "urban_2020_pct": 25.8,
+  "urban_2024_pct": 57.1,
+  "urban_change_pct": 31.3,
+  "sparse_vegetation_2020_pct": 34.8,
+  "sparse_vegetation_2024_pct": 22.2,
+  "sparse_vegetation_change_pct": -12.6,
+  "dense_vegetation_2020_pct": 33.3,
+  "dense_vegetation_2024_pct": 14.6,
+  "dense_vegetation_change_pct": -18.7
+}
