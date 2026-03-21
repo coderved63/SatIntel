@@ -325,6 +325,8 @@ export default function ResearchPage() {
           }
         }}
         getCursor={() => 'crosshair'}
+        useDevicePixels={2}
+        onError={(error) => console.warn('DeckGL:', error.message)}
         getTooltip={({ object }) => {
           if (!object || object.value === undefined) return null;
           return {

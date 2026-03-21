@@ -1,23 +1,41 @@
 import Card from '../common/Card';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function formatSmartLabel(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 2) return dateStr;
+  const year = parts[0];
+  const month = parseInt(parts[1], 10);
+  const monthName = MONTH_NAMES[month - 1] || '';
+  if (month === 1) return `${monthName} '${year.slice(2)}`;
+  return monthName;
+}
+
+function formatTooltipDate(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return dateStr;
+  const month = MONTH_NAMES[parseInt(parts[1], 10) - 1] || parts[1];
+  return `${parts[2]} ${month} ${parts[0]}`;
+}
 
 export default function TrendChart({ data }) {
   if (!data) return null;
 
   const { historical = {}, forecast = {}, trend_direction, parameter, model } = data;
 
-  // Combine historical + forecast for chart
   const historicalEntries = Object.entries(historical).map(([date, value]) => ({
-    date: date.substring(5),
-    fullDate: date,
+    date,
     value: Number(value),
     type: 'historical',
   }));
 
   const forecastEntries = Object.entries(forecast).map(([date, value]) => ({
-    date: date.substring(5),
-    fullDate: date,
+    date,
     forecast: Number(value),
     type: 'forecast',
   }));
@@ -29,6 +47,7 @@ export default function TrendChart({ data }) {
   }
 
   const chartData = [...historicalEntries, ...forecastEntries];
+  const tickInterval = Math.max(1, Math.floor(chartData.length / 12));
 
   const TrendIcon = trend_direction === 'increasing' ? TrendingUp : TrendingDown;
   const trendColor = trend_direction === 'increasing' ? 'text-red-400' : 'text-emerald-400';
@@ -47,16 +66,30 @@ export default function TrendChart({ data }) {
       </div>
 
       <ResponsiveContainer width="100%" height={350}>
-        <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-          <XAxis dataKey="date" tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} interval="preserveStartEnd" />
-          <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={50} />
-          <Tooltip
-            contentStyle={{ backgroundColor: 'rgba(17,24,39,0.95)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', backdropFilter: 'blur(12px)' }}
-            labelStyle={{ color: '#94A3B8' }}
+        <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tick={{ fill: '#94A3B8', fontSize: 10 }}
+            tickLine={false}
+            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            interval={tickInterval}
+            tickFormatter={formatSmartLabel}
           />
-          <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} name="Historical" />
-          <Line type="monotone" dataKey="forecast" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Forecast" />
+          <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={50} tickCount={5} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: 'rgba(17,24,39,0.95)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '8px',
+              padding: '8px 12px',
+              backdropFilter: 'blur(12px)',
+            }}
+            labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
+            labelFormatter={formatTooltipDate}
+          />
+          <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#3B82F6', stroke: '#1E293B', strokeWidth: 2 }} name="Historical" />
+          <Line type="monotone" dataKey="forecast" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 5" dot={false} activeDot={{ r: 4, fill: '#F59E0B', stroke: '#1E293B', strokeWidth: 2 }} name="Forecast" />
         </LineChart>
       </ResponsiveContainer>
 

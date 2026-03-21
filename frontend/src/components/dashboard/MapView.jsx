@@ -411,6 +411,9 @@ export default function MapView({ layers = [], city }) {
         layers={deckLayers}
         getTooltip={getTooltip}
         effects={showAtmosphere ? [] : []}
+        useDevicePixels={2}
+        onError={(error) => console.warn('DeckGL:', error.message)}
+        _animate={false}
       >
         <Map
           mapStyle={currentStyle.url}

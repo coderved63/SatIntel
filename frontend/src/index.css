@@ -1,4 +1,23 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @variant dark (&:where(.dark, .dark *));
+
+/* ── Base ──────────────────────────────────────────────── */
+* { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+code, .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+html { background: #060A13; }
+body { background: #060A13; color: rgba(255,255,255,0.9); }
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Selection ─────────────────────────────────────────── */
+::selection { background: rgba(6,182,212,0.2); color: #fff; }
+
+/* ── Focus ─────────────────────────────────────────────── */
+*:focus-visible { outline: 1px solid rgba(6,182,212,0.4); outline-offset: 2px; }

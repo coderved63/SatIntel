@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import Card from '../components/common/Card';
 import Loader from '../components/common/Loader';
-import Button from '../components/common/Button';
 import AnomalyList from '../components/analytics/AnomalyList';
 import TrendChart from '../components/analytics/TrendChart';
 import HotspotMap from '../components/analytics/HotspotMap';
@@ -12,10 +11,17 @@ import { AlertTriangle, TrendingUp, MapPin, Layers } from 'lucide-react';
 import { useCity } from '../context/CityContext';
 
 const PARAMETERS = [
-  { id: 'LST', label: 'Land Surface Temperature', color: '#EF4444' },
-  { id: 'NDVI', label: 'Vegetation Index', color: '#10B981' },
-  { id: 'NO2', label: 'Nitrogen Dioxide', color: '#8B5CF6' },
+  { id: 'LST', label: 'Temperature', color: '#EF4444' },
+  { id: 'NDVI', label: 'Vegetation', color: '#10B981' },
+  { id: 'NO2', label: 'NO₂', color: '#8B5CF6' },
   { id: 'SOIL_MOISTURE', label: 'Soil Moisture', color: '#3B82F6' },
+];
+
+const TABS = [
+  { id: 'anomalies', label: 'Anomalies', icon: AlertTriangle },
+  { id: 'trends', label: 'Trends', icon: TrendingUp },
+  { id: 'hotspots', label: 'Hotspots', icon: MapPin },
+  { id: 'specialized', label: 'Domain Analysis', icon: Layers },
 ];
 
 export default function AnalyticsPage() {
@@ -49,56 +55,64 @@ export default function AnalyticsPage() {
     }
   };
 
-  const tabs = [
-    { id: 'anomalies', label: 'Anomalies', icon: AlertTriangle, count: anomalies?.anomaly_count },
-    { id: 'trends', label: 'Trends', icon: TrendingUp },
-    { id: 'hotspots', label: 'Hotspots', icon: MapPin, count: hotspots?.cluster_count },
-    { id: 'specialized', label: 'Domain Analysis', icon: Layers },
-  ];
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-white">ML Analytics</h1>
-          <p className="text-slate-400 text-sm mt-1">Anomaly detection, trend prediction, and hotspot clustering</p>
-        </div>
-
-        {/* Parameter Selector */}
-        <div className="flex gap-2 flex-wrap">
-          {PARAMETERS.map(p => (
-            <button
-              key={p.id}
-              onClick={() => setActiveParam(p.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeParam === p.id
-                  ? 'bg-cyan-600 text-white'
-                  : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: p.color }} />
-              {p.label}
-            </button>
-          ))}
+        {/* Header + Parameter Selector inline */}
+        <div className="flex items-end justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">ML Analytics</h1>
+            <p className="text-white/30 text-sm mt-1">Anomaly detection, trend prediction, and hotspot clustering</p>
+          </div>
+          <div className="flex gap-1.5">
+            {PARAMETERS.map(p => (
+              <button
+                key={p.id}
+                onClick={() => setActiveParam(p.id)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                style={{
+                  background: activeParam === p.id ? `${p.color}15` : 'transparent',
+                  color: activeParam === p.id ? p.color : 'rgba(255,255,255,0.3)',
+                  border: activeParam === p.id ? `1px solid ${p.color}30` : '1px solid transparent',
+                }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color }} />
+                {p.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-slate-800/50 p-1 rounded-lg w-fit">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                activeTab === tab.id ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <tab.icon className="h-4 w-4" />
-              {tab.label}
-              {tab.count != null && (
-                <span className="bg-cyan-500/20 text-cyan-400 text-xs px-2 py-0.5 rounded-full">{tab.count}</span>
-              )}
-            </button>
-          ))}
+        <div className="flex gap-1" style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '3px', border: '1px solid rgba(255,255,255,0.04)' }}>
+          {TABS.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            const count = tab.id === 'anomalies' ? anomalies?.anomaly_count
+              : tab.id === 'hotspots' ? hotspots?.cluster_count : null;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="flex items-center gap-2 px-4 py-2 rounded-[10px] text-sm font-medium transition-all flex-1 justify-center"
+                style={{
+                  background: isActive ? 'rgba(255,255,255,0.06)' : 'transparent',
+                  color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                }}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {tab.label}
+                {count != null && count > 0 && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{
+                    background: 'rgba(6,182,212,0.15)',
+                    color: 'rgba(6,182,212,0.8)',
+                  }}>
+                    {count > 999 ? `${(count/1000).toFixed(1)}k` : count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Content */}

@@ -1,11 +1,10 @@
 export default function Card({ children, className = '', padding = 'p-6' }) {
   return (
     <div
-      className={`rounded-xl ${padding} ${className}`}
+      className={`rounded-2xl ${padding} ${className}`}
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,255,255,0.05)',
       }}
     >
       {children}

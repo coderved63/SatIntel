@@ -3,7 +3,7 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import Card from '../components/common/Card';
 import MapView from '../components/dashboard/MapView';
 import StatsCard from '../components/dashboard/StatsCard';
-import ChartWidget from '../components/dashboard/ChartWidget';
+import DrilldownChart from '../components/dashboard/DrilldownChart';
 import LayerControl from '../components/dashboard/LayerControl';
 import { satelliteService } from '../services/satelliteService';
 import { analyticsService } from '../services/analyticsService';
@@ -249,30 +249,33 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 space-y-6">
             {lstTs ? (
               <Card>
-                <h3 className="text-sm font-medium text-slate-400 mb-4">Temperature Trend</h3>
-                <ChartWidget
+                <DrilldownChart
                   data={lstTs?.timeseries || []}
-                  xKey="date" yKey="value" color="#EF4444" unit="°C"
+                  label="Temperature Trend"
+                  color="#EF4444"
+                  unit="°C"
                 />
               </Card>
             ) : <SkeletonChart />}
 
             {ndviTs ? (
               <Card>
-                <h3 className="text-sm font-medium text-slate-400 mb-4">Vegetation Health Trend</h3>
-                <ChartWidget
+                <DrilldownChart
                   data={ndviTs?.timeseries || []}
-                  xKey="date" yKey="value" color="#10B981" unit="NDVI"
+                  label="Vegetation Health"
+                  color="#10B981"
+                  unit="NDVI"
                 />
               </Card>
             ) : <SkeletonChart />}
 
             {aqTimeseries[aqParam.id] ? (
               <Card>
-                <h3 className="text-sm font-medium text-slate-400 mb-4">{aqParam.label} Trend</h3>
-                <ChartWidget
+                <DrilldownChart
                   data={aqTimeseries[aqParam.id]?.timeseries || []}
-                  xKey="date" yKey="value" color={aqParam.color} unit={aqParam.unit}
+                  label={`${aqParam.label} Trend`}
+                  color={aqParam.color}
+                  unit={aqParam.unit}
                 />
               </Card>
             ) : <SkeletonChart />}

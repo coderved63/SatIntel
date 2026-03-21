@@ -12,6 +12,19 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
+# ── ML Result Cache ──────────────────────────────────────
+_ml_cache: dict = {}
+
+def _cache_key(fn_name: str, parameter: str, city: str) -> str:
+    return f"{fn_name}:{city.lower()}:{parameter}"
+
+def _get_cached(fn_name: str, parameter: str, city: str):
+    return _ml_cache.get(_cache_key(fn_name, parameter, city))
+
+def _set_cached(fn_name: str, parameter: str, city: str, result):
+    _ml_cache[_cache_key(fn_name, parameter, city)] = result
+    return result
+
 
 def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
     """Load data from satellite service."""
@@ -20,7 +33,10 @@ def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
 
 
 def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: float = 0.08) -> dict:
-    """Detect anomalies using Isolation Forest."""
+    """Detect anomalies using Isolation Forest. Results are cached."""
+    cached = _get_cached("anomalies", parameter, city)
+    if cached:
+        return cached
     data = _load_parameter_data(parameter, city)
     if not data or len(data) < 10:
         return {"anomalies": [], "total_points": 0, "anomaly_count": 0}
@@ -52,18 +68,21 @@ def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: flo
             "parameter": parameter,
         })
 
-    return {
+    return _set_cached("anomalies", parameter, city, {
         "parameter": parameter,
         "city": city,
         "anomalies": anomaly_list,
         "total_points": len(df),
         "anomaly_count": len(anomaly_list),
         "contamination": contamination,
-    }
+    })
 
 
 def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 30) -> dict:
-    """Predict trends using ARIMA."""
+    """Predict trends using ARIMA. Results are cached."""
+    cached = _get_cached("trends", parameter, city)
+    if cached:
+        return cached
     data = _load_parameter_data(parameter, city)
     if not data:
         return {"historical": {}, "forecast": {}, "trend_direction": "unknown"}
@@ -104,7 +123,7 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
         last_forecast = forecast_result.iloc[-1] if len(forecast_result) > 0 else last_historical
         trend = "increasing" if last_forecast > last_historical else "decreasing"
 
-        return {
+        return _set_cached("trends", parameter, city, {
             "parameter": parameter,
             "city": city,
             "historical": timeseries,
@@ -112,11 +131,10 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
             "trend_direction": trend,
             "model": "ARIMA(2,1,1)",
             "forecast_days": forecast_days,
-        }
+        })
 
     except Exception as e:
         logger.warning(f"ARIMA failed for {parameter}: {e}. Using linear fallback.")
-        # Fallback: simple linear extrapolation
         dates = list(timeseries.keys())
         values = list(timeseries.values())
         n = len(values)
@@ -133,7 +151,7 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
             forecast = {}
             trend = "unknown"
 
-        return {
+        return _set_cached("trends", parameter, city, {
             "parameter": parameter,
             "city": city,
             "historical": timeseries,
@@ -141,11 +159,14 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
             "trend_direction": trend,
             "model": "linear_fallback",
             "forecast_days": forecast_days,
-        }
+        })
 
 
 def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, min_samples: int = 2) -> dict:
-    """Identify geographic clusters of extreme values using DBSCAN."""
+    """Identify geographic clusters of extreme values using DBSCAN. Results are cached."""
+    cached = _get_cached("hotspots", parameter, city)
+    if cached:
+        return cached
     data = _load_parameter_data(parameter, city)
     if not data:
         return {"hotspots": [], "total_points": 0}
@@ -197,7 +218,7 @@ def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, mi
             "radius_km": round(eps * 111, 1),  # Approximate km from degrees
         })
 
-    return {
+    return _set_cached("hotspots", parameter, city, {
         "parameter": parameter,
         "city": city,
         "hotspots": hotspots,
@@ -205,7 +226,7 @@ def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, mi
         "hot_points": len(hot_df),
         "cluster_count": len(hotspots),
         "threshold": round(float(threshold), 4),
-    }
+    })
 
 
 def get_city_summary(city: str = "Ahmedabad") -> dict:
