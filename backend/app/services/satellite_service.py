@@ -63,6 +63,17 @@ PARAMETERS = {
         "color": "#3B82F6",
         "description": "Surface soil moisture from L-band radiometer",
     },
+    "LAND_USE": {
+        "id": "LAND_USE",
+        "name": "Land Use Classification",
+        "unit": "class",
+        "source": "Landsat 8/9 (USGS/NASA)",
+        "resolution": "30m (aggregated to 1km)",
+        "frequency": "Annual composite",
+        "file": "land_use_2024.json",
+        "color": "#6B7280",
+        "description": "NDVI-based land classification: water, urban, sparse vegetation, dense vegetation",
+    },
 }
 
 # Cache loaded data in memory
@@ -249,4 +260,47 @@ def get_statistics(parameter: str) -> dict:
         "max": round(float(np.max(arr)), 4),
         "median": round(float(np.median(arr)), 4),
         "unit": PARAMETERS[parameter]["unit"],
+    }
+
+
+def get_land_use_change(city: str = "Ahmedabad") -> dict:
+    """Compare land use between 2020 and 2024 to show urban sprawl."""
+    file_2020 = DATA_DIR / "land_use_2020.json"
+    file_2024 = DATA_DIR / "land_use_2024.json"
+
+    data_2020 = []
+    data_2024 = []
+
+    if file_2020.exists():
+        with open(file_2020) as f:
+            data_2020 = json.load(f)
+    if file_2024.exists():
+        with open(file_2024) as f:
+            data_2024 = json.load(f)
+
+    # Compute change statistics
+    urban_2020 = sum(1 for d in data_2020 if d.get("value") == 1)
+    urban_2024 = sum(1 for d in data_2024 if d.get("value") == 1)
+    veg_2020 = sum(1 for d in data_2020 if d.get("value") in (2, 3))
+    veg_2024 = sum(1 for d in data_2024 if d.get("value") in (2, 3))
+    water_2020 = sum(1 for d in data_2020 if d.get("value") == 0)
+    water_2024 = sum(1 for d in data_2024 if d.get("value") == 0)
+    total = max(len(data_2020), 1)
+
+    return {
+        "city": city,
+        "year_from": 2020,
+        "year_to": 2024,
+        "data_2020": data_2020,
+        "data_2024": data_2024,
+        "change_summary": {
+            "urban_2020_pct": round(urban_2020 / total * 100, 1),
+            "urban_2024_pct": round(urban_2024 / total * 100, 1),
+            "urban_increase_pct": round((urban_2024 - urban_2020) / total * 100, 1),
+            "vegetation_2020_pct": round(veg_2020 / total * 100, 1),
+            "vegetation_2024_pct": round(veg_2024 / total * 100, 1),
+            "vegetation_decrease_pct": round((veg_2020 - veg_2024) / total * 100, 1),
+            "water_2020_pct": round(water_2020 / total * 100, 1),
+            "water_2024_pct": round(water_2024 / total * 100, 1),
+        },
     }

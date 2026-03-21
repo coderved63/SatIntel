@@ -11,3 +11,7 @@ async def get_heatmap(parameter: str, city: str = "Ahmedabad"):
 @router.get("/layers")
 async def get_layers(city: str = "Ahmedabad"):
     return satellite_service.get_all_layers(city)
+
+@router.get("/land-use-change")
+async def get_land_use_change(city: str = "Ahmedabad"):
+    return satellite_service.get_land_use_change(city)

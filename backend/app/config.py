@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     jwt_secret: str = "hackathon-aetrix-2026-satellite-intel-secret-key"
     jwt_algorithm: str = "HS256"
     jwt_expiry_hours: int = 24
+    database_url: str = ""  # e.g. "postgresql+asyncpg://user:pass@localhost:5432/satellite_intel"
     gee_service_account_email: str = ""
     gee_key_file: str = "gee_service_account.json"
     anthropic_api_key: str = ""
