@@ -84,6 +84,9 @@ const ELEVATION_RANGE = [0, 3000];
 export default function MapView({ layers = [], city }) {
   const navigate = useNavigate();
   const [heatmapData, setHeatmapData] = useState({});
+  const [loadingLayers, setLoadingLayers] = useState(new Set());
+  const [loadedLayers, setLoadedLayers] = useState(new Set());
+  const [showProgress, setShowProgress] = useState(false);
   const [mapStyle, setMapStyle] = useState('dark');
   const [vizMode, setVizMode] = useState('heatmap');
   const [show3D, setShow3D] = useState(true);
@@ -121,27 +124,61 @@ export default function MapView({ layers = [], city }) {
     }));
   }, [show3D]);
 
-  // Fetch heatmap data
+  // Track city to prevent stale fetches
+  const cityRef = useRef(city.key);
+
+  // Clear + refetch on city change
   useEffect(() => {
+    cityRef.current = city.key;
     setHeatmapData({});
+    setLoadingLayers(new Set());
+    setLoadedLayers(new Set());
+    setShowProgress(false);
   }, [city.key]);
 
+  // Fetch heatmap data — each enabled layer loads independently
   useEffect(() => {
+    const currentCity = city.key;
     const enabledLayers = layers.filter(l => l.enabled);
+
     enabledLayers.forEach(async (layer) => {
       const paramId = layer.id.toUpperCase();
-      if (heatmapData[paramId]) return;
-      try {
-        const res = await fetch(`/api/v1/maps/heatmap/${paramId}?city=${city.key}`);
-        const data = await res.json();
-        if (data.raw_points) {
-          setHeatmapData(prev => ({ ...prev, [paramId]: data.raw_points }));
-        }
-      } catch (err) {
-        console.error(`Failed to load ${paramId}:`, err);
-      }
+
+      // Skip if already loaded for THIS city
+      setHeatmapData(prev => {
+        if (prev[paramId]) return prev;
+        // Trigger fetch
+        setLoadingLayers(p => new Set([...p, paramId]));
+        fetch(`/api/v1/maps/heatmap/${paramId}?city=${currentCity}`)
+          .then(res => res.json())
+          .then(data => {
+            // Only apply if city hasn't changed
+            if (cityRef.current !== currentCity) return;
+            if (data.raw_points) {
+              setHeatmapData(p => ({ ...p, [paramId]: data.raw_points }));
+              setLoadedLayers(p => new Set([...p, paramId]));
+            }
+          })
+          .catch(err => console.error(`Failed to load ${paramId}:`, err))
+          .finally(() => {
+            setLoadingLayers(p => { const s = new Set(p); s.delete(paramId); return s; });
+          });
+        return prev;
+      });
     });
   }, [layers, city.key]);
+
+  const isLoadingData = loadingLayers.size > 0;
+
+  // Show progress panel while loading, auto-hide 2s after all done
+  useEffect(() => {
+    if (isLoadingData) {
+      setShowProgress(true);
+    } else if (loadedLayers.size > 0) {
+      const timer = setTimeout(() => setShowProgress(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoadingData, loadedLayers.size]);
 
   // Fetch NASA FIRMS fire data for Gujarat region
   useEffect(() => {
@@ -514,6 +551,44 @@ export default function MapView({ layers = [], city }) {
           </div>
         )}
       </div>
+
+      {/* ── Layer Loading Progress (top-right, below layer control) ── */}
+      {showProgress && layers.some(l => l.enabled) && (
+        <div className="absolute top-14 right-4 z-10 bg-slate-900/85 backdrop-blur-md border border-white/10 rounded-xl px-3 py-2.5 shadow-lg min-w-[160px]">
+          <div className="space-y-1.5">
+            {layers.filter(l => l.enabled).map(layer => {
+              const paramId = layer.id.toUpperCase();
+              const isLoading = loadingLayers.has(paramId);
+              const isLoaded = loadedLayers.has(paramId) || !!heatmapData[paramId];
+              const isWaiting = !isLoading && !isLoaded;
+
+              return (
+                <div key={layer.id} className="flex items-center gap-2">
+                  {isLoaded ? (
+                    <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-500/20">
+                      <span className="text-[8px] text-emerald-400">&#10003;</span>
+                    </span>
+                  ) : isLoading ? (
+                    <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+                      <span className="animate-ping absolute h-2.5 w-2.5 rounded-full opacity-75" style={{ backgroundColor: layer.color + '60' }} />
+                      <span className="relative h-2 w-2 rounded-full" style={{ backgroundColor: layer.color }} />
+                    </span>
+                  ) : (
+                    <span className="h-3.5 w-3.5 flex items-center justify-center">
+                      <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
+                    </span>
+                  )}
+                  <span className={`text-[10px] font-medium transition-colors duration-300 ${
+                    isLoaded ? 'text-emerald-400/80' : isLoading ? 'text-white/70' : 'text-white/25'
+                  }`}>
+                    {layer.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ── Research Mode Button (bottom-right) ───── */}
       <button

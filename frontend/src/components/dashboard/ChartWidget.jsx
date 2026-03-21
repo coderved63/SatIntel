@@ -1,36 +1,94 @@
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function formatSmartLabel(dateStr, index, data) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 2) return dateStr;
+  const year = parts[0];
+  const month = parseInt(parts[1], 10);
+  const monthName = MONTH_NAMES[month - 1] || '';
+
+  // If it's January or first data point, show "Jan '20" style
+  if (month === 1 || index === 0) {
+    return `${monthName} '${year.slice(2)}`;
+  }
+  return monthName;
+}
+
+function formatTooltipDate(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return dateStr;
+  const month = MONTH_NAMES[parseInt(parts[1], 10) - 1] || parts[1];
+  return `${parts[2]} ${month} ${parts[0]}`;
+}
+
 export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color = '#06B6D4', unit = '', height = 200 }) {
   if (!data || data.length === 0) {
     return <div className="flex items-center justify-center h-32 text-slate-500 text-sm">No data available</div>;
   }
 
-  // Truncate date labels
-  const chartData = data.map(d => ({
-    ...d,
-    shortDate: d[xKey] ? d[xKey].substring(5) : '',
-  }));
+  // Compute smart tick interval based on data density
+  const totalPoints = data.length;
+  let tickCount;
+  if (totalPoints <= 24) tickCount = totalPoints; // show all for small datasets
+  else if (totalPoints <= 50) tickCount = 8;
+  else if (totalPoints <= 100) tickCount = 10;
+  else tickCount = 12;
+
+  const tickInterval = Math.max(1, Math.floor(totalPoints / tickCount));
+
+  // Use a stable gradient ID to avoid conflicts when multiple charts use same color
+  const gradientId = `gradient-${color.replace('#', '')}-${Math.random().toString(36).slice(2, 6)}`;
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+      <AreaChart data={data} margin={{ top: 5, right: 10, bottom: 5, left: 5 }}>
         <defs>
-          <linearGradient id={`gradient-${color}`} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.3} />
             <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-        <XAxis dataKey="shortDate" tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} interval="preserveStartEnd" />
-        <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={45} />
-        <Tooltip
-          contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }}
-          labelStyle={{ color: '#94A3B8' }}
-          itemStyle={{ color: color }}
-          formatter={(value) => [`${value} ${unit}`, '']}
-          labelFormatter={(label) => `Date: ${label}`}
+        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+        <XAxis
+          dataKey={xKey}
+          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tickLine={false}
+          axisLine={{ stroke: '#334155' }}
+          interval={tickInterval}
+          tickFormatter={(val, i) => formatSmartLabel(val, i, data)}
         />
-        <Area type="monotone" dataKey={yKey} stroke={color} strokeWidth={2} fill={`url(#gradient-${color})`} />
+        <YAxis
+          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tickLine={false}
+          axisLine={false}
+          width={45}
+          tickCount={5}
+        />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: '#1E293B',
+            border: '1px solid #334155',
+            borderRadius: '8px',
+            padding: '8px 12px',
+          }}
+          labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
+          itemStyle={{ color: color, fontSize: 13, fontWeight: 600 }}
+          formatter={(value) => [`${Number(value).toFixed(4)} ${unit}`, '']}
+          labelFormatter={(label) => formatTooltipDate(label)}
+        />
+        <Area
+          type="monotone"
+          dataKey={yKey}
+          stroke={color}
+          strokeWidth={1.5}
+          fill={`url(#${gradientId})`}
+          dot={false}
+          activeDot={{ r: 4, fill: color, stroke: '#1E293B', strokeWidth: 2 }}
+        />
       </AreaChart>
     </ResponsiveContainer>
   );

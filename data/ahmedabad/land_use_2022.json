@@ -1,0 +1,202 @@
+[
+  {
+    "date": "2022",
+    "lat": 22.9115,
+    "lng": 72.4087,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9115,
+    "lng": 72.4806,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9115,
+    "lng": 72.5524,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9115,
+    "lng": 72.6243,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9115,
+    "lng": 72.6872,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9834,
+    "lng": 72.4087,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9834,
+    "lng": 72.4806,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9834,
+    "lng": 72.5524,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9834,
+    "lng": 72.6243,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 22.9834,
+    "lng": 72.6872,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.0463,
+    "lng": 72.4087,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.0463,
+    "lng": 72.4806,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.0463,
+    "lng": 72.5524,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.0463,
+    "lng": 72.6243,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.0463,
+    "lng": 72.6872,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.1181,
+    "lng": 72.4087,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.1181,
+    "lng": 72.4806,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.1181,
+    "lng": 72.5524,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.1181,
+    "lng": 72.6243,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.1181,
+    "lng": 72.6872,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.19,
+    "lng": 72.4087,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.19,
+    "lng": 72.4806,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.19,
+    "lng": 72.5524,
+    "value": 2.0,
+    "parameter": "LAND_USE",
+    "class_label": "sparse_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.19,
+    "lng": 72.6243,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  },
+  {
+    "date": "2022",
+    "lat": 23.19,
+    "lng": 72.6872,
+    "value": 3.0,
+    "parameter": "LAND_USE",
+    "class_label": "dense_vegetation"
+  }
+]

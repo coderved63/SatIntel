@@ -101,16 +101,20 @@ async def load_all():
                 print(f"  [{param}] SKIP — empty")
                 continue
 
-            # Check if already loaded
+            # Clear old data and reload with fresh data
             async with Session() as session:
                 result = await session.execute(
                     text("SELECT COUNT(*) FROM satellite_observations WHERE city = :city AND parameter = :param"),
                     {"city": city_key, "param": param}
                 )
-                count = result.scalar()
-                if count and count > 0:
-                    print(f"  [{param}] SKIP — already loaded ({count} rows)")
-                    continue
+                old_count = result.scalar()
+                if old_count and old_count > 0:
+                    await session.execute(
+                        text("DELETE FROM satellite_observations WHERE city = :city AND parameter = :param"),
+                        {"city": city_key, "param": param}
+                    )
+                    await session.commit()
+                    print(f"  [{param}] Cleared {old_count} old rows, reloading...")
 
             # Bulk insert
             async with Session() as session:

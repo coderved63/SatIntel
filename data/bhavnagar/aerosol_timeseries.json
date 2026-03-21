@@ -1,5 +1,257 @@
 [
   {
+    "date": "2020-01-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.4523,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.3923,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.9708,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.7085,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.6527,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.0949,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.513,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.4133,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.3802,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.6165,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.4639,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.6198,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.5862,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.4375,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.0169,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.0026,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.1554,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -1.1545,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.2768,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.2879,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.6283,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.236,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0751,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.1733,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.0205,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.217,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.4589,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.6223,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 1.215,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.0826,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.5304,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.3953,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.5161,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.3452,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0633,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.1728,
+    "parameter": "AEROSOL"
+  },
+  {
     "date": "2023-01-01",
     "lat": 21.7078,
     "lng": 72.1123,
@@ -164,7 +416,364 @@
     "date": "2024-12-01",
     "lat": 21.7078,
     "lng": 72.1123,
-    "value": -0.1718,
+    "value": -0.1876,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.2628,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.0689,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.2057,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.4712,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.0962,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.2949,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.3217,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.7032,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.3715,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.3209,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0297,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0218,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0832,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": -0.0784,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7078,
+    "lng": 72.1123,
+    "value": 0.2792,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.4632,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.3845,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.0163,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.7162,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.662,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.08,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.2908,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.3501,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.4722,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.6858,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.4481,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.6135,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.5998,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.4569,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.0404,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.009,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.1744,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -1.1028,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.1976,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3057,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.7668,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3439,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.0733,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.1201,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.0059,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.1534,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.4042,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.5821,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 1.1901,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.0856,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.4918,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.4498,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.482,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3836,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.0405,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.1968,
     "parameter": "AEROSOL"
   },
   {
@@ -332,7 +941,364 @@
     "date": "2024-12-01",
     "lat": 21.7078,
     "lng": 72.2021,
-    "value": -0.214,
+    "value": -0.229,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3033,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.0473,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.2059,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.4546,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.0075,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3262,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3651,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.6102,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.4617,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.3248,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.1269,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.041,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.1088,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": -0.0634,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7078,
+    "lng": 72.2021,
+    "value": 0.2667,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.3392,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.3443,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.9928,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.7277,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.7282,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.2115,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.3725,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.2439,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.5362,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.5254,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.376,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.5584,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.5764,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.488,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.1431,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.0681,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.112,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -1.229,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.2594,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.3553,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.6067,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.3209,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.0366,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0894,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0399,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.0582,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.3118,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.574,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 1.1239,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.0871,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.3728,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.404,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.647,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.3498,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0219,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.202,
     "parameter": "AEROSOL"
   },
   {
@@ -500,7 +1466,364 @@
     "date": "2024-12-01",
     "lat": 21.7078,
     "lng": 72.2919,
-    "value": -0.1276,
+    "value": -0.142,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.2386,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0472,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.1102,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.412,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0052,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.2617,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.4994,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.6876,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.5425,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.3633,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0153,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.0475,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.0787,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": -0.069,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7078,
+    "lng": 72.2919,
+    "value": 0.1695,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.2752,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.0585,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.7215,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.2984,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.1832,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.0634,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.3941,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.3981,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.5768,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.437,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.2579,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.3881,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.3403,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.1773,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.7339,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.6792,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.001,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -1.2477,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.1864,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.2205,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.7159,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.2285,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.0621,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.0204,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.1839,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.4386,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.7208,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.9276,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 1.4997,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.1715,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.4545,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.2918,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.5248,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.2244,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.154,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.02,
     "parameter": "AEROSOL"
   },
   {
@@ -668,7 +1991,364 @@
     "date": "2024-12-01",
     "lat": 21.7976,
     "lng": 72.1123,
-    "value": -0.0425,
+    "value": -0.054,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.0965,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.2268,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.4223,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.7125,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.2159,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.1862,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.3805,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.6022,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.508,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": -0.358,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.1147,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.0526,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.0379,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.0664,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7976,
+    "lng": 72.1123,
+    "value": 0.4583,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.3571,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.242,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.8675,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.4059,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.3486,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.1173,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.1885,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.2459,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.3108,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.4523,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.2738,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.4655,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.4835,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.3771,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.9531,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.775,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.0421,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -1.3006,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.1638,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.2891,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.6377,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.1699,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.055,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.0215,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.1155,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.2374,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.582,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.8872,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 1.4416,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.1519,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.4803,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.3168,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.4387,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.2327,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.1006,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.1335,
     "parameter": "AEROSOL"
   },
   {
@@ -836,7 +2516,364 @@
     "date": "2024-12-01",
     "lat": 21.7976,
     "lng": 72.2021,
-    "value": -0.0921,
+    "value": -0.1053,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.2094,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.1108,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.3674,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.5844,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.0961,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.2645,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.322,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.6049,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.556,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.2214,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.1156,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.0921,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.0286,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": -0.0169,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7976,
+    "lng": 72.2021,
+    "value": 0.3422,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.3362,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.3422,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.0024,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.7449,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.7135,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.3,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.4456,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.291,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.4748,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.5464,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.3611,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.5191,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.5233,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.441,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.1311,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.0425,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.2035,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -1.3406,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.1904,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.4048,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.6984,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.2977,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.0102,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0513,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0107,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.0629,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.3456,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.6057,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 1.1232,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0012,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.4564,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.4672,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.5762,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.3242,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0001,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.1908,
     "parameter": "AEROSOL"
   },
   {
@@ -1004,7 +3041,364 @@
     "date": "2024-12-01",
     "lat": 21.7976,
     "lng": 72.2919,
-    "value": -0.0968,
+    "value": -0.1091,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.2618,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0524,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.1173,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.4467,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.0969,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.2145,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.3705,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.6476,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.6133,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.2135,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0386,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.0488,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0589,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": -0.0376,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.7976,
+    "lng": 72.2919,
+    "value": 0.1862,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.3976,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.1866,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.8057,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.5818,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.4562,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.219,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.3301,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.5459,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.7456,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.4911,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.3691,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.4625,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.4347,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.2893,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.8212,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.7734,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.1045,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -1.3127,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.2158,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.2952,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.8411,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.3281,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.0339,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.1008,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.098,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.3417,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.6274,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.7956,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 1.3446,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.1706,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.3971,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.4472,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.65,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.3486,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.003,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.0913,
     "parameter": "AEROSOL"
   },
   {
@@ -1172,7 +3566,364 @@
     "date": "2024-12-01",
     "lat": 21.8875,
     "lng": 72.1123,
-    "value": -0.1001,
+    "value": -0.1139,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.1769,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.1271,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.3206,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.6104,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.0427,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.2377,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.4984,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.6862,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.5411,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.4335,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.1018,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.0318,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.1022,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": -0.0247,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.8875,
+    "lng": 72.1123,
+    "value": 0.3124,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.3933,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.2407,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.889,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.6537,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.5317,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.2684,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.1493,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.3305,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.5055,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.541,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.3226,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.5489,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.5803,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.4744,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.0761,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.93,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.1171,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -1.4083,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.1627,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.319,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.7071,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.3396,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0168,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.1054,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0232,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.1152,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.4729,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.6804,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 1.2921,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.0248,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.4435,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.6026,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.6389,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.2997,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.003,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.2525,
     "parameter": "AEROSOL"
   },
   {
@@ -1340,7 +4091,364 @@
     "date": "2024-12-01",
     "lat": 21.8875,
     "lng": 72.2021,
-    "value": -0.1519,
+    "value": -0.1635,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.2756,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0622,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.2388,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.5708,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.0654,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.3058,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.4321,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.7121,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.6244,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.3656,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.0174,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0063,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0929,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": -0.0866,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.8875,
+    "lng": 72.2021,
+    "value": 0.1422,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-01-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.353,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-02-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3457,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-03-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.9922,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-04-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.7197,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-05-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.0833,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-06-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3507,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-07-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3911,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-08-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3312,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-09-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.6865,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-10-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.5639,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-11-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3808,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2020-12-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.5513,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-01-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.5416,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-02-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.4438,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-03-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.1121,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-04-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.9983,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-05-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.181,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-06-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -1.3945,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-07-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.1731,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-08-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.559,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-09-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.6832,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-10-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.2743,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-11-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.0523,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2021-12-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.1316,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-01-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0295,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-02-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.0695,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-03-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.3743,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-04-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.5911,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-05-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 1.1132,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-06-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0002,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-07-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.5345,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-08-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.4627,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-09-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.754,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-10-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.3308,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-11-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.014,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2022-12-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.1805,
     "parameter": "AEROSOL"
   },
   {
@@ -1508,7 +4616,112 @@
     "date": "2024-12-01",
     "lat": 21.8875,
     "lng": 72.2919,
-    "value": -0.1257,
+    "value": -0.1384,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-01-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.2477,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-02-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0277,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-03-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.0972,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-04-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.4362,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-05-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0346,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-06-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.2029,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-07-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.5343,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-08-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.735,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-09-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.6617,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-10-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.4129,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-11-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.0637,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2025-12-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.0355,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-01-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0681,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-02-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": -0.0425,
+    "parameter": "AEROSOL"
+  },
+  {
+    "date": "2026-03-01",
+    "lat": 21.8875,
+    "lng": 72.2919,
+    "value": 0.1367,
     "parameter": "AEROSOL"
   }
 ]

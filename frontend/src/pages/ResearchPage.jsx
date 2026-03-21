@@ -6,8 +6,143 @@ import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Search, X, MapPin, Calendar, Sliders, Download, ChevronDown, Loader2 } from 'lucide-react';
+
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function formatDateLabel(dateStr) {
+  if (!dateStr) return '';
+  const [y, m] = dateStr.split('-');
+  const mi = parseInt(m, 10);
+  const mon = MONTH_NAMES[mi - 1] || '';
+  return mi === 1 ? `${mon} '${y.slice(2)}` : mon;
+}
+function formatTooltipDate(dateStr) {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-');
+  return `${d || ''} ${MONTH_NAMES[parseInt(m,10)-1] || m} ${y}`;
+}
 import { useNavigate } from 'react-router-dom';
+import { useCity } from '../context/CityContext';
 import api from '../services/api';
+
+// ── Interactive drill-down chart: Yearly → Monthly ──────────
+function ResearchChart({ timeseries, label, color, unit }) {
+  const [zoomedYear, setZoomedYear] = useState(null);
+
+  // Aggregate by year
+  const yearlyData = useMemo(() => {
+    const groups = {};
+    timeseries.forEach(d => {
+      const year = d.date?.split('-')[0];
+      if (!year) return;
+      if (!groups[year]) groups[year] = { values: [], count: 0 };
+      groups[year].values.push(d.value);
+      groups[year].count += d.count || 1;
+    });
+    return Object.entries(groups)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([year, g]) => ({
+        label: year,
+        value: +(g.values.reduce((s, v) => s + v, 0) / g.values.length).toFixed(4),
+        min: +Math.min(...g.values).toFixed(4),
+        max: +Math.max(...g.values).toFixed(4),
+        points: g.count,
+        year,
+      }));
+  }, [timeseries]);
+
+  // Monthly data for zoomed year
+  const monthlyData = useMemo(() => {
+    if (!zoomedYear) return [];
+    const groups = {};
+    timeseries.forEach(d => {
+      if (!d.date?.startsWith(zoomedYear)) return;
+      const month = d.date.substring(0, 7); // "2020-03"
+      if (!groups[month]) groups[month] = { values: [], count: 0 };
+      groups[month].values.push(d.value);
+      groups[month].count += d.count || 1;
+    });
+    return Object.entries(groups)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([month, g]) => ({
+        label: MONTH_NAMES[parseInt(month.split('-')[1], 10) - 1],
+        date: month,
+        value: +(g.values.reduce((s, v) => s + v, 0) / g.values.length).toFixed(4),
+        min: +Math.min(...g.values).toFixed(4),
+        max: +Math.max(...g.values).toFixed(4),
+        points: g.count,
+      }));
+  }, [timeseries, zoomedYear]);
+
+  const chartData = zoomedYear ? monthlyData : yearlyData;
+  const gradId = `rg-${(color || '').replace('#', '')}`;
+
+  return (
+    <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] text-white/30 uppercase tracking-wider">
+          {label} — {zoomedYear ? `Monthly (${zoomedYear})` : 'Yearly Overview'}
+        </p>
+        {zoomedYear && (
+          <button
+            onClick={() => setZoomedYear(null)}
+            className="text-[10px] text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1"
+          >
+            ← All Years
+          </button>
+        )}
+        {!zoomedYear && (
+          <p className="text-[9px] text-white/20 italic">Click a bar to drill into months</p>
+        )}
+      </div>
+      <ResponsiveContainer width="100%" height={180}>
+        <AreaChart
+          data={chartData}
+          margin={{ top: 5, right: 10, bottom: 5, left: 5 }}
+          onClick={(e) => {
+            if (!zoomedYear && e?.activeLabel) {
+              setZoomedYear(e.activeLabel);
+            }
+          }}
+          style={{ cursor: zoomedYear ? 'default' : 'pointer' }}
+        >
+          <defs>
+            <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+              <stop offset="100%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+          <XAxis
+            dataKey="label"
+            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 500 }}
+            tickLine={false}
+            axisLine={{ stroke: '#1e293b' }}
+          />
+          <YAxis tick={{ fill: '#64748b', fontSize: 9 }} tickLine={false} axisLine={false} width={40} tickCount={5} />
+          <Tooltip
+            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', padding: '8px 12px' }}
+            labelStyle={{ color: '#94a3b8', fontSize: 11, marginBottom: 4 }}
+            itemStyle={{ color, fontSize: 13, fontWeight: 600 }}
+            formatter={(v, name, props) => {
+              const d = props.payload;
+              return [`Avg: ${v} ${unit}\nMin: ${d.min}  Max: ${d.max}\nData points: ${d.points}`, ''];
+            }}
+            labelFormatter={(l) => zoomedYear ? `${l} ${zoomedYear}` : l}
+          />
+          <Area
+            type="monotone"
+            dataKey="value"
+            stroke={color}
+            strokeWidth={2}
+            fill={`url(#${gradId})`}
+            dot={{ r: 4, fill: color, stroke: '#0f172a', strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: color, stroke: '#0f172a', strokeWidth: 2 }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
 
 const PARAMETERS = [
   { id: 'LST', label: 'Temperature (LST)', unit: '°C', color: '#EF4444' },
@@ -22,19 +157,20 @@ const PARAMETERS = [
 
 export default function ResearchPage() {
   const navigate = useNavigate();
+  const { city } = useCity();
 
   const [viewState, setViewState] = useState({
-    longitude: 72.5714,
-    latitude: 23.0225,
-    zoom: 8,
+    longitude: city.center[1],
+    latitude: city.center[0],
+    zoom: city.zoom || 10,
     pitch: 0,
     bearing: 0,
   });
 
   const [pin, setPin] = useState(null);
   const [selectedParams, setSelectedParams] = useState(['LST', 'NDVI', 'NO2']);
-  const [startDate, setStartDate] = useState('2023-01-01');
-  const [endDate, setEndDate] = useState('2024-12-31');
+  const [startDate, setStartDate] = useState('2020-01-01');
+  const [endDate, setEndDate] = useState('2026-03-22');
   const [radiusKm, setRadiusKm] = useState(10);
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -379,45 +515,14 @@ export default function ResearchPage() {
                       })}
                     </div>
 
-                    {/* Timeseries chart */}
+                    {/* Interactive Timeseries — Year ↔ Month drill-down */}
                     {activeParamData?.timeseries?.length > 0 && (
-                      <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
-                        <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">
-                          {activeParamConfig?.label} — Timeseries
-                        </p>
-                        <ResponsiveContainer width="100%" height={180}>
-                          <AreaChart data={activeParamData.timeseries} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-                            <defs>
-                              <linearGradient id="researchGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor={activeParamConfig?.color} stopOpacity={0.3} />
-                                <stop offset="100%" stopColor={activeParamConfig?.color} stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                            <XAxis
-                              dataKey="date"
-                              tick={{ fill: '#64748b', fontSize: 9 }}
-                              tickLine={false}
-                              tickFormatter={v => v?.substring(5)}
-                              interval="preserveStartEnd"
-                            />
-                            <YAxis tick={{ fill: '#64748b', fontSize: 9 }} tickLine={false} axisLine={false} width={40} />
-                            <Tooltip
-                              contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', fontSize: '11px' }}
-                              labelStyle={{ color: '#94a3b8' }}
-                              itemStyle={{ color: activeParamConfig?.color }}
-                              formatter={(v) => [`${v} ${activeParamConfig?.unit}`, '']}
-                            />
-                            <Area
-                              type="monotone"
-                              dataKey="value"
-                              stroke={activeParamConfig?.color}
-                              strokeWidth={2}
-                              fill="url(#researchGrad)"
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
+                      <ResearchChart
+                        timeseries={activeParamData.timeseries}
+                        label={activeParamConfig?.label}
+                        color={activeParamConfig?.color}
+                        unit={activeParamConfig?.unit}
+                      />
                     )}
 
                     {/* Stats summary */}

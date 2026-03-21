@@ -20,8 +20,8 @@ from app.utils.gee_helpers import (
 from app.utils.cities import get_gujarat_cities, get_city
 
 # ── Configuration ──────────────────────────────────────────────
-START_DATE = "2023-01-01"
-END_DATE = "2024-12-31"
+START_DATE = "2020-01-01"
+END_DATE = "2026-03-22"
 
 SERVICE_ACCOUNT_EMAIL = "gee-service@prompted-it-all.iam.gserviceaccount.com"
 KEY_FILE = os.path.join(os.path.dirname(__file__), '..', 'backend', 'gee_service_account.json')
@@ -69,7 +69,7 @@ for city_key in cities:
             print(f"ERROR: {e}")
 
     # Fetch land use for 2020 and 2024
-    for year in [2020, 2024]:
+    for year in [2020, 2022, 2024, 2025]:
         print(f"  [LAND_USE_{year}] Fetching...", end=" ", flush=True)
         try:
             data = fetch_land_use(city_key, year)

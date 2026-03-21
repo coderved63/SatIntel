@@ -95,9 +95,9 @@ def _extract_timeseries(collection, bbox, band_name, scale_factor=1.0, offset=0.
     sample_fc = ee.FeatureCollection(points)
 
     size = collection.size().getInfo()
-    if size > 50:
-        collection = collection.limit(50)
-        logger.info(f"Limited collection from {size} to 50 images")
+    if size > 500:
+        collection = collection.limit(500)
+        logger.info(f"Limited collection from {size} to 500 images")
 
     region_data = collection.select(band_name).getRegion(sample_fc, scale=1000).getInfo()
 
