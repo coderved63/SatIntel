@@ -17,10 +17,6 @@ export const analysisService = {
     const { data } = await api.get(`/analysis/heat?city=${city}`);
     return data;
   },
-  async getWater(city = 'Ahmedabad') {
-    const { data } = await api.get(`/analysis/water?city=${city}`);
-    return data;
-  },
   async getFullReport(city = 'Ahmedabad') {
     const { data } = await api.get(`/analysis/full-report?city=${city}`);
     return data;

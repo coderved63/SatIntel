@@ -1,5 +1,5 @@
 """
-Specialized Analysis Routes — 5 domain-specific endpoints.
+Specialized Analysis Routes — 4 domain-specific endpoints.
 These provide deeper analysis than the generic /analytics/ endpoints.
 """
 from fastapi import APIRouter, Depends
@@ -32,16 +32,10 @@ async def heat_analysis(city: str = "Ahmedabad", user: dict = Depends(get_curren
     return heat_service.analyse(city)
 
 
-@router.get("/water")
-async def water_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
-    from app.services import water_service
-    return water_service.analyse(city)
-
-
 @router.get("/full-report")
 async def full_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
-    """Run all 5 analyses and return combined result."""
-    from app.services import vegetation_service, land_conversion_service, farmland_service, heat_service, water_service
+    """Run all 4 analyses and return combined result."""
+    from app.services import vegetation_service, land_conversion_service, farmland_service, heat_service
 
     return {
         "city": city,
@@ -49,5 +43,4 @@ async def full_analysis(city: str = "Ahmedabad", user: dict = Depends(get_curren
         "land_conversion": land_conversion_service.analyse(city),
         "farmland": farmland_service.analyse(city),
         "heat": heat_service.analyse(city),
-        "water": water_service.analyse(city),
     }

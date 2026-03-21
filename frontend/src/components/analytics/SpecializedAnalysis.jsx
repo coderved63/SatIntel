@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Card from '../common/Card';
 import Loader from '../common/Loader';
 import { analysisService } from '../../services/analysisService';
-import { Leaf, Building2, Wheat, Thermometer, Droplets, AlertTriangle, TrendingDown, MapPin } from 'lucide-react';
+import { Leaf, Building2, Wheat, Thermometer, AlertTriangle, TrendingDown, MapPin } from 'lucide-react';
 
 function StatRow({ label, value, color = 'text-white' }) {
   return (
@@ -48,7 +48,7 @@ export default function SpecializedAnalysis() {
     }
   };
 
-  if (loading) return <div className="py-16"><Loader text="Running 5 specialized analyses..." /></div>;
+  if (loading) return <div className="py-16"><Loader text="Running 4 specialized analyses..." /></div>;
   if (error) return <Card><p className="text-red-400">{error}</p></Card>;
   if (!data) return null;
 
@@ -56,11 +56,9 @@ export default function SpecializedAnalysis() {
   const land = data.land_conversion || {};
   const farm = data.farmland || {};
   const heat = data.heat || {};
-  const water = data.water || {};
-
   return (
     <div className="space-y-4">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
         {/* Vegetation */}
         <AnalysisCard title="Vegetation Loss" icon={Leaf} iconColor="text-emerald-400" loading={false}>
           <StatRow label="NDVI Decline" value={`${veg.ndvi_decline_pct || 0}%`} color={veg.ndvi_decline_pct > 0 ? 'text-red-400' : 'text-emerald-400'} />
@@ -115,16 +113,6 @@ export default function SpecializedAnalysis() {
           ))}
         </AnalysisCard>
 
-        {/* Water */}
-        <AnalysisCard title="Water Encroachment" icon={Droplets} iconColor="text-blue-400" loading={false}>
-          <StatRow label="Water Cells (2020)" value={water.water_cells_2020 || 0} />
-          <StatRow label="Preserved" value={water.water_cells_preserved || 0} color="text-emerald-400" />
-          <StatRow label="Encroached" value={water.cells_encroached || 0} color="text-red-400" />
-          <StatRow label="Area Lost" value={`${water.area_lost_sqkm || 0} km²`} />
-          {water.encroachment_by_type && Object.entries(water.encroachment_by_type).map(([key, count]) => (
-            <StatRow key={key} label={`→ ${key}`} value={count} color="text-slate-300" />
-          ))}
-        </AnalysisCard>
       </div>
     </div>
   );
