@@ -39,7 +39,7 @@ export default function LayerControl({ layers, onToggle }) {
                 </span>
                 <span
                   className={`w-7 h-4 rounded-full transition-colors relative cursor-pointer ${
-                    layer.enabled ? 'bg-cyan-500' : 'bg-white/10'
+                    layer.enabled ? 'bg-blue-500' : 'bg-white/10'
                   }`}
                   onClick={(e) => { e.preventDefault(); onToggle(layer.id); }}
                 >

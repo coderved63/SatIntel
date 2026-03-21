@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { CityProvider } from './context/CityContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -17,6 +18,7 @@ import NotFoundPage from './pages/NotFoundPage';
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
         <CityProvider>
         <Routes>
@@ -34,6 +36,7 @@ export default function App() {
         </Routes>
         </CityProvider>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

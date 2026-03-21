@@ -138,6 +138,14 @@ export default function ScrollAnimation({ onComplete }) {
     const dy = (H - drawH) / 2;
 
     ctx.drawImage(frame, dx * dpr, dy * dpr, drawW * dpr, drawH * dpr);
+
+    // Fade to background color in the last 15% of scroll
+    const progress = index / (FRAME_COUNT - 1);
+    if (progress > 0.85) {
+      const fadeAlpha = clamp((progress - 0.85) / 0.15, 0, 1);
+      ctx.fillStyle = `rgba(10, 14, 26, ${fadeAlpha})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
   }, []);
 
   // ── Canvas resize ──────────────────────────────────────────

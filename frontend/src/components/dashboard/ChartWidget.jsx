@@ -20,11 +20,11 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
             <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
         <XAxis dataKey="shortDate" tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} interval="preserveStartEnd" />
         <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={45} />
         <Tooltip
-          contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }}
+          contentStyle={{ backgroundColor: 'rgba(17,24,39,0.95)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', backdropFilter: 'blur(12px)' }}
           labelStyle={{ color: '#94A3B8' }}
           itemStyle={{ color: color }}
           formatter={(value) => [`${value} ${unit}`, '']}
