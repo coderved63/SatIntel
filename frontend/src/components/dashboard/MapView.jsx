@@ -10,7 +10,6 @@ function HeatmapLayer({ points, options = {} }) {
   useEffect(() => {
     if (!points || points.length === 0) return;
 
-    // Dynamically import leaflet.heat
     import('leaflet.heat').then(() => {
       const heat = window.L.heatLayer(points, {
         radius: options.radius || 25,
@@ -30,6 +29,15 @@ function HeatmapLayer({ points, options = {} }) {
   return null;
 }
 
+// Recenter map when city changes
+function RecenterMap({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
+  return null;
+}
+
 // Color gradient helpers
 const GRADIENTS = {
   LST: { 0.2: '#3B82F6', 0.4: '#06B6D4', 0.6: '#FBBF24', 0.8: '#F97316', 1: '#EF4444' },
@@ -38,17 +46,18 @@ const GRADIENTS = {
   SOIL_MOISTURE: { 0.2: '#EF4444', 0.4: '#F97316', 0.6: '#FBBF24', 0.8: '#3B82F6', 1: '#1D4ED8' },
 };
 
-export default function MapView({ layers = [] }) {
+export default function MapView({ layers = [], city }) {
   const [heatmapData, setHeatmapData] = useState({});
   const [markerData, setMarkerData] = useState({});
 
   useEffect(() => {
+    setHeatmapData({});
+    setMarkerData({});
     const enabledLayers = layers.filter(l => l.enabled);
     enabledLayers.forEach(async (layer) => {
       try {
         const paramId = layer.id.toUpperCase();
-        // Fetch from /satellite/timeseries to get the full data
-        const res = await fetch(`/api/v1/maps/heatmap/${paramId}?city=Ahmedabad`);
+        const res = await fetch(`/api/v1/maps/heatmap/${paramId}?city=${city.key}`);
         const data = await res.json();
 
         if (data.points) {
@@ -59,17 +68,18 @@ export default function MapView({ layers = [] }) {
         console.error(`Failed to load ${layer.id} heatmap:`, err);
       }
     });
-  }, [layers]);
+  }, [layers, city.key]);
 
   const enabledLayers = layers.filter(l => l.enabled);
 
   return (
     <MapContainer
-      center={[23.0225, 72.5714]}
-      zoom={11}
+      center={city.center}
+      zoom={city.zoom}
       style={{ height: '100%', width: '100%', borderRadius: '0.75rem' }}
       className="z-0"
     >
+      <RecenterMap center={city.center} zoom={city.zoom} />
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'

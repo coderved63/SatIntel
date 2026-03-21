@@ -1,0 +1,2900 @@
+[
+  {
+    "date": "2023-01-01",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2183,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1467,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3147,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.231,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2802,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2387,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1994,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1988,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1088,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1616,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1487,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.0592,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1307,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1571,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1312,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2724,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3091,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2116,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.13,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1144,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2611,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2081,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3931,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3252,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1964,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.217,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2988,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3413,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2699,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1452,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1985,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1766,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.13,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1436,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.0542,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1564,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1843,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.0757,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.0629,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3123,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.3556,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.0866,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2076,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.2206,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1331,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.6629,
+    "lng": 72.9118,
+    "value": 0.1145,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5702,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5238,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5269,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5439,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5719,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5106,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4752,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5162,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5052,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4906,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5052,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.143,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.1632,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.3832,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.2178,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.607,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6084,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5245,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5517,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5499,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5254,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6127,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6605,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5574,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5748,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.509,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5365,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5073,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4665,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4831,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4164,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4503,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4112,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4708,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.0735,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.0734,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4586,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4048,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.1731,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6411,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6057,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.6872,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5966,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5621,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.5153,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.6629,
+    "lng": 73.0016,
+    "value": 0.4994,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4429,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4185,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3624,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3422,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3358,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3165,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2589,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2825,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2551,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2647,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2508,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3185,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.0865,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2547,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.0624,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4297,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.1366,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4508,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.504,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4608,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4489,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5449,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5356,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5138,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5263,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4391,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.3911,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.36,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2978,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2972,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2488,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2477,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2711,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2945,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.045,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.0234,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.2733,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.1355,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.0463,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5285,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5455,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.5206,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4903,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4562,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4291,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.6629,
+    "lng": 73.0914,
+    "value": 0.4358,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.5572,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.5198,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4595,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4243,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3887,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3305,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2563,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.242,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2471,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2352,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2067,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.0807,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.483,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.0972,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2929,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2896,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3337,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3977,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4282,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4533,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.5157,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.6469,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.6824,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.527,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4908,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.5607,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.5016,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3904,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3326,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2898,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2498,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2188,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2018,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.2841,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.0332,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3945,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3813,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.1316,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3933,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3399,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.393,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4153,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3894,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.3886,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.39,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7258,
+    "lng": 72.9118,
+    "value": 0.4354,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4515,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3903,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3865,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3606,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.383,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.355,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3524,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3108,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3489,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3047,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3439,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.31,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.2596,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.2884,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5138,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5157,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4416,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5055,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5159,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4646,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4196,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5211,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4815,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4549,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4175,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4081,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4087,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3798,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3003,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3726,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3082,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3677,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.2797,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.2955,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.1087,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3738,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.054,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.1388,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.6684,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5126,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.5681,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4586,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4992,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4499,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.4577,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7258,
+    "lng": 73.0016,
+    "value": 0.3565,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5378,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.475,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4776,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4229,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5233,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4292,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4053,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3974,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3627,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3234,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.327,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.1488,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3065,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.0729,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3685,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5344,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4338,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3846,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4491,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5007,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5296,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.616,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.6064,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5396,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5305,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5113,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5281,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5108,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4214,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3893,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3848,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3726,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.3459,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4016,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.0346,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.0143,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5678,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4649,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4549,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5268,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.6187,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.6316,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5412,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5931,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.5804,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7258,
+    "lng": 73.0914,
+    "value": 0.4709,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4733,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4437,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4196,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3498,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3888,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3425,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3067,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.306,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.284,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2945,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2236,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.0181,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2499,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.1255,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4944,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5012,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5944,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5958,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.606,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4779,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5578,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.6087,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5887,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5373,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5203,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3971,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3977,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4081,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3539,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3268,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2926,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2883,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2427,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.2769,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3524,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3695,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.1074,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.1838,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5967,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5637,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5564,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5808,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4916,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.4486,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.3993,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7886,
+    "lng": 72.9118,
+    "value": 0.5118,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5968,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6197,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.555,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5016,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4302,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.3533,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2974,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2684,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2928,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2965,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2439,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.313,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2414,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2757,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4962,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.3664,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6402,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4972,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5276,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5513,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6315,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.7246,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.726,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6982,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6768,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6196,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5558,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4591,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4121,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.3356,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2554,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2552,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2254,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.248,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.2934,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.3155,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4689,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4355,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.631,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6519,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5366,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.6071,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5379,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4998,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.4928,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7886,
+    "lng": 73.0016,
+    "value": 0.5151,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-01",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5941,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-01-17",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5559,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-02",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5269,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-02-18",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4852,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-06",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4902,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-03-22",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.445,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-07",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3912,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-04-23",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3768,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-09",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3588,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-05-25",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3313,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-10",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.31,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-06-26",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3862,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-12",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.0577,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-07-28",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.1007,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-13",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3275,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-08-29",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5172,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-14",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6534,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-09-30",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6451,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-10-16",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6052,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-01",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5998,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-11-17",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5481,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-03",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6294,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2023-12-19",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6247,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-01",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5863,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-01-17",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5824,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-02",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5414,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-02-18",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.5044,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-05",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4748,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-03-21",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4259,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-06",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4111,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-04-22",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3614,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-08",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3483,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-05-24",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3008,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-09",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.2897,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-06-25",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.1486,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-11",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.3584,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-07-27",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4323,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-12",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.1328,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-08-28",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6937,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-13",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6938,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-09-29",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6268,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-15",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6056,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-10-31",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.6237,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-11-16",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4184,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-02",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.545,
+    "parameter": "NDVI"
+  },
+  {
+    "date": "2024-12-18",
+    "lat": 21.7886,
+    "lng": 73.0914,
+    "value": 0.4831,
+    "parameter": "NDVI"
+  }
+]

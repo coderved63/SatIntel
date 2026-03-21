@@ -1,7 +1,15 @@
+import { useEffect } from 'react';
 import Card from '../common/Card';
-import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
+import { useCity } from '../../context/CityContext';
+
+function RecenterMap({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => { map.setView(center, zoom); }, [center, zoom, map]);
+  return null;
+}
 
 const severityColors = {
   critical: '#EF4444',
@@ -10,6 +18,8 @@ const severityColors = {
 };
 
 export default function HotspotMap({ data }) {
+  const { city } = useCity();
+
   if (!data) return null;
 
   const { hotspots = [], parameter, total_points, cluster_count } = data;
@@ -30,10 +40,11 @@ export default function HotspotMap({ data }) {
 
         <div className="h-[400px] rounded-lg overflow-hidden">
           <MapContainer
-            center={[23.0225, 72.5714]}
-            zoom={11}
+            center={city.center}
+            zoom={city.zoom}
             style={{ height: '100%', width: '100%' }}
           >
+            <RecenterMap center={city.center} zoom={city.zoom} />
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; CARTO'

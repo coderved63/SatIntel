@@ -1,17 +1,6 @@
 """
 Google Earth Engine (GEE) Integration.
-
-Setup Instructions (Person 1 — do these steps):
-1. Go to https://code.earthengine.google.com/ — sign in with Google
-2. Go to https://console.cloud.google.com/
-3. Create a new project (or use existing)
-4. Enable "Earth Engine API" in APIs & Services
-5. Go to IAM & Admin → Service Accounts → Create Service Account
-6. Name it "gee-satellite-intel", grant "Earth Engine Resource Viewer" role
-7. Create a JSON key → download it
-8. Save as backend/gee_service_account.json
-9. Register the service account at https://signup.earthengine.google.com/#!/service_accounts
-10. Put the email in backend/.env as GEE_SERVICE_ACCOUNT_EMAIL
+Supports all Gujarat cities and air quality parameters.
 """
 import ee
 import json
@@ -20,123 +9,126 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger(__name__)
+from app.utils.cities import CITIES, get_city
 
-# ── City Configuration ────────────────────────────────────────
-CITIES = {
-    "Ahmedabad": {
-        "bbox": [72.4, 22.9, 72.7, 23.2],
-        "center": [23.0225, 72.5714],
-        "state": "Gujarat",
-    },
-    "Delhi": {
-        "bbox": [76.8, 28.4, 77.4, 28.9],
-        "center": [28.6139, 77.2090],
-        "state": "Delhi",
-    },
-    "Bengaluru": {
-        "bbox": [77.4, 12.8, 77.8, 13.2],
-        "center": [12.9716, 77.5946],
-        "state": "Karnataka",
-    },
-}
+logger = logging.getLogger(__name__)
 
 _initialized = False
 
 
-def init_gee(service_account_email: str = "", key_file: str = "gee_service_account.json"):
+def init_gee(service_account_email: str = "", key_file: str = "gee_service_account.json", project: str = ""):
     """Initialize GEE. Call once at startup."""
     global _initialized
     if _initialized:
         return True
 
-    # Try service account first (for backend deployment)
     if service_account_email and Path(key_file).exists():
         try:
             credentials = ee.ServiceAccountCredentials(service_account_email, key_file)
-            ee.Initialize(credentials)
+            init_kwargs = {"credentials": credentials}
+            if project:
+                init_kwargs["project"] = project
+            ee.Initialize(**init_kwargs)
             _initialized = True
             logger.info("GEE initialized with service account")
             return True
         except Exception as e:
             logger.warning(f"Service account init failed: {e}")
 
-    # Try default credentials (for local dev — run `earthengine authenticate` first)
     try:
-        ee.Initialize()
+        init_kwargs = {}
+        if project:
+            init_kwargs["project"] = project
+        ee.Initialize(**init_kwargs)
         _initialized = True
         logger.info("GEE initialized with default credentials")
         return True
     except Exception as e:
         logger.error(f"GEE initialization failed: {e}")
-        logger.error("Run 'earthengine authenticate' or set up a service account")
         return False
 
 
-def get_bbox(city: str = "Ahmedabad") -> ee.Geometry:
+def get_bbox(city: str = "ahmedabad") -> ee.Geometry:
     """Get the bounding box for a city as an EE Geometry."""
-    cfg = CITIES.get(city, CITIES["Ahmedabad"])
+    cfg = get_city(city)
     return ee.Geometry.Rectangle(cfg["bbox"])
+
+
+def _make_monthly_collection(base_collection, band_name, start_date, end_date):
+    """Create monthly mean composites from a daily collection."""
+    start = ee.Date(start_date)
+    end = ee.Date(end_date)
+    n_months = end.difference(start, 'month').round()
+
+    def make_monthly(i):
+        i = ee.Number(i)
+        month_start = start.advance(i, 'month')
+        month_end = month_start.advance(1, 'month')
+        return (base_collection
+                .filterDate(month_start, month_end)
+                .select(band_name)
+                .mean()
+                .set('system:time_start', month_start.millis()))
+
+    return ee.ImageCollection(ee.List.sequence(0, n_months.subtract(1)).map(make_monthly))
 
 
 def _extract_timeseries(collection, bbox, band_name, scale_factor=1.0, offset=0.0, num_points=10):
     """
-    Extract time-series data from a GEE ImageCollection.
-    Samples `num_points` locations within the bbox for each image date.
-    Returns list of {date, lat, lng, value}.
+    Extract time-series data using getRegion() for fast batch extraction.
+    Single API call for all points x all dates.
     """
-    # Create sample points across the bbox
+    import numpy as np
+
     cfg_bbox = bbox.bounds().coordinates().getInfo()[0]
     min_lng, min_lat = cfg_bbox[0]
     max_lng, max_lat = cfg_bbox[2]
 
-    import numpy as np
-    np.random.seed(42)
-    lats = np.linspace(min_lat + 0.01, max_lat - 0.01, int(np.sqrt(num_points)))
-    lngs = np.linspace(min_lng + 0.01, max_lng - 0.01, int(np.sqrt(num_points)))
-    sample_points = [(float(lat), float(lng)) for lat in lats for lng in lngs]
+    grid_size = max(int(np.sqrt(num_points)), 3)
+    lats = np.linspace(min_lat + 0.01, max_lat - 0.01, grid_size)
+    lngs = np.linspace(min_lng + 0.01, max_lng - 0.01, grid_size)
 
-    # Get image dates
-    image_list = collection.toList(collection.size())
+    points = []
+    for lat in lats:
+        for lng in lngs:
+            points.append(ee.Feature(ee.Geometry.Point([float(lng), float(lat)])))
+    sample_fc = ee.FeatureCollection(points)
+
     size = collection.size().getInfo()
+    if size > 50:
+        collection = collection.limit(50)
+        logger.info(f"Limited collection from {size} to 50 images")
+
+    region_data = collection.select(band_name).getRegion(sample_fc, scale=1000).getInfo()
+
+    header = region_data[0]
+    band_idx = header.index(band_name)
+    time_idx = header.index('time')
+    lon_idx = header.index('longitude')
+    lat_idx = header.index('latitude')
 
     results = []
-    for i in range(min(size, 50)):  # Cap at 50 images to avoid timeout
-        try:
-            image = ee.Image(image_list.get(i))
-            date_ms = image.date().millis().getInfo()
-            date_str = datetime.utcfromtimestamp(date_ms / 1000).strftime('%Y-%m-%d')
-
-            for lat, lng in sample_points:
-                point = ee.Geometry.Point([lng, lat])
-                value = image.select(band_name).reduceRegion(
-                    reducer=ee.Reducer.mean(),
-                    geometry=point,
-                    scale=1000,
-                ).getInfo()
-
-                val = value.get(band_name)
-                if val is not None:
-                    val = val * scale_factor + offset
-                    results.append({
-                        "date": date_str,
-                        "lat": round(lat, 4),
-                        "lng": round(lng, 4),
-                        "value": round(val, 4),
-                    })
-        except Exception as e:
-            logger.warning(f"Error extracting image {i}: {e}")
+    for row in region_data[1:]:
+        val = row[band_idx]
+        timestamp = row[time_idx]
+        if val is None or timestamp is None:
             continue
+        val = val * scale_factor + offset
+        date_str = datetime.utcfromtimestamp(timestamp / 1000).strftime('%Y-%m-%d')
+        results.append({
+            "date": date_str,
+            "lat": round(row[lat_idx], 4),
+            "lng": round(row[lon_idx], 4),
+            "value": round(val, 4),
+        })
 
     return results
 
 
-def fetch_lst(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
-    """
-    Fetch Land Surface Temperature from MODIS Terra (MOD11A2).
-    8-day composite, 1km resolution.
-    Raw values: Kelvin * 0.02 → subtract 273.15 for Celsius.
-    """
+# ── Core Environmental Parameters ─────────────────────────────
+
+def fetch_lst(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch Land Surface Temperature from MODIS Terra (MOD11A2). 8-day, 1km."""
     bbox = get_bbox(city)
     collection = (
         ee.ImageCollection('MODIS/061/MOD11A2')
@@ -144,27 +136,15 @@ def fetch_lst(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date:
         .filterDate(start_date, end_date)
         .select('LST_Day_1km')
     )
-
-    data = _extract_timeseries(
-        collection, bbox,
-        band_name='LST_Day_1km',
-        scale_factor=0.02,  # DN to Kelvin
-        offset=-273.15,     # Kelvin to Celsius
-    )
-
+    data = _extract_timeseries(collection, bbox, 'LST_Day_1km', scale_factor=0.02, offset=-273.15)
     for d in data:
         d["parameter"] = "LST"
-
     logger.info(f"Fetched {len(data)} LST points for {city}")
     return data
 
 
-def fetch_ndvi(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
-    """
-    Fetch NDVI from MODIS (MOD13A2).
-    16-day composite, 1km resolution.
-    Raw values: multiply by 0.0001 for NDVI scale (0-1).
-    """
+def fetch_ndvi(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch NDVI from MODIS (MOD13A2). 16-day, 1km."""
     bbox = get_bbox(city)
     collection = (
         ee.ImageCollection('MODIS/061/MOD13A2')
@@ -172,61 +152,126 @@ def fetch_ndvi(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date
         .filterDate(start_date, end_date)
         .select('NDVI')
     )
-
-    data = _extract_timeseries(
-        collection, bbox,
-        band_name='NDVI',
-        scale_factor=0.0001,
-    )
-
+    data = _extract_timeseries(collection, bbox, 'NDVI', scale_factor=0.0001)
     for d in data:
         d["parameter"] = "NDVI"
-
     logger.info(f"Fetched {len(data)} NDVI points for {city}")
     return data
 
 
-def fetch_no2(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
-    """
-    Fetch NO2 from Sentinel-5P TROPOMI.
-    Daily, ~7km resolution.
-    Values: tropospheric NO2 column density in mol/m².
-    """
+def fetch_soil_moisture(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch Soil Moisture from NASA SMAP (SPL3SMP_E). 3-day, ~9km."""
     bbox = get_bbox(city)
     collection = (
+        ee.ImageCollection('NASA/SMAP/SPL3SMP_E/006')
+        .filterBounds(bbox)
+        .filterDate(start_date, end_date)
+        .select('soil_moisture_am')
+    )
+    data = _extract_timeseries(collection, bbox, 'soil_moisture_am')
+    for d in data:
+        d["parameter"] = "SOIL_MOISTURE"
+    logger.info(f"Fetched {len(data)} soil moisture points for {city}")
+    return data
+
+
+# ── Air Quality Parameters (Sentinel-5P TROPOMI) ──────────────
+
+def fetch_no2(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch NO2 from Sentinel-5P TROPOMI. Monthly composites. mol/m²."""
+    bbox = get_bbox(city)
+    band = 'tropospheric_NO2_column_number_density'
+    base = (
         ee.ImageCollection('COPERNICUS/S5P/OFFL/L3_NO2')
         .filterBounds(bbox)
         .filterDate(start_date, end_date)
-        .select('tropospheric_NO2_column_number_density')
+        .select(band)
     )
-
-    # NO2 has daily data — sample monthly to avoid too many API calls
-    collection = collection.filter(ee.Filter.calendarRange(1, 28, 'day_of_month'))
-
-    data = _extract_timeseries(
-        collection, bbox,
-        band_name='tropospheric_NO2_column_number_density',
-    )
-
+    collection = _make_monthly_collection(base, band, start_date, end_date)
+    data = _extract_timeseries(collection, bbox, band)
     for d in data:
         d["parameter"] = "NO2"
-
     logger.info(f"Fetched {len(data)} NO2 points for {city}")
     return data
 
 
-def fetch_land_use(city: str = "Ahmedabad", year: int = 2024) -> list[dict]:
-    """
-    Fetch land use classification from Landsat 8/9.
-    Creates a median composite for the year, classifies by NDVI thresholds:
-      NDVI > 0.4  → vegetation (value=3)
-      NDVI > 0.1  → sparse/mixed (value=2)
-      NDVI > -0.1 → urban/barren (value=1)
-      NDVI <= -0.1 → water (value=0)
-    """
+def fetch_so2(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch SO2 from Sentinel-5P TROPOMI. Monthly composites. mol/m²."""
     bbox = get_bbox(city)
+    band = 'SO2_column_number_density'
+    base = (
+        ee.ImageCollection('COPERNICUS/S5P/OFFL/L3_SO2')
+        .filterBounds(bbox)
+        .filterDate(start_date, end_date)
+        .select(band)
+    )
+    collection = _make_monthly_collection(base, band, start_date, end_date)
+    data = _extract_timeseries(collection, bbox, band)
+    for d in data:
+        d["parameter"] = "SO2"
+    logger.info(f"Fetched {len(data)} SO2 points for {city}")
+    return data
 
-    # Landsat 8/9 surface reflectance
+
+def fetch_co(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch CO from Sentinel-5P TROPOMI. Monthly composites. mol/m²."""
+    bbox = get_bbox(city)
+    band = 'CO_column_number_density'
+    base = (
+        ee.ImageCollection('COPERNICUS/S5P/OFFL/L3_CO')
+        .filterBounds(bbox)
+        .filterDate(start_date, end_date)
+        .select(band)
+    )
+    collection = _make_monthly_collection(base, band, start_date, end_date)
+    data = _extract_timeseries(collection, bbox, band)
+    for d in data:
+        d["parameter"] = "CO"
+    logger.info(f"Fetched {len(data)} CO points for {city}")
+    return data
+
+
+def fetch_ozone(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch O3 (Ozone) from Sentinel-5P TROPOMI. Monthly composites. mol/m²."""
+    bbox = get_bbox(city)
+    band = 'O3_column_number_density'
+    base = (
+        ee.ImageCollection('COPERNICUS/S5P/OFFL/L3_O3')
+        .filterBounds(bbox)
+        .filterDate(start_date, end_date)
+        .select(band)
+    )
+    collection = _make_monthly_collection(base, band, start_date, end_date)
+    data = _extract_timeseries(collection, bbox, band)
+    for d in data:
+        d["parameter"] = "O3"
+    logger.info(f"Fetched {len(data)} O3 points for {city}")
+    return data
+
+
+def fetch_aerosol(city: str = "ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> list[dict]:
+    """Fetch UV Aerosol Index from Sentinel-5P TROPOMI. PM2.5/haze proxy. Monthly composites."""
+    bbox = get_bbox(city)
+    band = 'absorbing_aerosol_index'
+    base = (
+        ee.ImageCollection('COPERNICUS/S5P/OFFL/L3_AER_AI')
+        .filterBounds(bbox)
+        .filterDate(start_date, end_date)
+        .select(band)
+    )
+    collection = _make_monthly_collection(base, band, start_date, end_date)
+    data = _extract_timeseries(collection, bbox, band)
+    for d in data:
+        d["parameter"] = "AEROSOL"
+    logger.info(f"Fetched {len(data)} aerosol index points for {city}")
+    return data
+
+
+# ── Land Use ───────────────────────────────────────────────────
+
+def fetch_land_use(city: str = "ahmedabad", year: int = 2024) -> list[dict]:
+    """Fetch land use classification from Landsat 8/9 NDVI thresholds."""
+    bbox = get_bbox(city)
     collection = (
         ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
         .merge(ee.ImageCollection('LANDSAT/LC09/C02/T1_L2'))
@@ -235,7 +280,6 @@ def fetch_land_use(city: str = "Ahmedabad", year: int = 2024) -> list[dict]:
         .filter(ee.Filter.lt('CLOUD_COVER', 20))
     )
 
-    # Compute NDVI from Landsat bands
     def add_ndvi(image):
         nir = image.select('SR_B5').multiply(0.0000275).add(-0.2)
         red = image.select('SR_B4').multiply(0.0000275).add(-0.2)
@@ -243,22 +287,16 @@ def fetch_land_use(city: str = "Ahmedabad", year: int = 2024) -> list[dict]:
         return image.addBands(ndvi)
 
     composite = collection.map(add_ndvi).median()
-
-    # Classify
     ndvi = composite.select('NDVI')
     classified = (
-        ndvi.gt(0.4).multiply(3)         # vegetation
-        .add(ndvi.gt(0.1).And(ndvi.lte(0.4)).multiply(2))  # sparse
-        .add(ndvi.gt(-0.1).And(ndvi.lte(0.1)).multiply(1))  # urban
-        # water = 0 (default)
+        ndvi.gt(0.4).multiply(3)
+        .add(ndvi.gt(0.1).And(ndvi.lte(0.4)).multiply(2))
+        .add(ndvi.gt(-0.1).And(ndvi.lte(0.1)).multiply(1))
     ).rename('land_class')
 
-    # Sample the classified image
     data = _extract_timeseries(
         ee.ImageCollection([classified.set('system:time_start', ee.Date(f'{year}-06-15').millis())]),
-        bbox,
-        band_name='land_class',
-        num_points=25,  # More points for land use
+        bbox, 'land_class', num_points=25,
     )
 
     class_labels = {0: "water", 1: "urban", 2: "sparse_vegetation", 3: "dense_vegetation"}
@@ -271,43 +309,19 @@ def fetch_land_use(city: str = "Ahmedabad", year: int = 2024) -> list[dict]:
     return data
 
 
-def fetch_all(city: str = "Ahmedabad", start_date: str = "2023-01-01", end_date: str = "2024-12-31") -> dict:
-    """
-    Fetch all satellite parameters for a city.
-    Returns dict keyed by parameter name.
-    """
-    if not _initialized:
-        if not init_gee():
-            logger.error("GEE not initialized — cannot fetch data")
-            return {}
+# ── Batch fetch ────────────────────────────────────────────────
 
-    results = {}
-
-    try:
-        results["LST"] = fetch_lst(city, start_date, end_date)
-    except Exception as e:
-        logger.error(f"LST fetch failed: {e}")
-        results["LST"] = []
-
-    try:
-        results["NDVI"] = fetch_ndvi(city, start_date, end_date)
-    except Exception as e:
-        logger.error(f"NDVI fetch failed: {e}")
-        results["NDVI"] = []
-
-    try:
-        results["NO2"] = fetch_no2(city, start_date, end_date)
-    except Exception as e:
-        logger.error(f"NO2 fetch failed: {e}")
-        results["NO2"] = []
-
-    try:
-        results["LAND_USE_2020"] = fetch_land_use(city, 2020)
-        results["LAND_USE_2024"] = fetch_land_use(city, 2024)
-    except Exception as e:
-        logger.error(f"Land use fetch failed: {e}")
-
-    return results
+# All available fetch functions mapped by parameter name
+FETCH_FUNCTIONS = {
+    "LST": ("lst_timeseries.json", fetch_lst),
+    "NDVI": ("ndvi_timeseries.json", fetch_ndvi),
+    "NO2": ("no2_timeseries.json", fetch_no2),
+    "SO2": ("so2_timeseries.json", fetch_so2),
+    "CO": ("co_timeseries.json", fetch_co),
+    "O3": ("o3_timeseries.json", fetch_ozone),
+    "AEROSOL": ("aerosol_timeseries.json", fetch_aerosol),
+    "SOIL_MOISTURE": ("soil_moisture.json", fetch_soil_moisture),
+}
 
 
 def save_to_json(data: list[dict], filepath: str):

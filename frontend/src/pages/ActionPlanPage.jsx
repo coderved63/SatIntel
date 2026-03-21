@@ -7,8 +7,10 @@ import PlanViewer from '../components/action-plan/PlanViewer';
 import { exportAsPDF, exportAsJSON } from '../components/action-plan/ExportPlan';
 import { actionPlanService } from '../services/actionPlanService';
 import { FileText, Sparkles, Download, FileDown, FileJson } from 'lucide-react';
+import { useCity } from '../context/CityContext';
 
 export default function ActionPlanPage() {
+  const { city } = useCity();
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
@@ -37,7 +39,7 @@ export default function ActionPlanPage() {
     }, 1500);
 
     try {
-      const result = await actionPlanService.generatePlan('Ahmedabad');
+      const result = await actionPlanService.generatePlan(city.key);
       setPlan(result);
     } catch (err) {
       setError(err.message || 'Failed to generate action plan');

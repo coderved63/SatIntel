@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, FileText, Database, Info, Map } from 'lucide-react';
+import { LayoutDashboard, BarChart3, FileText, Database, Info, Map, ChevronDown } from 'lucide-react';
+import { useCity } from '../../context/CityContext';
+import { useState } from 'react';
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -10,6 +12,9 @@ const links = [
 ];
 
 export default function Sidebar() {
+  const { city, cities, changeCity } = useCity();
+  const [open, setOpen] = useState(false);
+
   return (
     <aside className="w-64 bg-slate-900/80 border-r border-slate-700/50 min-h-[calc(100vh-4rem)] p-4">
       <nav className="space-y-1">
@@ -36,8 +41,33 @@ export default function Sidebar() {
           <Map className="h-4 w-4 text-emerald-400" />
           <span className="text-xs font-medium text-emerald-400">Active City</span>
         </div>
-        <p className="text-sm text-white font-semibold">Ahmedabad</p>
-        <p className="text-xs text-slate-500">23.0225°N, 72.5714°E</p>
+        <div className="relative">
+          <button
+            onClick={() => setOpen(!open)}
+            className="w-full flex items-center justify-between px-2 py-1.5 rounded-md bg-slate-700/50 hover:bg-slate-700 transition-colors"
+          >
+            <span className="text-sm text-white font-semibold">{city.name}</span>
+            <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+          </button>
+          {open && (
+            <div className="absolute left-0 right-0 top-full mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl max-h-60 overflow-y-auto z-50">
+              {cities.map(c => (
+                <button
+                  key={c.key}
+                  onClick={() => { changeCity(c.key); setOpen(false); }}
+                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                    c.key === city.key
+                      ? 'bg-cyan-600/20 text-cyan-400'
+                      : 'text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <p className="text-xs text-slate-500 mt-1.5">{city.center[0]}°N, {city.center[1]}°E</p>
       </div>
     </aside>
   );

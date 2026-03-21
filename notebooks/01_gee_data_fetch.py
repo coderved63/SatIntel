@@ -1,63 +1,88 @@
 """
-Notebook 01: Google Earth Engine Data Fetch
-============================================
-Run this to fetch REAL satellite data for Ahmedabad and save to data/ahmedabad/
+GEE Data Fetch — All Gujarat Cities
+=====================================
+Fetches real satellite + air quality data from Google Earth Engine
+for all Gujarat cities and saves to data/<city>/.
 
-Instructions:
-1. pip install earthengine-api
-2. Run: earthengine authenticate  (one-time, opens browser)
-3. Run this script
-
-OR if using service account:
-1. Place gee_service_account.json in backend/
-2. Set GEE_SERVICE_ACCOUNT_EMAIL in .env
+Usage:
+    python notebooks/01_gee_data_fetch.py
 """
 import sys
-sys.path.insert(0, '../backend')
+import os
+import time
 
-from app.utils.gee_helpers import init_gee, fetch_lst, fetch_ndvi, fetch_no2, fetch_land_use, save_to_json
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
-# Step 1: Initialize GEE
+from app.utils.gee_helpers import (
+    init_gee, save_to_json, FETCH_FUNCTIONS,
+    fetch_land_use,
+)
+from app.utils.cities import get_gujarat_cities, get_city
+
+# ── Configuration ──────────────────────────────────────────────
+START_DATE = "2023-01-01"
+END_DATE = "2024-12-31"
+
+SERVICE_ACCOUNT_EMAIL = "gee-service@prompted-it-all.iam.gserviceaccount.com"
+KEY_FILE = os.path.join(os.path.dirname(__file__), '..', 'backend', 'gee_service_account.json')
+PROJECT = "prompted-it-all"
+
+DATA_ROOT = os.path.join(os.path.dirname(__file__), '..', 'data')
+
+# ── Initialize GEE ────────────────────────────────────────────
 print("Initializing Google Earth Engine...")
-success = init_gee()
+success = init_gee(service_account_email=SERVICE_ACCOUNT_EMAIL, key_file=KEY_FILE, project=PROJECT)
 if not success:
-    print("ERROR: GEE init failed. Run 'earthengine authenticate' first.")
+    print("ERROR: GEE initialization failed!")
     sys.exit(1)
-print("GEE initialized successfully!")
+print("GEE initialized successfully!\n")
 
-city = "Ahmedabad"
-start = "2023-01-01"
-end = "2024-12-31"
+# ── Fetch data for all Gujarat cities ─────────────────────────
+cities = get_gujarat_cities()
+print(f"Fetching data for {len(cities)} Gujarat cities: {', '.join(cities)}")
+print(f"Parameters: {', '.join(FETCH_FUNCTIONS.keys())} + Land Use (2020, 2024)")
+print(f"Date range: {START_DATE} to {END_DATE}")
+print("=" * 60)
 
-# Step 2: Fetch LST
-print(f"\n--- Fetching Land Surface Temperature ({city}) ---")
-lst_data = fetch_lst(city, start, end)
-print(f"Got {len(lst_data)} LST data points")
-save_to_json(lst_data, f"../data/ahmedabad/lst_timeseries.json")
+total_start = time.time()
 
-# Step 3: Fetch NDVI
-print(f"\n--- Fetching Vegetation Index ({city}) ---")
-ndvi_data = fetch_ndvi(city, start, end)
-print(f"Got {len(ndvi_data)} NDVI data points")
-save_to_json(ndvi_data, f"../data/ahmedabad/ndvi_timeseries.json")
+for city_key in cities:
+    city_cfg = get_city(city_key)
+    city_name = city_cfg["name"]
+    city_dir = os.path.join(DATA_ROOT, city_key)
+    os.makedirs(city_dir, exist_ok=True)
 
-# Step 4: Fetch NO2
-print(f"\n--- Fetching Air Pollution NO2 ({city}) ---")
-no2_data = fetch_no2(city, start, end)
-print(f"Got {len(no2_data)} NO2 data points")
-save_to_json(no2_data, f"../data/ahmedabad/no2_timeseries.json")
+    print(f"\n{'='*60}")
+    print(f"  {city_name} ({city_key})")
+    print(f"{'='*60}")
+    city_start = time.time()
 
-# Step 5: Fetch Land Use (2020 + 2024)
-print(f"\n--- Fetching Land Use 2020 ({city}) ---")
-lu_2020 = fetch_land_use(city, 2020)
-print(f"Got {len(lu_2020)} land use points (2020)")
-save_to_json(lu_2020, f"../data/ahmedabad/land_use_2020.json")
+    # Fetch all timeseries parameters
+    for param, (filename, fetch_fn) in FETCH_FUNCTIONS.items():
+        print(f"  [{param}] Fetching...", end=" ", flush=True)
+        try:
+            data = fetch_fn(city_key, START_DATE, END_DATE)
+            filepath = os.path.join(city_dir, filename)
+            save_to_json(data, filepath)
+            print(f"{len(data)} points")
+        except Exception as e:
+            print(f"ERROR: {e}")
 
-print(f"\n--- Fetching Land Use 2024 ({city}) ---")
-lu_2024 = fetch_land_use(city, 2024)
-print(f"Got {len(lu_2024)} land use points (2024)")
-save_to_json(lu_2024, f"../data/ahmedabad/land_use_2024.json")
+    # Fetch land use for 2020 and 2024
+    for year in [2020, 2024]:
+        print(f"  [LAND_USE_{year}] Fetching...", end=" ", flush=True)
+        try:
+            data = fetch_land_use(city_key, year)
+            filepath = os.path.join(city_dir, f"land_use_{year}.json")
+            save_to_json(data, filepath)
+            print(f"{len(data)} points")
+        except Exception as e:
+            print(f"ERROR: {e}")
 
-print("\n=== ALL DATA FETCHED SUCCESSFULLY ===")
-print("Files saved to data/ahmedabad/")
-print("You can now start the backend — it will use this real data.")
+    elapsed = time.time() - city_start
+    print(f"  >> {city_name} done in {elapsed:.0f}s")
+
+total_elapsed = time.time() - total_start
+print(f"\n{'='*60}")
+print(f"ALL DONE — {len(cities)} cities in {total_elapsed:.0f}s")
+print(f"Data saved to: {DATA_ROOT}")

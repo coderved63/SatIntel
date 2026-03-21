@@ -8,6 +8,7 @@ import TrendChart from '../components/analytics/TrendChart';
 import HotspotMap from '../components/analytics/HotspotMap';
 import { analyticsService } from '../services/analyticsService';
 import { AlertTriangle, TrendingUp, MapPin } from 'lucide-react';
+import { useCity } from '../context/CityContext';
 
 const PARAMETERS = [
   { id: 'LST', label: 'Land Surface Temperature', color: '#EF4444' },
@@ -17,6 +18,7 @@ const PARAMETERS = [
 ];
 
 export default function AnalyticsPage() {
+  const { city } = useCity();
   const [activeParam, setActiveParam] = useState('LST');
   const [activeTab, setActiveTab] = useState('anomalies');
   const [loading, setLoading] = useState(false);
@@ -26,15 +28,15 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     runAnalysis();
-  }, [activeParam]);
+  }, [activeParam, city.key]);
 
   const runAnalysis = async () => {
     setLoading(true);
     try {
       const [anomalyRes, trendRes, hotspotRes] = await Promise.all([
-        analyticsService.getAnomalies(activeParam),
-        analyticsService.getTrends(activeParam),
-        analyticsService.getHotspots(activeParam),
+        analyticsService.getAnomalies(activeParam, city.key),
+        analyticsService.getTrends(activeParam, city.key),
+        analyticsService.getHotspots(activeParam, city.key),
       ]);
       setAnomalies(anomalyRes);
       setTrends(trendRes);

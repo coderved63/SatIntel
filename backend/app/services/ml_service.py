@@ -13,10 +13,10 @@ from collections import defaultdict
 logger = logging.getLogger(__name__)
 
 
-def _load_parameter_data(parameter: str, city: str = "Ahmedabad") -> list[dict]:
+def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
     """Load data from satellite service."""
     from app.services import satellite_service
-    return satellite_service._load_data(parameter)
+    return satellite_service._load_data(parameter, city)
 
 
 def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: float = 0.08) -> dict:

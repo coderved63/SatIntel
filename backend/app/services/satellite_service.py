@@ -10,8 +10,13 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Path to pre-fetched data
-DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "ahmedabad"
+# Base path to pre-fetched data
+DATA_BASE = Path(__file__).resolve().parent.parent.parent.parent / "data"
+
+
+def _get_data_dir(city: str = "ahmedabad") -> Path:
+    """Get data directory for a city."""
+    return DATA_BASE / city.lower()
 
 # Ahmedabad constants
 AHMEDABAD_CENTER = [23.0225, 72.5714]
@@ -63,6 +68,50 @@ PARAMETERS = {
         "color": "#3B82F6",
         "description": "Surface soil moisture from L-band radiometer",
     },
+    "SO2": {
+        "id": "SO2",
+        "name": "Sulfur Dioxide (SO₂)",
+        "unit": "mol/m²",
+        "source": "Sentinel-5P TROPOMI",
+        "resolution": "7km",
+        "frequency": "Monthly composite",
+        "file": "so2_timeseries.json",
+        "color": "#F59E0B",
+        "description": "SO₂ column density — industrial emission indicator",
+    },
+    "CO": {
+        "id": "CO",
+        "name": "Carbon Monoxide (CO)",
+        "unit": "mol/m²",
+        "source": "Sentinel-5P TROPOMI",
+        "resolution": "7km",
+        "frequency": "Monthly composite",
+        "file": "co_timeseries.json",
+        "color": "#DC2626",
+        "description": "CO column density — combustion/traffic pollution indicator",
+    },
+    "O3": {
+        "id": "O3",
+        "name": "Ozone (O₃)",
+        "unit": "mol/m²",
+        "source": "Sentinel-5P TROPOMI",
+        "resolution": "7km",
+        "frequency": "Monthly composite",
+        "file": "o3_timeseries.json",
+        "color": "#2563EB",
+        "description": "Total ozone column density — UV protection and smog indicator",
+    },
+    "AEROSOL": {
+        "id": "AEROSOL",
+        "name": "Aerosol Index (UV AI)",
+        "unit": "index",
+        "source": "Sentinel-5P TROPOMI",
+        "resolution": "7km",
+        "frequency": "Monthly composite",
+        "file": "aerosol_timeseries.json",
+        "color": "#92400E",
+        "description": "UV Aerosol Index — PM2.5/dust/haze proxy",
+    },
     "LAND_USE": {
         "id": "LAND_USE",
         "name": "Land Use Classification",
@@ -80,23 +129,17 @@ PARAMETERS = {
 _data_cache: dict = {}
 
 
-def _load_data(parameter: str) -> list[dict]:
-    """Load pre-fetched JSON data for a parameter.
-
-    Currently serves pre-fetched data directly. When real GEE data is fetched
-    (with different native resolutions per mission), call
-    geo_helpers.harmonize_timeseries() here to resample everything to the
-    common 1 km grid before caching. See utils/geo_helpers.py for the
-    IDW interpolation implementation — ready to plug in.
-    """
-    if parameter in _data_cache:
-        return _data_cache[parameter]
+def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
+    """Load pre-fetched JSON data for a parameter and city."""
+    cache_key = f"{city.lower()}:{parameter}"
+    if cache_key in _data_cache:
+        return _data_cache[cache_key]
 
     meta = PARAMETERS.get(parameter)
     if not meta:
         raise ValueError(f"Unknown parameter: {parameter}")
 
-    filepath = DATA_DIR / meta["file"]
+    filepath = _get_data_dir(city) / meta["file"]
     if not filepath.exists():
         logger.warning(f"Data file not found: {filepath}")
         return []
@@ -104,12 +147,8 @@ def _load_data(parameter: str) -> list[dict]:
     with open(filepath, "r") as f:
         data = json.load(f)
 
-    # TODO: When using real GEE data with different resolutions, uncomment:
-    # from app.utils.geo_helpers import harmonize_timeseries
-    # data = harmonize_timeseries(data, city="Ahmedabad", parameter=parameter)
-
-    _data_cache[parameter] = data
-    logger.info(f"Loaded {len(data)} points for {parameter} from {filepath}")
+    _data_cache[cache_key] = data
+    logger.info(f"Loaded {len(data)} points for {parameter}/{city} from {filepath}")
     return data
 
 
@@ -134,7 +173,7 @@ def fetch_satellite_data(city: str, parameters: list[str], date_range: dict) -> 
     """Fetch satellite data for given parameters. Uses pre-fetched files."""
     result = {}
     for param in parameters:
-        data = _load_data(param)
+        data = _load_data(param, city)
         # Filter by date range if provided
         start = date_range.get("start_date", "2023-01-01")
         end = date_range.get("end_date", "2024-12-31")
@@ -147,9 +186,9 @@ def fetch_satellite_data(city: str, parameters: list[str], date_range: dict) -> 
     return {"city": city, "parameters": result}
 
 
-def get_timeseries(parameter: str, city: str = "Ahmedabad") -> dict:
+def get_timeseries(parameter: str, city: str = "ahmedabad") -> dict:
     """Get time-series data for a single parameter."""
-    data = _load_data(parameter)
+    data = _load_data(parameter, city)
     # Aggregate by date (average across spatial points)
     from collections import defaultdict
 
@@ -170,9 +209,9 @@ def get_timeseries(parameter: str, city: str = "Ahmedabad") -> dict:
     }
 
 
-def get_heatmap_data(parameter: str, city: str = "Ahmedabad") -> dict:
+def get_heatmap_data(parameter: str, city: str = "ahmedabad") -> dict:
     """Get spatial data formatted for heatmap rendering."""
-    data = _load_data(parameter)
+    data = _load_data(parameter, city)
     if not data:
         return {"points": [], "parameter": parameter, "min_value": 0, "max_value": 0}
 
@@ -210,7 +249,7 @@ def get_heatmap_data(parameter: str, city: str = "Ahmedabad") -> dict:
     }
 
 
-def get_all_layers(city: str = "Ahmedabad") -> list[dict]:
+def get_all_layers(city: str = "ahmedabad") -> list[dict]:
     """Get all available map layers with their data."""
     layers = []
     for param_id, meta in PARAMETERS.items():
@@ -228,9 +267,9 @@ def get_all_layers(city: str = "Ahmedabad") -> list[dict]:
     return layers
 
 
-def get_spatial_data(parameter: str, date: Optional[str] = None) -> list[dict]:
+def get_spatial_data(parameter: str, date: Optional[str] = None, city: str = "ahmedabad") -> list[dict]:
     """Get spatial data points for a parameter, optionally filtered by date."""
-    data = _load_data(parameter)
+    data = _load_data(parameter, city)
     if date:
         return [d for d in data if d["date"] == date]
     # Return latest date
@@ -241,9 +280,9 @@ def get_spatial_data(parameter: str, date: Optional[str] = None) -> list[dict]:
     return data
 
 
-def get_statistics(parameter: str) -> dict:
+def get_statistics(parameter: str, city: str = "ahmedabad") -> dict:
     """Compute basic statistics for a parameter."""
-    data = _load_data(parameter)
+    data = _load_data(parameter, city)
     if not data:
         return {}
 
@@ -263,10 +302,11 @@ def get_statistics(parameter: str) -> dict:
     }
 
 
-def get_land_use_change(city: str = "Ahmedabad") -> dict:
+def get_land_use_change(city: str = "ahmedabad") -> dict:
     """Compare land use between 2020 and 2024 to show urban sprawl."""
-    file_2020 = DATA_DIR / "land_use_2020.json"
-    file_2024 = DATA_DIR / "land_use_2024.json"
+    data_dir = _get_data_dir(city)
+    file_2020 = data_dir / "land_use_2020.json"
+    file_2024 = data_dir / "land_use_2024.json"
 
     data_2020 = []
     data_2024 = []

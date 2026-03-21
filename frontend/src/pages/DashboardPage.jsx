@@ -9,8 +9,10 @@ import LayerControl from '../components/dashboard/LayerControl';
 import { satelliteService } from '../services/satelliteService';
 import { analyticsService } from '../services/analyticsService';
 import { Thermometer, Leaf, Wind, Droplets } from 'lucide-react';
+import { useCity } from '../context/CityContext';
 
 export default function DashboardPage() {
+  const { city } = useCity();
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
   const [timeseries, setTimeseries] = useState(null);
@@ -25,17 +27,17 @@ export default function DashboardPage() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [city.key]);
 
   const loadData = async () => {
     try {
       setLoading(true);
       const [summaryRes, lstTs, ndviTs, no2Ts, smTs] = await Promise.all([
-        analyticsService.getSummary('Ahmedabad'),
-        satelliteService.getTimeSeries('LST'),
-        satelliteService.getTimeSeries('NDVI'),
-        satelliteService.getTimeSeries('NO2'),
-        satelliteService.getTimeSeries('SOIL_MOISTURE'),
+        analyticsService.getSummary(city.key),
+        satelliteService.getTimeSeries('LST', city.key),
+        satelliteService.getTimeSeries('NDVI', city.key),
+        satelliteService.getTimeSeries('NO2', city.key),
+        satelliteService.getTimeSeries('SOIL_MOISTURE', city.key),
       ]);
       setSummary(summaryRes);
       setTimeseries({ LST: lstTs, NDVI: ndviTs, NO2: no2Ts, SOIL_MOISTURE: smTs });
@@ -83,7 +85,7 @@ export default function DashboardPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-white">Ahmedabad Environmental Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">{city.name} Environmental Dashboard</h1>
           <p className="text-slate-400 text-sm mt-1">Satellite-based environmental monitoring — MODIS, Sentinel-5P, SMAP</p>
         </div>
 
@@ -131,7 +133,7 @@ export default function DashboardPage() {
               <div className="absolute top-4 right-4 z-[1000]">
                 <LayerControl layers={layers} onToggle={handleLayerToggle} />
               </div>
-              <MapView layers={layers} />
+              <MapView layers={layers} city={city} />
             </Card>
           </div>
 
