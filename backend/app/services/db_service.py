@@ -109,12 +109,10 @@ async def query_timeseries(city: str, parameter: str, start_date: str = "", end_
     from sqlalchemy import select, and_, text
 
     async with get_session_factory()() as session:
-        query = select(SatelliteObservation).where(
-            and_(
-                SatelliteObservation.city == city,
-                SatelliteObservation.parameter == parameter,
-            )
-        )
+        conditions = [SatelliteObservation.parameter == parameter]
+        if city:
+            conditions.append(SatelliteObservation.city == city)
+        query = select(SatelliteObservation).where(and_(*conditions))
 
         if start_date:
             query = query.where(SatelliteObservation.date >= start_date)

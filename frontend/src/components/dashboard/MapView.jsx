@@ -4,7 +4,8 @@ import { DeckGL } from '@deck.gl/react';
 import { HeatmapLayer, HexagonLayer, GridLayer, ContourLayer, ScreenGridLayer } from '@deck.gl/aggregation-layers';
 import { ScatterplotLayer, ColumnLayer, ArcLayer, IconLayer, GeoJsonLayer } from '@deck.gl/layers';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { Globe, Mountain, Satellite, Map as MapIcon, Layers, Eye, Flame, Wind, BarChart3, Hexagon, Grid3x3, CircleDot, Activity } from 'lucide-react';
+import { Globe, Mountain, Satellite, Map as MapIcon, Layers, Eye, Flame, Wind, BarChart3, Hexagon, Grid3x3, CircleDot, Activity, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // ── Map Styles (all free, no API key) ──────────────────────────
 const MAP_STYLES = {
@@ -81,6 +82,7 @@ const COLOR_RANGES = {
 const ELEVATION_RANGE = [0, 3000];
 
 export default function MapView({ layers = [], city }) {
+  const navigate = useNavigate();
   const [heatmapData, setHeatmapData] = useState({});
   const [mapStyle, setMapStyle] = useState('dark');
   const [vizMode, setVizMode] = useState('heatmap');
@@ -512,6 +514,15 @@ export default function MapView({ layers = [], city }) {
           </div>
         )}
       </div>
+
+      {/* ── Research Mode Button (bottom-right) ───── */}
+      <button
+        onClick={() => navigate('/research')}
+        className="absolute bottom-4 right-4 z-10 flex flex-col items-center gap-1 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 hover:bg-slate-800/90 hover:border-cyan-500/30 transition-all group shadow-lg"
+      >
+        <Search className="h-5 w-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+        <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest group-hover:text-cyan-400 transition-colors">Research</span>
+      </button>
 
       {/* ── Attribution (subtle) ──────────────────── */}
       <div className="absolute bottom-1.5 left-2 text-[9px] text-white/20 pointer-events-none">

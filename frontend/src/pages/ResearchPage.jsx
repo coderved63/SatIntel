@@ -1,0 +1,461 @@
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import Map, { NavigationControl, Marker } from 'react-map-gl/maplibre';
+import { DeckGL } from '@deck.gl/react';
+import { ScatterplotLayer } from '@deck.gl/layers';
+import { HeatmapLayer } from '@deck.gl/aggregation-layers';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { Search, X, MapPin, Calendar, Sliders, Download, ChevronDown, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+
+const PARAMETERS = [
+  { id: 'LST', label: 'Temperature (LST)', unit: '°C', color: '#EF4444' },
+  { id: 'NDVI', label: 'Vegetation (NDVI)', unit: 'index', color: '#10B981' },
+  { id: 'NO2', label: 'NO₂', unit: 'mol/m²', color: '#8B5CF6' },
+  { id: 'SO2', label: 'SO₂', unit: 'mol/m²', color: '#F59E0B' },
+  { id: 'CO', label: 'CO', unit: 'mol/m²', color: '#DC2626' },
+  { id: 'O3', label: 'O₃', unit: 'mol/m²', color: '#2563EB' },
+  { id: 'AEROSOL', label: 'Aerosol Index', unit: 'index', color: '#92400E' },
+  { id: 'SOIL_MOISTURE', label: 'Soil Moisture', unit: 'm³/m³', color: '#3B82F6' },
+];
+
+export default function ResearchPage() {
+  const navigate = useNavigate();
+
+  const [viewState, setViewState] = useState({
+    longitude: 72.5714,
+    latitude: 23.0225,
+    zoom: 8,
+    pitch: 0,
+    bearing: 0,
+  });
+
+  const [pin, setPin] = useState(null);
+  const [selectedParams, setSelectedParams] = useState(['LST', 'NDVI', 'NO2']);
+  const [startDate, setStartDate] = useState('2023-01-01');
+  const [endDate, setEndDate] = useState('2024-12-31');
+  const [radiusKm, setRadiusKm] = useState(10);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPanel, setShowPanel] = useState(true);
+  const [activeResultParam, setActiveResultParam] = useState(null);
+
+  // Click on map → drop pin
+  const handleMapClick = useCallback((e) => {
+    // DeckGL onClick provides coordinate differently
+    if (e.coordinate) {
+      setPin({ lat: e.coordinate[1], lng: e.coordinate[0] });
+      setResults(null);
+    }
+  }, []);
+
+  // Query the research endpoint
+  const runQuery = async () => {
+    if (!pin) return;
+    setLoading(true);
+    setResults(null);
+    try {
+      const paramStr = selectedParams.join(',');
+      const { data } = await api.get(
+        `/satellite/research?lat=${pin.lat}&lng=${pin.lng}&radius_km=${radiusKm}&start_date=${startDate}&end_date=${endDate}&parameters=${paramStr}`
+      );
+      setResults(data);
+      // Set first param with data as active
+      const firstWithData = selectedParams.find(p => data.parameters?.[p]?.total_points > 0);
+      setActiveResultParam(firstWithData || selectedParams[0]);
+    } catch (err) {
+      console.error('Research query failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle param selection
+  const toggleParam = (id) => {
+    setSelectedParams(prev =>
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    );
+  };
+
+  // Export CSV
+  const exportCSV = () => {
+    if (!results || !activeResultParam) return;
+    const paramData = results.parameters[activeResultParam];
+    if (!paramData?.raw_data) return;
+
+    const rows = paramData.raw_data.map(d =>
+      `${d.date},${d.lat},${d.lng},${d.value},${activeResultParam}`
+    );
+    const csv = `date,lat,lng,value,parameter\n${rows.join('\n')}`;
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `research_${activeResultParam}_${pin?.lat?.toFixed(4)}_${pin?.lng?.toFixed(4)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Deck.gl layers for showing queried points
+  const deckLayers = useMemo(() => {
+    if (!results || !activeResultParam) return [];
+    const paramData = results.parameters[activeResultParam];
+    if (!paramData?.raw_data?.length) return [];
+
+    const paramConfig = PARAMETERS.find(p => p.id === activeResultParam);
+    const color = paramConfig?.color || '#06B6D4';
+    const [r, g, b] = hexToRgb(color);
+
+    return [
+      new HeatmapLayer({
+        id: 'research-heatmap',
+        data: paramData.raw_data,
+        getPosition: d => [d.lng, d.lat],
+        getWeight: d => Math.abs(d.value),
+        radiusPixels: 40,
+        intensity: 2,
+        threshold: 0.05,
+        colorRange: [[r,g,b,50],[r,g,b,100],[r,g,b,150],[r,g,b,200],[r,g,b,255]],
+        opacity: 0.6,
+      }),
+      new ScatterplotLayer({
+        id: 'research-points',
+        data: paramData.raw_data.slice(0, 200),
+        getPosition: d => [d.lng, d.lat],
+        getRadius: 200,
+        getFillColor: [r, g, b, 180],
+        pickable: true,
+        radiusUnits: 'meters',
+      }),
+    ];
+  }, [results, activeResultParam]);
+
+  // Radius circle + pin marker overlay
+  const pinLayers = useMemo(() => {
+    if (!pin) return [];
+    return [
+      // Radius circle
+      new ScatterplotLayer({
+        id: 'radius-ring',
+        data: [pin],
+        getPosition: d => [d.lng, d.lat],
+        getRadius: radiusKm * 1000,
+        getFillColor: [6, 182, 212, 15],
+        getLineColor: [6, 182, 212, 100],
+        stroked: true,
+        lineWidthMinPixels: 2,
+        radiusUnits: 'meters',
+      }),
+      // Pin outer glow
+      new ScatterplotLayer({
+        id: 'pin-glow',
+        data: [pin],
+        getPosition: d => [d.lng, d.lat],
+        getRadius: 600,
+        getFillColor: [6, 182, 212, 60],
+        radiusUnits: 'meters',
+      }),
+      // Pin center dot
+      new ScatterplotLayer({
+        id: 'pin-center',
+        data: [pin],
+        getPosition: d => [d.lng, d.lat],
+        getRadius: 200,
+        getFillColor: [6, 182, 212, 255],
+        getLineColor: [255, 255, 255, 255],
+        stroked: true,
+        lineWidthMinPixels: 2,
+        radiusUnits: 'meters',
+      }),
+    ];
+  }, [pin, radiusKm]);
+
+  const activeParamData = results?.parameters?.[activeResultParam];
+  const activeParamConfig = PARAMETERS.find(p => p.id === activeResultParam);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-950">
+      {/* Map */}
+      <DeckGL
+        viewState={viewState}
+        onViewStateChange={({ viewState: vs }) => setViewState(vs)}
+        controller={true}
+        layers={[...pinLayers, ...deckLayers]}
+        onClick={(info, event) => {
+          if (info.coordinate) {
+            setPin({ lat: info.coordinate[1], lng: info.coordinate[0] });
+            setResults(null);
+          }
+        }}
+        getCursor={() => 'crosshair'}
+        getTooltip={({ object }) => {
+          if (!object || object.value === undefined) return null;
+          return {
+            html: `<div style="padding:6px;font-size:11px;"><b>${object.value}</b><br/>${object.date}<br/>(${object.lat}, ${object.lng})</div>`,
+            style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #334155', borderRadius: '6px' },
+          };
+        }}
+      >
+        <Map
+          mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          attributionControl={false}
+        >
+          <NavigationControl position="top-right" />
+        </Map>
+      </DeckGL>
+
+      {/* Pin marker — rendered as a Deck.gl layer for accurate geo-positioning */}
+
+      {/* Close button */}
+      <button
+        onClick={() => navigate('/dashboard')}
+        className="absolute top-4 left-4 z-30 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white/80 hover:bg-slate-800 transition-all"
+      >
+        <X className="h-4 w-4" />
+        Exit Research
+      </button>
+
+      {/* Coordinates display */}
+      {pin && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-slate-900/80 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2 text-sm flex items-center gap-3">
+          <span className="text-cyan-400 font-mono">{pin.lat.toFixed(6)}°N, {pin.lng.toFixed(6)}°E</span>
+          <span className="text-white/20">|</span>
+          <span className="text-white/30">r = {radiusKm}km</span>
+          {results?.nearest_city && (
+            <>
+              <span className="text-white/20">|</span>
+              <span className="text-emerald-400 text-xs capitalize">{results.nearest_city}</span>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Instruction overlay (when no pin) */}
+      {!pin && !results && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+          <div className="bg-slate-900/70 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-6 text-center max-w-md">
+            <MapPin className="h-10 w-10 text-cyan-400 mx-auto mb-3" />
+            <h2 className="text-xl font-bold text-white mb-2">Research Mode</h2>
+            <p className="text-white/50 text-sm">
+              Click anywhere on the map to drop a pin. Then configure parameters, date range, and radius to query the satellite database.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Right Panel */}
+      {pin && (
+        <div className={`absolute top-0 right-0 h-full z-30 transition-all duration-300 ${showPanel ? 'w-[400px]' : 'w-0'}`}>
+          {/* Toggle panel */}
+          <button
+            onClick={() => setShowPanel(!showPanel)}
+            className="absolute -left-10 top-1/2 -translate-y-1/2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-l-xl px-2 py-4 text-white/60 hover:text-white transition-colors"
+          >
+            <ChevronDown className={`h-4 w-4 transition-transform ${showPanel ? 'rotate-[-90deg]' : 'rotate-90'}`} />
+          </button>
+
+          {showPanel && (
+            <div className="h-full bg-slate-900/95 backdrop-blur-xl border-l border-white/10 overflow-y-auto">
+              <div className="p-5 space-y-5">
+                {/* Header */}
+                <div>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Search className="h-5 w-5 text-cyan-400" />
+                    Query Builder
+                  </h3>
+                  <p className="text-xs text-white/40 mt-1">Configure your spatial-temporal query</p>
+                </div>
+
+                {/* Parameters */}
+                <div>
+                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">Parameters</label>
+                  <div className="grid grid-cols-2 gap-1.5 mt-2">
+                    {PARAMETERS.map(p => (
+                      <button
+                        key={p.id}
+                        onClick={() => toggleParam(p.id)}
+                        className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium transition-all ${
+                          selectedParams.includes(p.id)
+                            ? 'bg-white/10 text-white ring-1 ring-white/20'
+                            : 'text-white/30 hover:bg-white/5 hover:text-white/60'
+                        }`}
+                      >
+                        <span className="w-2 h-2 rounded-full" style={{
+                          backgroundColor: p.color,
+                          opacity: selectedParams.includes(p.id) ? 1 : 0.3,
+                        }} />
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Date Range */}
+                <div>
+                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> Date Range
+                  </label>
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={e => setStartDate(e.target.value)}
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-cyan-500/50"
+                    />
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={e => setEndDate(e.target.value)}
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-cyan-500/50"
+                    />
+                  </div>
+                </div>
+
+                {/* Radius */}
+                <div>
+                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider flex items-center gap-1">
+                    <Sliders className="h-3 w-3" /> Search Radius: {radiusKm}km
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    value={radiusKm}
+                    onChange={e => setRadiusKm(parseInt(e.target.value))}
+                    className="w-full mt-2 accent-cyan-500"
+                  />
+                  <div className="flex justify-between text-[10px] text-white/20">
+                    <span>1km</span><span>25km</span><span>50km</span>
+                  </div>
+                </div>
+
+                {/* Run Query Button */}
+                <button
+                  onClick={runQuery}
+                  disabled={loading || selectedParams.length === 0}
+                  className="w-full flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-700 text-white font-medium py-3 rounded-xl text-sm transition-all"
+                >
+                  {loading ? (
+                    <><Loader2 className="h-4 w-4 animate-spin" /> Querying...</>
+                  ) : (
+                    <><Search className="h-4 w-4" /> Run Query</>
+                  )}
+                </button>
+
+                {/* Results */}
+                {results && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-white">Results</h4>
+                      <button
+                        onClick={exportCSV}
+                        className="flex items-center gap-1 text-[10px] text-cyan-400 hover:text-cyan-300"
+                      >
+                        <Download className="h-3 w-3" /> CSV
+                      </button>
+                    </div>
+
+                    {/* Param tabs */}
+                    <div className="flex gap-1 flex-wrap">
+                      {selectedParams.map(pid => {
+                        const pData = results.parameters?.[pid];
+                        const pConfig = PARAMETERS.find(p => p.id === pid);
+                        return (
+                          <button
+                            key={pid}
+                            onClick={() => setActiveResultParam(pid)}
+                            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all flex items-center gap-1.5 ${
+                              activeResultParam === pid
+                                ? 'bg-white/10 text-white ring-1 ring-white/20'
+                                : 'text-white/30 hover:text-white/60'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pConfig?.color }} />
+                            {pConfig?.label}
+                            <span className="text-white/20">{pData?.total_points || 0}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Timeseries chart */}
+                    {activeParamData?.timeseries?.length > 0 && (
+                      <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+                        <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">
+                          {activeParamConfig?.label} — Timeseries
+                        </p>
+                        <ResponsiveContainer width="100%" height={180}>
+                          <AreaChart data={activeParamData.timeseries} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+                            <defs>
+                              <linearGradient id="researchGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor={activeParamConfig?.color} stopOpacity={0.3} />
+                                <stop offset="100%" stopColor={activeParamConfig?.color} stopOpacity={0} />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                            <XAxis
+                              dataKey="date"
+                              tick={{ fill: '#64748b', fontSize: 9 }}
+                              tickLine={false}
+                              tickFormatter={v => v?.substring(5)}
+                              interval="preserveStartEnd"
+                            />
+                            <YAxis tick={{ fill: '#64748b', fontSize: 9 }} tickLine={false} axisLine={false} width={40} />
+                            <Tooltip
+                              contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', fontSize: '11px' }}
+                              labelStyle={{ color: '#94a3b8' }}
+                              itemStyle={{ color: activeParamConfig?.color }}
+                              formatter={(v) => [`${v} ${activeParamConfig?.unit}`, '']}
+                            />
+                            <Area
+                              type="monotone"
+                              dataKey="value"
+                              stroke={activeParamConfig?.color}
+                              strokeWidth={2}
+                              fill="url(#researchGrad)"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+
+                    {/* Stats summary */}
+                    {activeParamData?.statistics && Object.keys(activeParamData.statistics).length > 0 && (
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { label: 'Mean', value: activeParamData.statistics.mean },
+                          { label: 'Min', value: activeParamData.statistics.min },
+                          { label: 'Max', value: activeParamData.statistics.max },
+                        ].map(s => (
+                          <div key={s.label} className="bg-white/5 rounded-xl p-2.5 text-center border border-white/5">
+                            <p className="text-[10px] text-white/30">{s.label}</p>
+                            <p className="text-sm font-bold text-white mt-0.5">{s.value?.toFixed?.(4) ?? '--'}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Data count */}
+                    {activeParamData && (
+                      <p className="text-[10px] text-white/20 text-center">
+                        {activeParamData.total_points} data points found within {radiusKm}km radius
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}

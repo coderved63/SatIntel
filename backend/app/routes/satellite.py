@@ -80,6 +80,119 @@ async def spatial_query(
     }
 
 
+@router.get("/research")
+async def research_query(
+    lat: float = 23.0225,
+    lng: float = 72.5714,
+    radius_km: float = 10.0,
+    start_date: str = "2023-01-01",
+    end_date: str = "2024-12-31",
+    parameters: str = "LST,NDVI,NO2,SO2,CO,O3,AEROSOL,SOIL_MOISTURE",
+):
+    """
+    Research Mode: fast spatial-temporal query using local JSON data.
+    Auto-detects nearest city, searches within radius, auto-expands if empty.
+    """
+    import math
+    from collections import defaultdict
+    from app.utils.cities import CITIES, get_city
+
+    param_list = [p.strip() for p in parameters.split(",")]
+
+    # Find nearest city by distance to clicked coordinate
+    nearest_city = None
+    min_dist = float('inf')
+    for city_key, cfg in CITIES.items():
+        center = cfg["center"]
+        dist = math.sqrt((center[0] - lat)**2 + (center[1] - lng)**2) * 111
+        if dist < min_dist:
+            min_dist = dist
+            nearest_city = city_key
+
+    # Also find all cities within a generous range (the click might be between cities)
+    nearby_cities = []
+    for city_key, cfg in CITIES.items():
+        center = cfg["center"]
+        dist = math.sqrt((center[0] - lat)**2 + (center[1] - lng)**2) * 111
+        if dist < radius_km + 50:  # include cities whose data might overlap
+            nearby_cities.append(city_key)
+
+    if not nearby_cities and nearest_city:
+        nearby_cities = [nearest_city]
+
+    results = {}
+
+    for param in param_list:
+        all_points = []
+
+        # Collect data from nearby cities
+        for city_key in nearby_cities:
+            try:
+                city_data = satellite_service._load_raw(param, city_key)
+                for d in city_data:
+                    if start_date <= d.get("date", "") <= end_date:
+                        dlat = d["lat"] - lat
+                        dlng = d["lng"] - lng
+                        dist = math.sqrt(dlat**2 + dlng**2) * 111
+                        if dist <= radius_km:
+                            all_points.append({**d, "_dist_km": round(dist, 2)})
+            except Exception:
+                continue
+
+        # Auto-expand: if no results, use nearest city's data with closest points
+        if not all_points and nearest_city:
+            try:
+                city_data = satellite_service._load_raw(param, nearest_city)
+                dated = [d for d in city_data if start_date <= d.get("date", "") <= end_date]
+                # Add distance to each point
+                for d in dated:
+                    dlat = d["lat"] - lat
+                    dlng = d["lng"] - lng
+                    d["_dist_km"] = round(math.sqrt(dlat**2 + dlng**2) * 111, 2)
+                # Take closest points (up to 500)
+                dated.sort(key=lambda x: x["_dist_km"])
+                all_points = dated[:500]
+            except Exception:
+                pass
+
+        # Aggregate into timeseries
+        date_values = defaultdict(list)
+        for d in all_points:
+            date_values[d["date"]].append(d["value"])
+
+        timeseries = [
+            {"date": date, "value": round(sum(vals) / len(vals), 6), "count": len(vals)}
+            for date, vals in sorted(date_values.items())
+        ]
+
+        # Compute stats
+        all_vals = [d["value"] for d in all_points]
+        stats = {}
+        if all_vals:
+            stats = {
+                "mean": round(sum(all_vals) / len(all_vals), 6),
+                "min": round(min(all_vals), 6),
+                "max": round(max(all_vals), 6),
+            }
+
+        results[param] = {
+            "total_points": len(all_points),
+            "timeseries": timeseries,
+            "statistics": stats,
+            "raw_data": all_points[:300],
+        }
+
+    return {
+        "lat": lat,
+        "lng": lng,
+        "radius_km": radius_km,
+        "nearest_city": nearest_city,
+        "nearby_cities": nearby_cities,
+        "date_range": {"start": start_date, "end": end_date},
+        "parameters": results,
+    }
+
+
 @router.get("/cities")
 async def get_cities():
     """List all supported cities."""
