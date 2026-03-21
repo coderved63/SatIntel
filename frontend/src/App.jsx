@@ -10,6 +10,7 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import ActionPlanPage from './pages/ActionPlanPage';
 import DataExplorerPage from './pages/DataExplorerPage';
 import AboutPage from './pages/AboutPage';
+import GreenGapPage from './pages/GreenGapPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/action-plan" element={<ProtectedRoute><ActionPlanPage /></ProtectedRoute>} />
           <Route path="/data-explorer" element={<ProtectedRoute><DataExplorerPage /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><AboutPage /></ProtectedRoute>} />
+          <Route path="/green-gap" element={<ProtectedRoute><GreenGapPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </CityProvider>
