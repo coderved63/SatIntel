@@ -48,21 +48,21 @@ export default function TrendChart({ data }) {
 
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
           <XAxis dataKey="date" tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} interval="preserveStartEnd" />
           <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={50} />
           <Tooltip
-            contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }}
+            contentStyle={{ backgroundColor: 'rgba(17,24,39,0.95)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', backdropFilter: 'blur(12px)' }}
             labelStyle={{ color: '#94A3B8' }}
           />
-          <Line type="monotone" dataKey="value" stroke="#06B6D4" strokeWidth={2} dot={false} name="Historical" />
+          <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} name="Historical" />
           <Line type="monotone" dataKey="forecast" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Forecast" />
         </LineChart>
       </ResponsiveContainer>
 
       <div className="flex items-center gap-6 mt-4 text-xs text-slate-400">
         <div className="flex items-center gap-2">
-          <span className="w-4 h-0.5 bg-cyan-500" />
+          <span className="w-4 h-0.5 bg-blue-500" />
           Historical
         </div>
         <div className="flex items-center gap-2">

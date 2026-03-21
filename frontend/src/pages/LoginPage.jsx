@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Satellite, LogIn } from 'lucide-react';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
+import { motion } from 'framer-motion';
+import { Loader2, Satellite, Mail, Lock, ArrowLeft } from 'lucide-react';
+
+const F = { fontFamily: "'Space Grotesk', sans-serif" };
+
+const inputStyle = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' };
+const onFocus = (e) => { e.target.style.borderColor = 'rgba(59,130,246,0.5)'; e.target.style.boxShadow = '0 0 0 2px rgba(59,130,246,0.12)'; };
+const onBlur = (e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.boxShadow = 'none'; };
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -28,52 +33,122 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <Satellite className="h-10 w-10 text-cyan-400" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              SatIntel
-            </span>
+    <div className="min-h-screen flex" style={{ background: '#0A0E1A' }}>
+
+      {/* ── LEFT PANEL — quote + texture ── */}
+      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden flex-col justify-between p-10">
+        {/* Diagonal grid texture */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.03) 75%, transparent 75%)',
+          backgroundSize: '40px 40px',
+        }} />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,14,26,0.3) 0%, rgba(59,130,246,0.06) 40%, rgba(139,92,246,0.08) 70%, rgba(10,14,26,0.6) 100%)' }} />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/3" style={{ background: 'linear-gradient(to top, rgba(10,14,26,0.9), transparent)' }} />
+
+        {/* Back to home */}
+        <div className="relative z-10">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
           </Link>
-          <p className="text-slate-400">Sign in to access the platform</p>
         </div>
 
-        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-8">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4 text-sm">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
-            <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : <><LogIn className="h-4 w-4 mr-2" /> Sign In</>}
-            </Button>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-slate-400">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-cyan-400 hover:text-cyan-300 font-medium">Sign up</Link>
+        {/* Quote */}
+        <div className="relative z-10">
+          <div className="w-12 h-1 bg-blue-500 rounded-full mb-8" />
+          <blockquote className="text-3xl sm:text-4xl font-bold italic text-white/90 leading-snug max-w-lg" style={{ fontFamily: 'Georgia, serif' }}>
+            "Every city has a story the sky can tell. We turn orbit into action."
+          </blockquote>
+          <p className="text-sm text-slate-500 mt-6 uppercase tracking-[0.15em]">
+            SatIntel — Satellite Environmental Intelligence
           </p>
         </div>
+
+        {/* Brand at bottom */}
+        <div className="relative z-10 flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center">
+            <Satellite className="h-4 w-4 text-white" />
+          </div>
+          <span className="text-base font-bold text-white/70" style={F}>SatIntel</span>
+        </div>
+      </div>
+
+      {/* ── RIGHT PANEL — form ── */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 relative" style={{ background: '#0d1117' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="w-full max-w-sm"
+        >
+          {/* Mobile back link */}
+          <Link to="/" className="lg:hidden inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors mb-8">
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+
+          <h1 className="text-3xl font-bold text-white mb-2" style={F}>Welcome back</h1>
+          <p className="text-sm text-slate-500 mb-8">Sign in to your account</p>
+
+          {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                required
+                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-white placeholder-slate-600 text-sm"
+                style={inputStyle}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            </div>
+
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-white placeholder-slate-600 text-sm"
+                style={inputStyle}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full font-semibold rounded-full py-3.5 transition-all duration-200 text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+              style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', boxShadow: '0 4px 20px rgba(59,130,246,0.35)', ...F }}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-sm text-slate-500">
+            Don&apos;t have an account?{' '}
+            <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+              Create one
+            </Link>
+          </p>
+        </motion.div>
       </div>
     </div>
   );

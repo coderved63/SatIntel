@@ -33,14 +33,13 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
   // Compute smart tick interval based on data density
   const totalPoints = data.length;
   let tickCount;
-  if (totalPoints <= 24) tickCount = totalPoints; // show all for small datasets
+  if (totalPoints <= 24) tickCount = totalPoints;
   else if (totalPoints <= 50) tickCount = 8;
   else if (totalPoints <= 100) tickCount = 10;
   else tickCount = 12;
 
   const tickInterval = Math.max(1, Math.floor(totalPoints / tickCount));
 
-  // Use a stable gradient ID to avoid conflicts when multiple charts use same color
   const gradientId = `gradient-${color.replace('#', '')}-${Math.random().toString(36).slice(2, 6)}`;
 
   return (
@@ -52,12 +51,12 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
             <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
         <XAxis
           dataKey={xKey}
           tick={{ fill: '#94A3B8', fontSize: 10 }}
           tickLine={false}
-          axisLine={{ stroke: '#334155' }}
+          axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
           interval={tickInterval}
           tickFormatter={(val, i) => formatSmartLabel(val, i, data)}
         />
@@ -70,10 +69,11 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: '#1E293B',
-            border: '1px solid #334155',
+            backgroundColor: 'rgba(17,24,39,0.95)',
+            border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '8px',
             padding: '8px 12px',
+            backdropFilter: 'blur(12px)',
           }}
           labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
           itemStyle={{ color: color, fontSize: 13, fontWeight: 600 }}

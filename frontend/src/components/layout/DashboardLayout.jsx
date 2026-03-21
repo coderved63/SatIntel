@@ -1,16 +1,12 @@
 import Navbar from './Navbar';
-import Sidebar from './Sidebar';
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen" style={{ background: '#0A0E1A' }}>
       <Navbar />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6 overflow-auto">
-          {children}
-        </main>
-      </div>
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+        {children}
+      </main>
     </div>
   );
 }

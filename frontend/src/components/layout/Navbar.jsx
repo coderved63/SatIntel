@@ -1,10 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Satellite, LogOut, User } from 'lucide-react';
+import { useCity } from '../../context/CityContext';
+import { Satellite, LogOut, User, ChevronDown, LayoutDashboard, BarChart3, FileText, TreePine, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+
+const F = { fontFamily: "'Space Grotesk', sans-serif" };
+
+const navLinks = [
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/action-plan', label: 'Action Plan', icon: FileText },
+  { to: '/green-gap', label: 'Green Gap', icon: TreePine },
+];
 
 export default function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
+  const { city, cities, changeCity } = useCity();
   const navigate = useNavigate();
+  const [cityOpen, setCityOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -12,39 +26,118 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <Satellite className="h-8 w-8 text-cyan-400" />
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              SatIntel
-            </span>
-          </Link>
+    <nav className="sticky top-0 z-50 flex justify-center pt-4 px-4" style={{ background: 'transparent' }}>
+      {/* Centered floating pill */}
+      <div
+        className="flex items-center gap-1 px-2 py-2 rounded-full"
+        style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 pl-2 pr-3">
+          <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+            <Satellite className="h-4 w-4 text-white" />
+          </div>
+        </Link>
 
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                <div className="flex items-center gap-2 text-slate-300">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">{user?.name}</span>
-                </div>
-                <button onClick={handleLogout} className="flex items-center gap-1 text-slate-400 hover:text-red-400 transition-colors text-sm">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
-              </>
-            ) : (
-              <div className="flex items-center gap-3">
-                <Link to="/login" className="text-slate-300 hover:text-white text-sm transition-colors">Login</Link>
-                <Link to="/signup" className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-1.5 rounded-lg text-sm transition-colors">
-                  Sign Up
-                </Link>
+        {/* Desktop nav links */}
+        <div className="hidden md:flex items-center">
+          {navLinks.map(({ to, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                `px-4 py-1.5 rounded-full text-sm transition-all duration-200 ${
+                  isActive
+                    ? 'text-white bg-white/[0.1]'
+                    : 'text-slate-300 hover:text-white'
+                }`
+              }
+            >
+              {label}
+            </NavLink>
+          ))}
+        </div>
+
+        {/* City selector */}
+        {isAuthenticated && (
+          <div className="relative ml-1">
+            <button
+              onClick={() => setCityOpen(!cityOpen)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all hover:bg-white/[0.04]"
+            >
+              <span className="text-blue-400 text-xs">City:</span>
+              <span className="text-white font-medium">{city.name}</span>
+              <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform ${cityOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {cityOpen && (
+              <div className="absolute right-0 top-full mt-2 rounded-xl shadow-2xl max-h-72 overflow-y-auto min-w-[180px] py-1" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                {cities.map(c => (
+                  <button
+                    key={c.key}
+                    onClick={() => { changeCity(c.key); setCityOpen(false); }}
+                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                      c.key === city.key
+                        ? 'text-blue-400 bg-blue-500/10'
+                        : 'text-slate-300 hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    {c.name}
+                  </button>
+                ))}
               </div>
             )}
           </div>
-        </div>
+        )}
+
+        {/* User pill / Sign up */}
+        {isAuthenticated ? (
+          <div className="hidden sm:flex items-center gap-1 ml-1">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 text-slate-400 text-xs">
+              <User className="h-3.5 w-3.5" />
+              <span>{user?.name}</span>
+            </div>
+            <button onClick={handleLogout} className="p-2 rounded-full text-slate-500 hover:text-red-400 hover:bg-white/[0.04] transition-colors">
+              <LogOut className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        ) : (
+          <Link to="/signup" className="text-sm font-medium px-5 py-2 rounded-full bg-white text-[#0A0E1A] hover:bg-slate-100 transition-all duration-200 ml-2" style={F}>
+            Sign up
+          </Link>
+        )}
+
+        {/* Mobile toggle */}
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white transition-colors ml-1">
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
+
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div className="absolute top-20 left-4 right-4 rounded-2xl px-5 py-4 space-y-1 z-50" style={{ background: 'rgba(10,14,26,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          {navLinks.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
+                  isActive ? 'text-white bg-white/[0.08]' : 'text-slate-400 hover:text-white'
+                }`
+              }
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </NavLink>
+          ))}
+          {isAuthenticated && (
+            <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-red-400 transition-colors w-full">
+              <LogOut className="h-4 w-4" />
+              Logout
+            </button>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
