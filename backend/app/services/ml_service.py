@@ -1,0 +1,234 @@
+"""
+ML Analytics Service — anomaly detection, trend prediction, hotspot clustering.
+Uses scikit-learn (Isolation Forest, DBSCAN) and statsmodels (ARIMA).
+"""
+import logging
+import numpy as np
+import pandas as pd
+from typing import Optional
+from sklearn.ensemble import IsolationForest
+from sklearn.cluster import DBSCAN
+from collections import defaultdict
+
+logger = logging.getLogger(__name__)
+
+
+def _load_parameter_data(parameter: str, city: str = "Ahmedabad") -> list[dict]:
+    """Load data from satellite service."""
+    from app.services import satellite_service
+    return satellite_service._load_data(parameter)
+
+
+def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: float = 0.08) -> dict:
+    """Detect anomalies using Isolation Forest."""
+    data = _load_parameter_data(parameter, city)
+    if not data or len(data) < 10:
+        return {"anomalies": [], "total_points": 0, "anomaly_count": 0}
+
+    df = pd.DataFrame(data)
+    values = df[["value"]].values
+
+    model = IsolationForest(contamination=contamination, random_state=42, n_estimators=100)
+    predictions = model.fit_predict(values)
+    scores = model.decision_function(values)
+
+    df["is_anomaly"] = predictions == -1
+    df["anomaly_score"] = scores
+
+    anomalies = df[df["is_anomaly"]].copy()
+    anomalies["severity"] = anomalies["anomaly_score"].apply(
+        lambda s: "critical" if s < -0.3 else ("high" if s < -0.15 else "moderate")
+    )
+
+    anomaly_list = []
+    for _, row in anomalies.iterrows():
+        anomaly_list.append({
+            "date": row["date"],
+            "lat": round(float(row["lat"]), 4),
+            "lng": round(float(row["lng"]), 4),
+            "value": round(float(row["value"]), 4),
+            "severity": row["severity"],
+            "anomaly_score": round(float(row["anomaly_score"]), 4),
+            "parameter": parameter,
+        })
+
+    return {
+        "parameter": parameter,
+        "city": city,
+        "anomalies": anomaly_list,
+        "total_points": len(df),
+        "anomaly_count": len(anomaly_list),
+        "contamination": contamination,
+    }
+
+
+def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 30) -> dict:
+    """Predict trends using ARIMA."""
+    data = _load_parameter_data(parameter, city)
+    if not data:
+        return {"historical": {}, "forecast": {}, "trend_direction": "unknown"}
+
+    # Aggregate by date
+    date_values = defaultdict(list)
+    for d in data:
+        date_values[d["date"]].append(d["value"])
+
+    timeseries = {
+        date: round(sum(vals) / len(vals), 4)
+        for date, vals in sorted(date_values.items())
+    }
+
+    if len(timeseries) < 10:
+        return {"historical": timeseries, "forecast": {}, "trend_direction": "insufficient_data"}
+
+    try:
+        from statsmodels.tsa.arima.model import ARIMA
+
+        df = pd.Series(list(timeseries.values()), index=pd.to_datetime(list(timeseries.keys())))
+        df = df.sort_index()
+
+        # Fit ARIMA model
+        model = ARIMA(df, order=(2, 1, 1))
+        fitted = model.fit()
+
+        # Forecast
+        forecast_result = fitted.forecast(steps=forecast_days)
+        forecast_dates = pd.date_range(start=df.index[-1] + pd.Timedelta(days=1), periods=forecast_days)
+        forecast = {
+            str(date.date()): round(float(val), 4)
+            for date, val in zip(forecast_dates, forecast_result)
+        }
+
+        # Determine trend direction
+        last_historical = df.iloc[-1]
+        last_forecast = forecast_result.iloc[-1] if len(forecast_result) > 0 else last_historical
+        trend = "increasing" if last_forecast > last_historical else "decreasing"
+
+        return {
+            "parameter": parameter,
+            "city": city,
+            "historical": timeseries,
+            "forecast": forecast,
+            "trend_direction": trend,
+            "model": "ARIMA(2,1,1)",
+            "forecast_days": forecast_days,
+        }
+
+    except Exception as e:
+        logger.warning(f"ARIMA failed for {parameter}: {e}. Using linear fallback.")
+        # Fallback: simple linear extrapolation
+        dates = list(timeseries.keys())
+        values = list(timeseries.values())
+        n = len(values)
+        if n >= 2:
+            slope = (values[-1] - values[0]) / n
+            last_val = values[-1]
+            forecast = {}
+            last_date = pd.to_datetime(dates[-1])
+            for i in range(1, forecast_days + 1):
+                fdate = last_date + pd.Timedelta(days=i)
+                forecast[str(fdate.date())] = round(last_val + slope * i, 4)
+            trend = "increasing" if slope > 0 else "decreasing"
+        else:
+            forecast = {}
+            trend = "unknown"
+
+        return {
+            "parameter": parameter,
+            "city": city,
+            "historical": timeseries,
+            "forecast": forecast,
+            "trend_direction": trend,
+            "model": "linear_fallback",
+            "forecast_days": forecast_days,
+        }
+
+
+def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, min_samples: int = 2) -> dict:
+    """Identify geographic clusters of extreme values using DBSCAN."""
+    data = _load_parameter_data(parameter, city)
+    if not data:
+        return {"hotspots": [], "total_points": 0}
+
+    # Use latest available date for spatial clustering
+    dates = sorted(set(d["date"] for d in data))
+    # Use all data for more robust clustering
+    df = pd.DataFrame(data)
+
+    # Get high-value points (top 25th percentile)
+    threshold = df["value"].quantile(0.75)
+
+    # For NDVI, low values are concerning (stressed vegetation)
+    if parameter == "NDVI":
+        hot_mask = df["value"] <= df["value"].quantile(0.25)
+    else:
+        hot_mask = df["value"] >= threshold
+
+    hot_df = df[hot_mask]
+    if len(hot_df) < min_samples:
+        return {"hotspots": [], "total_points": len(df), "threshold": float(threshold)}
+
+    coords = hot_df[["lat", "lng"]].values
+    clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(coords)
+
+    hot_df = hot_df.copy()
+    hot_df["cluster"] = clustering.labels_
+
+    hotspots = []
+    for label in sorted(set(clustering.labels_)):
+        if label == -1:
+            continue
+        cluster_points = hot_df[hot_df["cluster"] == label]
+        center_lat = float(cluster_points["lat"].mean())
+        center_lng = float(cluster_points["lng"].mean())
+        avg_value = float(cluster_points["value"].mean())
+        num_points = len(cluster_points)
+
+        severity = "critical" if num_points >= 8 else ("high" if num_points >= 4 else "moderate")
+
+        hotspots.append({
+            "cluster_id": int(label),
+            "center_lat": round(center_lat, 4),
+            "center_lng": round(center_lng, 4),
+            "avg_value": round(avg_value, 4),
+            "num_points": num_points,
+            "severity": severity,
+            "parameter": parameter,
+            "radius_km": round(eps * 111, 1),  # Approximate km from degrees
+        })
+
+    return {
+        "parameter": parameter,
+        "city": city,
+        "hotspots": hotspots,
+        "total_points": len(df),
+        "hot_points": len(hot_df),
+        "cluster_count": len(hotspots),
+        "threshold": round(float(threshold), 4),
+    }
+
+
+def get_city_summary(city: str = "Ahmedabad") -> dict:
+    """Get comprehensive analytics summary for a city."""
+    from app.services import satellite_service
+
+    summary = {"city": city, "parameters": {}}
+
+    for param_id in ["LST", "NDVI", "NO2", "SOIL_MOISTURE"]:
+        try:
+            stats = satellite_service.get_statistics(param_id)
+            anomaly_result = detect_anomalies(param_id, city)
+            hotspot_result = find_hotspots(param_id, city)
+
+            summary["parameters"][param_id] = {
+                "statistics": stats,
+                "anomaly_count": anomaly_result.get("anomaly_count", 0),
+                "hotspot_count": hotspot_result.get("cluster_count", 0),
+                "top_anomalies": anomaly_result.get("anomalies", [])[:3],
+                "top_hotspots": hotspot_result.get("hotspots", [])[:3],
+            }
+        except Exception as e:
+            logger.error(f"Error computing summary for {param_id}: {e}")
+            summary["parameters"][param_id] = {"error": str(e)}
+
+    return summary
