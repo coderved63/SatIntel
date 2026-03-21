@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, FileText, Database, Info, Map, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, BarChart3, FileText, Database, Info, Map, ChevronDown, TreePine } from 'lucide-react';
 import { useCity } from '../../context/CityContext';
 import { useState } from 'react';
 
@@ -9,6 +9,7 @@ const links = [
   { to: '/action-plan', label: 'Action Plan', icon: FileText },
   { to: '/data-explorer', label: 'Data Explorer', icon: Database },
   { to: '/about', label: 'About', icon: Info },
+  { to: '/green-gap', label: 'Green Gap', icon: TreePine },
 ];
 
 export default function Sidebar() {
