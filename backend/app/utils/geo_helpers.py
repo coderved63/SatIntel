@@ -18,24 +18,52 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# ── Ahmedabad Grid Definition ─────────────────────────────────
-# Bounding box: 22.95°N–23.10°N, 72.45°E–72.70°E
-# At ~23°N latitude:
-#   1° lat ≈ 111.32 km → 0.009° ≈ 1 km
-#   1° lng ≈ 102.47 km → 0.00976° ≈ 1 km
-# We use 0.01° spacing ≈ 1.1 km grid cells
+# ── Grid Config — auto-generated from cities.py ──────────────
+# 0.01° spacing ≈ 1.1 km at Indian latitudes
+# Each city's bbox from cities.py → grid config
+STEP_DEG = 0.01
+STEP_KM = 1.1
 
-GRID_CONFIG = {
-    "Ahmedabad": {
-        "min_lat": 22.95,
-        "max_lat": 23.10,
-        "min_lng": 72.45,
-        "max_lng": 72.70,
-        "step_deg": 0.01,       # ~1.1 km at this latitude
-        "step_km": 1.1,
-        "center": [23.0225, 72.5714],
-    }
-}
+def _build_grid_config() -> dict:
+    """Build grid config for all cities from cities.py bboxes."""
+    try:
+        from app.utils.cities import CITIES
+    except ImportError:
+        CITIES = {}
+
+    config = {}
+    for key, city_data in CITIES.items():
+        bbox = city_data.get("bbox", [72.4, 22.9, 72.7, 23.2])
+        center = city_data.get("center", [23.0, 72.5])
+        name = city_data.get("name", key.title())
+        config[name.lower()] = {
+            "min_lat": bbox[1],
+            "max_lat": bbox[3],
+            "min_lng": bbox[0],
+            "max_lng": bbox[2],
+            "step_deg": STEP_DEG,
+            "step_km": STEP_KM,
+            "center": center,
+        }
+
+    # Fallback if cities.py is empty
+    if not config:
+        config["ahmedabad"] = {
+            "min_lat": 22.9, "max_lat": 23.2,
+            "min_lng": 72.4, "max_lng": 72.7,
+            "step_deg": STEP_DEG, "step_km": STEP_KM,
+            "center": [23.0225, 72.5714],
+        }
+
+    return config
+
+GRID_CONFIG = _build_grid_config()
+
+
+def _get_cfg(city: str) -> dict:
+    """Get grid config for a city (case-insensitive)."""
+    key = city.lower()
+    return GRID_CONFIG.get(key, GRID_CONFIG.get("ahmedabad", list(GRID_CONFIG.values())[0]))
 
 
 def get_grid(city: str = "Ahmedabad") -> tuple[np.ndarray, np.ndarray]:
@@ -43,7 +71,7 @@ def get_grid(city: str = "Ahmedabad") -> tuple[np.ndarray, np.ndarray]:
     Generate the harmonized lat/lng grid for a city.
     Returns (lats_1d, lngs_1d) arrays.
     """
-    cfg = GRID_CONFIG.get(city, GRID_CONFIG["Ahmedabad"])
+    cfg = _get_cfg(city)
     lats = np.arange(cfg["min_lat"], cfg["max_lat"] + cfg["step_deg"] / 2, cfg["step_deg"])
     lngs = np.arange(cfg["min_lng"], cfg["max_lng"] + cfg["step_deg"] / 2, cfg["step_deg"])
     return np.round(lats, 4), np.round(lngs, 4)
@@ -57,7 +85,7 @@ def get_grid_points(city: str = "Ahmedabad") -> list[tuple[float, float]]:
 
 def get_grid_info(city: str = "Ahmedabad") -> dict:
     """Return metadata about the harmonized grid."""
-    cfg = GRID_CONFIG.get(city, GRID_CONFIG["Ahmedabad"])
+    cfg = _get_cfg(city)
     lats, lngs = get_grid(city)
     return {
         "city": city,
@@ -82,7 +110,7 @@ def harmonize_to_grid(
     value_key: str = "value",
     method: str = "idw",
     power: float = 2.0,
-    max_radius_deg: float = 0.05,
+    max_radius_deg: float = 0.15,  # ~16km — covers the coarse GEE 3x3 grid spacing
 ) -> list[dict]:
     """
     Harmonize irregular satellite data points onto the common 1 km grid.
@@ -151,7 +179,7 @@ def harmonize_to_grid(
 
     logger.info(
         f"Harmonized {len(data_points)} source points -> {len(result)} grid cells "
-        f"({city}, {method}, {GRID_CONFIG.get(city, GRID_CONFIG['Ahmedabad'])['step_km']} km)"
+        f"({city}, {method}, {STEP_KM} km)"
     )
     return result
 

@@ -125,15 +125,16 @@ PARAMETERS = {
     },
 }
 
-# Cache loaded data in memory
-_data_cache: dict = {}
+# Cache: raw + harmonized
+_raw_cache: dict = {}
+_data_cache: dict = {}  # harmonized
 
 
-def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
-    """Load pre-fetched JSON data for a parameter and city."""
+def _load_raw(parameter: str, city: str = "ahmedabad") -> list[dict]:
+    """Load raw JSON data without harmonization."""
     cache_key = f"{city.lower()}:{parameter}"
-    if cache_key in _data_cache:
-        return _data_cache[cache_key]
+    if cache_key in _raw_cache:
+        return _raw_cache[cache_key]
 
     meta = PARAMETERS.get(parameter)
     if not meta:
@@ -147,9 +148,51 @@ def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
     with open(filepath, "r") as f:
         data = json.load(f)
 
-    _data_cache[cache_key] = data
-    logger.info(f"Loaded {len(data)} points for {parameter}/{city} from {filepath}")
+    _raw_cache[cache_key] = data
     return data
+
+
+def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
+    """Load data harmonized to the common 1km grid.
+
+    Raw satellite data comes on different grids:
+      MODIS (LST, NDVI): 1km native
+      Sentinel-5P (NO2, SO2, CO, O3, Aerosol): ~7km native
+      SMAP (Soil Moisture): ~9km native
+      Landsat (Land Use): 30m aggregated
+
+    This function resamples everything to a uniform 0.01° (~1.1km) grid
+    using Inverse Distance Weighting interpolation so all parameters
+    can be overlaid and compared pixel-by-pixel.
+    """
+    cache_key = f"{city.lower()}:{parameter}:harmonized"
+    if cache_key in _data_cache:
+        return _data_cache[cache_key]
+
+    raw_data = _load_raw(parameter, city)
+    if not raw_data:
+        return []
+
+    # Skip harmonization for land use (categorical data — can't interpolate classes)
+    if parameter == "LAND_USE":
+        _data_cache[cache_key] = raw_data
+        return raw_data
+
+    # Harmonize to common 1km grid
+    from app.utils.geo_helpers import harmonize_timeseries
+    harmonized = harmonize_timeseries(raw_data, city=city, parameter=parameter)
+
+    if harmonized:
+        _data_cache[cache_key] = harmonized
+        logger.info(
+            f"Harmonized {parameter}/{city}: {len(raw_data)} raw -> {len(harmonized)} grid points (1km)"
+        )
+    else:
+        # Fallback to raw if harmonization yields nothing
+        _data_cache[cache_key] = raw_data
+        logger.warning(f"Harmonization empty for {parameter}/{city}, using raw data")
+
+    return _data_cache[cache_key]
 
 
 def get_available_parameters() -> list[dict]:
