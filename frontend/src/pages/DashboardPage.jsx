@@ -8,39 +8,64 @@ import ChartWidget from '../components/dashboard/ChartWidget';
 import LayerControl from '../components/dashboard/LayerControl';
 import { satelliteService } from '../services/satelliteService';
 import { analyticsService } from '../services/analyticsService';
-import { Thermometer, Leaf, Wind, Droplets } from 'lucide-react';
+import { Thermometer, Leaf, Wind, Droplets, ChevronDown, Cloud, Flame, Sun, Haze } from 'lucide-react';
 import { useCity } from '../context/CityContext';
+
+const AQ_PARAMS = [
+  { id: 'NO2', label: 'NO₂', unit: 'mol/m²', scale: 1e6, displayUnit: 'µmol/m²', color: '#8B5CF6', icon: Wind },
+  { id: 'SO2', label: 'SO₂', unit: 'mol/m²', scale: 1e6, displayUnit: 'µmol/m²', color: '#F59E0B', icon: Cloud },
+  { id: 'CO', label: 'CO', unit: 'mol/m²', scale: 1e2, displayUnit: '×10⁻² mol/m²', color: '#DC2626', icon: Flame },
+  { id: 'O3', label: 'O₃', unit: 'mol/m²', scale: 1e3, displayUnit: 'mmol/m²', color: '#2563EB', icon: Sun },
+  { id: 'AEROSOL', label: 'Aerosol', unit: 'index', scale: 1, displayUnit: 'index', color: '#92400E', icon: Haze },
+];
 
 export default function DashboardPage() {
   const { city } = useCity();
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
   const [timeseries, setTimeseries] = useState(null);
+  const [aqParam, setAqParam] = useState(AQ_PARAMS[0]);
+  const [aqDropdownOpen, setAqDropdownOpen] = useState(false);
+  const [aqTimeseries, setAqTimeseries] = useState({});
   const [layers, setLayers] = useState([
-    { id: 'LST', label: 'Urban Heat Island', color: '#EF4444', enabled: true },
-    { id: 'NDVI', label: 'Vegetation Health', color: '#10B981', enabled: true },
-    { id: 'NO2', label: 'Air Pollution (NO₂)', color: '#8B5CF6', enabled: false },
+    { id: 'LST', label: 'Temperature (LST)', color: '#EF4444', enabled: true },
+    { id: 'NDVI', label: 'Vegetation (NDVI)', color: '#10B981', enabled: true },
+    { id: 'NO2', label: 'NO₂', color: '#8B5CF6', enabled: false },
+    { id: 'SO2', label: 'SO₂', color: '#F59E0B', enabled: false },
+    { id: 'CO', label: 'CO', color: '#DC2626', enabled: false },
+    { id: 'O3', label: 'O₃', color: '#2563EB', enabled: false },
+    { id: 'AEROSOL', label: 'Aerosol Index', color: '#92400E', enabled: false },
     { id: 'SOIL_MOISTURE', label: 'Soil Moisture', color: '#3B82F6', enabled: false },
   ]);
-  const [heatmapData, setHeatmapData] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadData();
   }, [city.key]);
 
+  // Load AQ timeseries when param changes
+  useEffect(() => {
+    if (!aqTimeseries[aqParam.id]) {
+      satelliteService.getTimeSeries(aqParam.id, city.key).then(data => {
+        setAqTimeseries(prev => ({ ...prev, [aqParam.id]: data }));
+      }).catch(() => {});
+    }
+  }, [aqParam.id, city.key]);
+
   const loadData = async () => {
     try {
       setLoading(true);
-      const [summaryRes, lstTs, ndviTs, no2Ts, smTs] = await Promise.all([
+      setAqTimeseries({});
+      const [summaryRes, lstTs, ndviTs, smTs, no2Ts] = await Promise.all([
         analyticsService.getSummary(city.key),
         satelliteService.getTimeSeries('LST', city.key),
         satelliteService.getTimeSeries('NDVI', city.key),
-        satelliteService.getTimeSeries('NO2', city.key),
         satelliteService.getTimeSeries('SOIL_MOISTURE', city.key),
+        satelliteService.getTimeSeries('NO2', city.key),
       ]);
       setSummary(summaryRes);
-      setTimeseries({ LST: lstTs, NDVI: ndviTs, NO2: no2Ts, SOIL_MOISTURE: smTs });
+      setTimeseries({ LST: lstTs, NDVI: ndviTs, SOIL_MOISTURE: smTs });
+      setAqTimeseries({ NO2: no2Ts });
     } catch (err) {
       setError(err.message || 'Failed to load dashboard data');
     } finally {
@@ -80,6 +105,14 @@ export default function DashboardPage() {
   const no2Stats = summary?.parameters?.NO2?.statistics || {};
   const smStats = summary?.parameters?.SOIL_MOISTURE?.statistics || {};
 
+  // Air quality display values
+  const aqStats = summary?.parameters?.[aqParam.id]?.statistics || no2Stats;
+  const aqMean = aqStats.mean != null ? (aqStats.mean * aqParam.scale).toFixed(2) : '--';
+  const aqMax = aqStats.max != null ? (aqStats.max * aqParam.scale).toFixed(2) : '--';
+  const aqAnomalies = summary?.parameters?.[aqParam.id]?.anomaly_count || summary?.parameters?.NO2?.anomaly_count || 0;
+
+  const AqIcon = aqParam.icon;
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -107,14 +140,46 @@ export default function DashboardPage() {
             subtitle={`Range: ${ndviStats.min || '--'} - ${ndviStats.max || '--'}`}
             trend={summary?.parameters?.NDVI?.hotspot_count ? `${summary.parameters.NDVI.hotspot_count} stress zones` : null}
           />
-          <StatsCard
-            title="Air Quality (NO₂)"
-            value={no2Stats.mean ? `${(no2Stats.mean * 1e6).toFixed(1)} µmol/m²` : '--'}
-            icon={Wind}
-            color="purple"
-            subtitle={no2Stats.max ? `Peak: ${(no2Stats.max * 1e6).toFixed(1)} µmol/m²` : ''}
-            trend={summary?.parameters?.NO2?.anomaly_count ? `${summary.parameters.NO2.anomaly_count} anomalies` : null}
-          />
+
+          {/* Air Quality Dropdown Card */}
+          <Card padding="p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="relative">
+                  <button
+                    onClick={() => setAqDropdownOpen(!aqDropdownOpen)}
+                    className="flex items-center gap-1 text-xs font-medium text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+                  >
+                    Air Quality ({aqParam.label})
+                    <ChevronDown className={`h-3 w-3 transition-transform ${aqDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {aqDropdownOpen && (
+                    <div className="absolute left-0 top-full mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-50 min-w-[160px]">
+                      {AQ_PARAMS.map(p => (
+                        <button
+                          key={p.id}
+                          onClick={() => { setAqParam(p); setAqDropdownOpen(false); }}
+                          className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors ${
+                            p.id === aqParam.id ? 'bg-cyan-600/20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+                          }`}
+                        >
+                          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <p className="text-2xl font-bold text-white mt-1">{aqMean} {aqParam.displayUnit}</p>
+                <p className="text-xs text-slate-500 mt-1">Peak: {aqMax} {aqParam.displayUnit}</p>
+                {aqAnomalies > 0 && <p className="text-xs text-amber-400 mt-1">{aqAnomalies} anomalies</p>}
+              </div>
+              <div className={`p-2 rounded-lg bg-purple-500/10`}>
+                <AqIcon className="h-5 w-5 text-purple-400" />
+              </div>
+            </div>
+          </Card>
+
           <StatsCard
             title="Soil Moisture"
             value={`${smStats.mean || '--'} m³/m³`}
@@ -137,26 +202,27 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          {/* Charts + Alerts */}
+          {/* Charts */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <h3 className="text-sm font-medium text-slate-400 mb-4">Temperature Trend</h3>
               <ChartWidget
                 data={timeseries?.LST?.timeseries || []}
-                xKey="date"
-                yKey="value"
-                color="#EF4444"
-                unit="°C"
+                xKey="date" yKey="value" color="#EF4444" unit="°C"
               />
             </Card>
             <Card>
               <h3 className="text-sm font-medium text-slate-400 mb-4">Vegetation Health Trend</h3>
               <ChartWidget
                 data={timeseries?.NDVI?.timeseries || []}
-                xKey="date"
-                yKey="value"
-                color="#10B981"
-                unit="NDVI"
+                xKey="date" yKey="value" color="#10B981" unit="NDVI"
+              />
+            </Card>
+            <Card>
+              <h3 className="text-sm font-medium text-slate-400 mb-4">{aqParam.label} Trend</h3>
+              <ChartWidget
+                data={aqTimeseries[aqParam.id]?.timeseries || []}
+                xKey="date" yKey="value" color={aqParam.color} unit={aqParam.unit}
               />
             </Card>
           </div>

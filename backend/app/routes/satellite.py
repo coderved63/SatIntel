@@ -60,7 +60,7 @@ async def spatial_query(
 
     # Fallback: filter JSON data by distance
     import math
-    data = satellite_service._load_data(parameter)
+    data = satellite_service._load_data(parameter, city)
     filtered = []
     for d in data:
         dlat = d["lat"] - lat

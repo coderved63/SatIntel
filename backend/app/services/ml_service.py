@@ -216,7 +216,7 @@ def get_city_summary(city: str = "Ahmedabad") -> dict:
 
     for param_id in ["LST", "NDVI", "NO2", "SOIL_MOISTURE"]:
         try:
-            stats = satellite_service.get_statistics(param_id)
+            stats = satellite_service.get_statistics(param_id, city)
             anomaly_result = detect_anomalies(param_id, city)
             hotspot_result = find_hotspots(param_id, city)
 
