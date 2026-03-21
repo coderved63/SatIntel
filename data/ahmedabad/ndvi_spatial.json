@@ -1,0 +1,12 @@
+[
+  {"lat": 23.0238, "lng": 72.5728, "value": 0.2112, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.0498, "lng": 72.5515, "value": 0.2245, "parameter": "NDVI", "unit": "index"},
+  {"lat": 22.9705, "lng": 72.6312, "value": 0.1578, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.0712, "lng": 72.5185, "value": 0.2712, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.0015, "lng": 72.5795, "value": 0.2312, "parameter": "NDVI", "unit": "index"},
+  {"lat": 22.9815, "lng": 72.6495, "value": 0.1478, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.0305, "lng": 72.5002, "value": 0.4212, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.1002, "lng": 72.6005, "value": 0.2778, "parameter": "NDVI", "unit": "index"},
+  {"lat": 22.9512, "lng": 72.5488, "value": 0.2545, "parameter": "NDVI", "unit": "index"},
+  {"lat": 23.0598, "lng": 72.6792, "value": 0.3312, "parameter": "NDVI", "unit": "index"}
+]

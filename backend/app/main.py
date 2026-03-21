@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, users, satellite, analytics, maps, action_plan, data, health
+from app.routes import auth, users, satellite, analytics, maps, action_plan, data, health, analysis
 
 app = FastAPI(
     title="Satellite Environmental Intelligence Platform",
@@ -24,10 +24,23 @@ app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytic
 app.include_router(maps.router, prefix="/api/v1/maps", tags=["Maps"])
 app.include_router(action_plan.router, prefix="/api/v1/action-plan", tags=["Action Plan"])
 app.include_router(data.router, prefix="/api/v1/data", tags=["Data"])
+app.include_router(analysis.router, prefix="/api/v1/analysis", tags=["Specialized Analysis"])
 
 @app.on_event("startup")
 async def startup():
-    print("Satellite Environmental Intelligence Platform starting...")
+    # Create PostGIS tables if database is configured
+    try:
+        from app.models.db_models import create_tables, get_engine
+        engine = get_engine()
+        if engine:
+            await create_tables()
+            print("PostgreSQL + PostGIS connected, tables ready")
+        else:
+            print("No DATABASE_URL configured — using in-memory fallback")
+    except Exception as e:
+        print(f"Database setup skipped: {e} — using in-memory fallback")
+
+    print("Satellite Environmental Intelligence Platform started")
 
 @app.on_event("shutdown")
 async def shutdown():
