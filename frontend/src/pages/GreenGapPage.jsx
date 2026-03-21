@@ -6,21 +6,25 @@ import { greenGapService } from '../services/greenGapService';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { TreePine, Thermometer, Leaf, MapPin, TrendingDown, Target } from 'lucide-react';
+import { useCity } from '../context/CityContext';
 
 const severityColor = (s) => s === 'critical' ? '#dc2626' : s === 'high' ? '#f59e0b' : '#16a34a';
 
 export default function GreenGapPage() {
+  const { city } = useCity();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    greenGapService.analyse()
+    setLoading(true);
+    setSelected(null);
+    greenGapService.analyse(city.key)
       .then(setData)
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [city.key]);
 
   if (loading) return (
     <DashboardLayout>
@@ -96,8 +100,9 @@ export default function GreenGapPage() {
           <div className="lg:col-span-3">
             <Card padding="p-0" className="h-[500px]">
               <MapContainer
-                center={[23.0225, 72.5714]}
-                zoom={11}
+                center={city.center}
+                zoom={city.zoom || 11}
+                key={city.key}
                 style={{ height: '100%', width: '100%', borderRadius: '0.75rem' }}
               >
                 <TileLayer
