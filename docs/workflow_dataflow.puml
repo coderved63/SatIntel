@@ -1,0 +1,202 @@
+@startuml SatIntel_Complete_Workflow
+
+' ═══════════════════════════════════════════════════════════════
+' SatIntel — Complete Data Flow & Workflow Diagram
+' Import this into draw.io: File → Import → Select this .puml file
+' ═══════════════════════════════════════════════════════════════
+
+skinparam backgroundColor #0F172A
+skinparam defaultFontColor #E2E8F0
+skinparam defaultFontSize 12
+skinparam defaultFontName Inter
+
+skinparam rectangle {
+  RoundCorner 15
+  FontColor #E2E8F0
+  BorderThickness 2
+}
+
+skinparam database {
+  FontColor #E2E8F0
+  BorderThickness 2
+}
+
+skinparam cloud {
+  FontColor #E2E8F0
+  BorderThickness 2
+}
+
+skinparam arrow {
+  Color #94A3B8
+  FontColor #94A3B8
+  Thickness 2
+}
+
+' ─── COLOR DEFINITIONS ──────────────────────────────────────────
+!define SAT_BG #1E3A5F
+!define SAT_BORDER #06B6D4
+!define BACKEND_BG #1E293B
+!define BACKEND_BORDER #8B5CF6
+!define ML_BG #1C2432
+!define ML_BORDER #10B981
+!define FRONTEND_BG #1A1F2E
+!define FRONTEND_BORDER #F59E0B
+!define DB_BG #1E293B
+!define DB_BORDER #3B82F6
+!define USER_BG #1C1917
+!define USER_BORDER #EF4444
+!define EXTERNAL_BG #1E293B
+!define EXTERNAL_BORDER #6B7280
+
+title <font size=20 color=#06B6D4><b>SatIntel — Complete System Workflow & Data Flow</b></font>\n<font size=12 color=#94A3B8>Satellite Environmental Intelligence Platform</font>
+
+' ═══════════════════════════════════════════════════════════════
+' EXTERNAL DATA SOURCES (Top Layer)
+' ═══════════════════════════════════════════════════════════════
+
+package "**Satellite Data Sources**" as SAT_SOURCES SAT_BG {
+  rectangle "<font color=#06B6D4><b>MODIS Terra</b></font>\nMOD11A2 (LST)\nMOD13A2 (NDVI)\n<font color=#64748B>1km, 8-16 day</font>" as MODIS SAT_BG
+  rectangle "<font color=#06B6D4><b>Sentinel-5P</b></font>\nTROPOMI\nNO₂, SO₂, CO, O₃\nAerosol Index\n<font color=#64748B>7km, daily</font>" as SENTINEL SAT_BG
+  rectangle "<font color=#06B6D4><b>NASA SMAP</b></font>\nSPL3SMP_E\nSoil Moisture\n<font color=#64748B>9km, 3-day</font>" as SMAP SAT_BG
+  rectangle "<font color=#06B6D4><b>Landsat 8/9</b></font>\nSurface Reflectance\nLand Use Classification\n<font color=#64748B>30m, annual</font>" as LANDSAT SAT_BG
+  rectangle "<font color=#F97316><b>NASA FIRMS</b></font>\nVIIRS Active Fires\n<font color=#64748B>375m, near real-time</font>" as FIRMS SAT_BG
+}
+
+' ═══════════════════════════════════════════════════════════════
+' GEE DATA PIPELINE
+' ═══════════════════════════════════════════════════════════════
+
+package "**Google Earth Engine Pipeline**" as GEE_PIPE SAT_BG {
+  rectangle "<font color=#06B6D4><b>GEE Service Account</b></font>\nAuthentication & Init\n<font color=#64748B>gee_helpers.py</font>" as GEE_AUTH SAT_BG
+  rectangle "<font color=#06B6D4><b>Data Extraction</b></font>\ngetRegion() batch API\nMonthly composites\nGrid sampling (3×3)\n<font color=#64748B>_extract_timeseries()</font>" as GEE_EXTRACT SAT_BG
+  rectangle "<font color=#06B6D4><b>14 Gujarat Cities</b></font>\nAhmedabad, Surat, Vadodara\nRajkot, Gandhinagar...\n<font color=#64748B>cities.py bbox config</font>" as CITIES SAT_BG
+}
+
+MODIS --> GEE_AUTH
+SENTINEL --> GEE_AUTH
+SMAP --> GEE_AUTH
+LANDSAT --> GEE_AUTH
+GEE_AUTH --> GEE_EXTRACT
+CITIES --> GEE_EXTRACT
+
+' ═══════════════════════════════════════════════════════════════
+' DATA STORAGE LAYER
+' ═══════════════════════════════════════════════════════════════
+
+package "**Data Storage**" as STORAGE DB_BG {
+  database "<font color=#3B82F6><b>JSON Files</b></font>\ndata/<city>/\nlst_timeseries.json\nndvi_timeseries.json\nno2/so2/co/o3/aerosol\nsoil_moisture.json\nland_use_2020/2024.json" as JSON_FILES DB_BG
+  database "<font color=#3B82F6><b>Neon PostgreSQL</b></font>\n+ PostGIS\nUsers, Observations\nAction Plans\nSpatial Indexes\n<font color=#64748B>ST_DWithin queries</font>" as POSTGRES DB_BG
+}
+
+GEE_EXTRACT --> JSON_FILES : <font color=#06B6D4>save_to_json()</font>
+
+' ═══════════════════════════════════════════════════════════════
+' BACKEND SERVICES
+' ═══════════════════════════════════════════════════════════════
+
+package "**FastAPI Backend**" as BACKEND BACKEND_BG {
+
+  rectangle "<font color=#8B5CF6><b>Auth Service</b></font>\nJWT (HS256, 24h)\nbcrypt hashing\nSignup / Login\n<font color=#64748B>auth_service.py</font>" as AUTH BACKEND_BG
+
+  rectangle "<font color=#8B5CF6><b>Satellite Service</b></font>\nLoad from JSON\nIDW Harmonization (1km)\nTimeseries aggregation\nHeatmap formatting\nStatistics (numpy)\n<font color=#64748B>satellite_service.py</font>" as SAT_SERVICE BACKEND_BG
+
+  rectangle "<font color=#8B5CF6><b>API Routes</b></font>\n/auth/signup, /auth/login\n/satellite/timeseries\n/maps/heatmap\n/analytics/*\n/action-plan/generate\n<font color=#64748B>8 route modules</font>" as ROUTES BACKEND_BG
+}
+
+JSON_FILES --> SAT_SERVICE : <font color=#3B82F6>_load_data(param, city)</font>
+POSTGRES --> AUTH : <font color=#3B82F6>db_service (users)</font>
+
+' ═══════════════════════════════════════════════════════════════
+' ML ANALYTICS ENGINE
+' ═══════════════════════════════════════════════════════════════
+
+package "**ML Analytics Engine**" as ML_ENGINE ML_BG {
+  rectangle "<font color=#10B981><b>Anomaly Detection</b></font>\nIsolation Forest\ncontamination=0.08\nSeverity: critical/high/moderate\n<font color=#64748B>detect_anomalies()</font>" as ANOMALY ML_BG
+  rectangle "<font color=#10B981><b>Trend Prediction</b></font>\nARIMA(2,1,1)\n30-day forecast\nLinear fallback\n<font color=#64748B>predict_trend()</font>" as TREND ML_BG
+  rectangle "<font color=#10B981><b>Hotspot Clustering</b></font>\nDBSCAN ε=0.02\nTop 25th percentile\nSpatial clusters\n<font color=#64748B>find_hotspots()</font>" as HOTSPOT ML_BG
+  rectangle "<font color=#10B981><b>City Summary</b></font>\nAll params × all models\nStatistics + anomalies\n+ hotspots combined\n<font color=#64748B>get_city_summary()</font>" as SUMMARY ML_BG
+}
+
+SAT_SERVICE --> ANOMALY
+SAT_SERVICE --> TREND
+SAT_SERVICE --> HOTSPOT
+ANOMALY --> SUMMARY
+TREND --> SUMMARY
+HOTSPOT --> SUMMARY
+
+' ═══════════════════════════════════════════════════════════════
+' ACTION PLAN GENERATION
+' ═══════════════════════════════════════════════════════════════
+
+package "**Action Plan Generator**" as PLAN_GEN ML_BG {
+  rectangle "<font color=#10B981><b>Multi-Agent Pipeline</b></font>\n1. Data Agent → fetch\n2. Analysis Agent → ML\n3. Plan Agent → report\n<font color=#64748B>orchestrator.py</font>" as AGENTS ML_BG
+  rectangle "<font color=#10B981><b>Report Builder</b></font>\nCity-dynamic template\nFindings + Risk Matrix\nRecommendations + KPIs\nPriority Zones\n<font color=#64748B>action_plan_service.py</font>" as REPORT ML_BG
+}
+
+SUMMARY --> AGENTS
+AGENTS --> REPORT
+
+' ═══════════════════════════════════════════════════════════════
+' FRONTEND APPLICATION
+' ═══════════════════════════════════════════════════════════════
+
+package "**React Frontend**" as FRONTEND FRONTEND_BG {
+  rectangle "<font color=#F59E0B><b>Scroll Animation</b></font>\n240-frame sequence\nFramer Motion\nApple-style scroll\n<font color=#64748B>ScrollAnimation.jsx</font>" as SCROLL FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>Landing Page</b></font>\nHero + Features\nStats + Tech Stack\nLogin / Signup CTA\n<font color=#64748B>LandingPage.jsx</font>" as LANDING FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>Dashboard</b></font>\nStats Cards (LST, NDVI,\nAir Quality dropdown, SM)\nMapLibre + Deck.gl Map\nTimeseries Charts\n<font color=#64748B>DashboardPage.jsx</font>" as DASHBOARD FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>Interactive Map</b></font>\n5 basemap styles\n5 viz modes (heatmap,\nhexbin, grid, scatter,\ncontour)\n3D view + Wildfires\n<font color=#64748B>MapView.jsx + Deck.gl</font>" as MAP FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>Analytics Page</b></font>\nAnomalies list\nTrend chart + forecast\nHotspot cluster map\nDomain analysis\n<font color=#64748B>AnalyticsPage.jsx</font>" as ANALYTICS FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>Action Plan Page</b></font>\nGenerate report\nPDF / JSON export\nFindings + Risk Matrix\nRecommendations viewer\n<font color=#64748B>ActionPlanPage.jsx</font>" as PLAN_PAGE FRONTEND_BG
+
+  rectangle "<font color=#F59E0B><b>City Context</b></font>\n14 Gujarat cities\nGlobal city selector\nSidebar dropdown\n<font color=#64748B>CityContext.jsx</font>" as CITY_CTX FRONTEND_BG
+}
+
+SCROLL --> LANDING : <font color=#F59E0B>onComplete</font>
+
+ROUTES --> DASHBOARD : <font color=#94A3B8>REST API</font>
+ROUTES --> ANALYTICS : <font color=#94A3B8>REST API</font>
+ROUTES --> MAP : <font color=#94A3B8>REST API</font>
+REPORT --> PLAN_PAGE : <font color=#94A3B8>REST API</font>
+FIRMS --> MAP : <font color=#F97316>NASA FIRMS CSV API</font>
+CITY_CTX --> DASHBOARD
+CITY_CTX --> ANALYTICS
+CITY_CTX --> MAP
+CITY_CTX --> PLAN_PAGE
+
+' ═══════════════════════════════════════════════════════════════
+' END USERS
+' ═══════════════════════════════════════════════════════════════
+
+package "**End Users**" as USERS USER_BG {
+  rectangle "<font color=#EF4444><b>Municipal Corp</b></font>\nAMC, SMC, VMC\nPolicy decisions\nAction plan execution" as MUNICIPAL USER_BG
+  rectangle "<font color=#EF4444><b>Pollution Board</b></font>\nGPCB, CPCB\nEmission monitoring\nCompliance tracking" as SPCB USER_BG
+  rectangle "<font color=#EF4444><b>Urban Planners</b></font>\nAUDA, SUDA\nLand use analysis\nGreen cover targets" as PLANNERS USER_BG
+  rectangle "<font color=#EF4444><b>Researchers</b></font>\nAcademia, NGOs\nData exploration\nEnvironmental studies" as RESEARCHERS USER_BG
+}
+
+LANDING --> MUNICIPAL
+DASHBOARD --> MUNICIPAL
+PLAN_PAGE --> MUNICIPAL
+ANALYTICS --> SPCB
+MAP --> PLANNERS
+DASHBOARD --> RESEARCHERS
+
+' ═══════════════════════════════════════════════════════════════
+' LEGEND
+' ═══════════════════════════════════════════════════════════════
+
+legend bottom right
+  |<back:#1E3A5F>  </back>| <font color=#06B6D4>Satellite Data & GEE Pipeline</font> |
+  |<back:#1E293B>  </back>| <font color=#8B5CF6>FastAPI Backend Services</font> |
+  |<back:#1C2432>  </back>| <font color=#10B981>ML Analytics & Action Plan</font> |
+  |<back:#1A1F2E>  </back>| <font color=#F59E0B>React Frontend</font> |
+  |<back:#1E293B>  </back>| <font color=#3B82F6>Data Storage</font> |
+  |<back:#1C1917>  </back>| <font color=#EF4444>End Users</font> |
+endlegend
+
+@enduml

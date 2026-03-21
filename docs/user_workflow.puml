@@ -1,0 +1,143 @@
+@startuml SatIntel_User_Workflow
+
+skinparam backgroundColor #0F172A
+skinparam defaultFontColor #E2E8F0
+skinparam defaultFontSize 11
+skinparam defaultFontName Inter
+
+skinparam sequence {
+  ArrowColor #94A3B8
+  ArrowFontColor #94A3B8
+  ArrowThickness 2
+  LifeLineBorderColor #475569
+  LifeLineBackgroundColor #1E293B
+  ParticipantBorderColor #06B6D4
+  ParticipantBackgroundColor #1E3A5F
+  ParticipantFontColor #E2E8F0
+  ParticipantFontStyle bold
+  GroupBorderColor #475569
+  GroupBackgroundColor #1E293B22
+  DividerBorderColor #334155
+  DividerFontColor #94A3B8
+}
+
+skinparam note {
+  BackgroundColor #1C2432
+  BorderColor #10B981
+  FontColor #E2E8F0
+}
+
+title <font size=18 color=#06B6D4><b>SatIntel — User Journey Sequence Diagram</b></font>
+
+actor "<font color=#EF4444><b>User</b></font>\n(Municipal Officer)" as User #1C1917
+participant "<font color=#F59E0B><b>Frontend</b></font>\n(React + Deck.gl)" as FE #1A1F2E
+participant "<font color=#8B5CF6><b>Backend</b></font>\n(FastAPI)" as BE #1E293B
+participant "<font color=#10B981><b>ML Engine</b></font>\n(scikit-learn)" as ML #1C2432
+database "<font color=#3B82F6><b>Data Store</b></font>\n(JSON + PostgreSQL)" as DB #1E293B
+participant "<font color=#06B6D4><b>GEE</b></font>\n(Satellite API)" as GEE #1E3A5F
+participant "<font color=#F97316><b>NASA FIRMS</b></font>\n(Fire API)" as FIRMS #1C1917
+
+== <font color=#F59E0B>Phase 1: Landing & Authentication</font> ==
+
+User -> FE : Visit website
+FE -> FE : Play 240-frame\nscroll animation
+FE -> User : Show Landing Page\n(after scroll complete)
+User -> FE : Click "Get Started"
+User -> FE : Enter name, email, password
+FE -> BE : POST /auth/signup
+BE -> DB : create_user()\n(bcrypt hash)
+DB --> BE : user object
+BE --> FE : { token, user }
+FE -> FE : Store JWT in localStorage
+FE -> User : Redirect to /dashboard
+
+== <font color=#06B6D4>Phase 2: Dashboard — Environmental Overview</font> ==
+
+User -> FE : Select city from dropdown\n(e.g., Surat)
+FE -> BE : GET /analytics/summary/surat
+BE -> DB : _load_data(LST, surat)\n_load_data(NDVI, surat)\n_load_data(NO2, surat)\n_load_data(SOIL_MOISTURE, surat)
+DB --> BE : JSON data arrays
+BE -> ML : detect_anomalies()\nfind_hotspots()
+ML --> BE : anomalies + hotspots
+BE --> FE : { statistics, anomaly_count,\nhotspot_count per param }
+
+FE -> BE : GET /satellite/timeseries/LST?city=surat
+BE -> DB : Load + harmonize (IDW 1km)
+DB --> BE : timeseries data
+BE --> FE : { timeseries: [{date, value}...] }
+
+FE -> BE : GET /maps/heatmap/LST?city=surat
+BE --> FE : { points, raw_points, min, max }
+
+FE -> FIRMS : Fetch VIIRS active fires\n(Gujarat region, last 48h)
+FIRMS --> FE : CSV → parsed fire points
+
+FE -> FE : Render Dashboard:\n• Stats Cards\n• MapLibre + Deck.gl Map\n• Recharts timeseries
+FE -> User : Display interactive dashboard
+
+note over FE
+  **Map Features:**
+  • 5 basemap styles (Dark/Satellite/Terrain/Streets/Light)
+  • 5 viz modes (Heatmap/3D Hexbin/Grid/Scatter/Contour)
+  • 8 data layers (LST/NDVI/NO₂/SO₂/CO/O₃/Aerosol/SM)
+  • Wildfire overlay (NASA FIRMS live data)
+  • 3D tilted view with rotation
+end note
+
+== <font color=#10B981>Phase 3: ML Analytics — Deep Dive</font> ==
+
+User -> FE : Navigate to Analytics
+User -> FE : Select parameter (e.g., NO₂)
+FE -> BE : POST /analytics/anomalies\n{ parameter: "NO2", city: "surat" }
+BE -> DB : Load NO₂ data for Surat
+BE -> ML : IsolationForest(contamination=0.08)
+ML --> BE : anomalies with severity scores
+BE --> FE : { anomalies[], anomaly_count }
+
+FE -> BE : POST /analytics/trends
+BE -> ML : ARIMA(2,1,1) → 30-day forecast
+ML --> BE : { historical, forecast, direction }
+BE --> FE : trend data
+
+FE -> BE : POST /analytics/hotspots
+BE -> ML : DBSCAN(eps=0.02, min_samples=2)
+ML --> BE : { hotspots[], cluster_count }
+BE --> FE : hotspot clusters
+
+FE -> User : Display:\n• Anomaly list with severity badges\n• Trend chart with forecast overlay\n• Hotspot cluster map (Deck.gl)
+
+== <font color=#EF4444>Phase 4: Action Plan Generation</font> ==
+
+User -> FE : Click "Generate Action Plan"
+FE -> FE : Show progress steps:\n1. Fetching data...\n2. Anomaly detection...\n3. Trend analysis...\n4. Hotspot clustering...\n5. Generating plan...
+
+FE -> BE : POST /action-plan/generate\n{ city: "surat", parameters: [...] }
+
+BE -> DB : Load all params for Surat
+BE -> ML : Run all 3 models × 4 params
+ML --> BE : Full analysis results
+
+BE -> BE : _generate_template_plan()\n• City-dynamic (notable_areas)\n• Findings from real data\n• Risk matrix\n• Recommendations\n• KPI targets
+
+BE --> FE : Complete action plan JSON
+
+FE -> User : Render municipal-grade report:\n• Executive Summary\n• Key Findings (4)\n• Risk Assessment Matrix\n• Priority Zones (with coords)\n• Recommendations (5)\n• Monitoring Framework
+
+User -> FE : Click "Export as PDF"
+FE -> FE : Generate PDF client-side
+FE -> User : Download PDF report
+
+== <font color=#94A3B8>Phase 5: Ongoing Monitoring</font> ==
+
+User -> FE : Switch city → Ahmedabad
+FE -> FE : CityContext update\n→ all components re-fetch
+FE -> User : Dashboard auto-refreshes\nwith Ahmedabad data
+
+note over User, GEE
+  **Data Refresh Cycle:**
+  GEE data re-fetched quarterly via:
+  python notebooks/01_gee_data_fetch.py
+  (14 cities × 10 parameters)
+end note
+
+@enduml
