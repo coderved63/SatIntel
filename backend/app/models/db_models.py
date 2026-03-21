@@ -120,7 +120,13 @@ def get_engine():
                 ssl_ctx.verify_mode = ssl_mod.CERT_NONE
                 connect_args["ssl"] = ssl_ctx
 
-            _engine = create_async_engine(clean_url, echo=False, connect_args=connect_args)
+            _engine = create_async_engine(
+                clean_url, echo=False, connect_args=connect_args,
+                pool_recycle=300,    # recycle connections after 5 min (Neon drops idle)
+                pool_pre_ping=True,  # test connection before use
+                pool_size=3,
+                max_overflow=2,
+            )
         else:
             return None
     return _engine
