@@ -70,7 +70,14 @@ _data_cache: dict = {}
 
 
 def _load_data(parameter: str) -> list[dict]:
-    """Load pre-fetched JSON data for a parameter."""
+    """Load pre-fetched JSON data for a parameter.
+
+    Currently serves pre-fetched data directly. When real GEE data is fetched
+    (with different native resolutions per mission), call
+    geo_helpers.harmonize_timeseries() here to resample everything to the
+    common 1 km grid before caching. See utils/geo_helpers.py for the
+    IDW interpolation implementation — ready to plug in.
+    """
     if parameter in _data_cache:
         return _data_cache[parameter]
 
@@ -85,6 +92,10 @@ def _load_data(parameter: str) -> list[dict]:
 
     with open(filepath, "r") as f:
         data = json.load(f)
+
+    # TODO: When using real GEE data with different resolutions, uncomment:
+    # from app.utils.geo_helpers import harmonize_timeseries
+    # data = harmonize_timeseries(data, city="Ahmedabad", parameter=parameter)
 
     _data_cache[parameter] = data
     logger.info(f"Loaded {len(data)} points for {parameter} from {filepath}")

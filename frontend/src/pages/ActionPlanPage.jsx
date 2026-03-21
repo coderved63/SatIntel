@@ -4,14 +4,16 @@ import Card from '../components/common/Card';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import PlanViewer from '../components/action-plan/PlanViewer';
+import { exportAsPDF, exportAsJSON } from '../components/action-plan/ExportPlan';
 import { actionPlanService } from '../services/actionPlanService';
-import { FileText, Sparkles, Download } from 'lucide-react';
+import { FileText, Sparkles, Download, FileDown, FileJson } from 'lucide-react';
 
 export default function ActionPlanPage() {
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
   const [error, setError] = useState(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const generatePlan = async () => {
     setLoading(true);
@@ -52,13 +54,33 @@ export default function ActionPlanPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white">Environment Action Plan</h1>
-            <p className="text-slate-400 text-sm mt-1">AI-generated city-specific environmental recommendations</p>
+            <p className="text-slate-400 text-sm mt-1">Satellite-based environmental intelligence assessment</p>
           </div>
           <div className="flex gap-3">
             {plan && (
-              <Button variant="secondary" onClick={() => window.print()}>
-                <Download className="h-4 w-4 mr-2" /> Export
-              </Button>
+              <div className="relative">
+                <Button variant="secondary" onClick={() => setShowExportMenu(!showExportMenu)}>
+                  <Download className="h-4 w-4 mr-2" /> Export
+                </Button>
+                {showExportMenu && (
+                  <div className="absolute right-0 top-full mt-2 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 z-50 min-w-[180px]">
+                    <button
+                      onClick={() => { exportAsPDF(plan); setShowExportMenu(false); }}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700 transition-colors"
+                    >
+                      <FileDown className="h-4 w-4 text-red-400" />
+                      Save as PDF
+                    </button>
+                    <button
+                      onClick={() => { exportAsJSON(plan); setShowExportMenu(false); }}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700 transition-colors"
+                    >
+                      <FileJson className="h-4 w-4 text-cyan-400" />
+                      Export as JSON
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
             <Button variant="primary" onClick={generatePlan} disabled={loading}>
               <Sparkles className="h-4 w-4 mr-2" />
