@@ -106,13 +106,15 @@ export default function HotspotMap({ data }) {
           </div>
         </div>
 
-        <div className="h-[400px] rounded-lg overflow-hidden">
+        <div className="h-[400px] rounded-xl overflow-hidden relative">
           <DeckGL
             viewState={viewState}
             onViewStateChange={({ viewState: vs }) => setViewState(vs)}
             controller={true}
             layers={deckLayers}
             getTooltip={getTooltip}
+            useDevicePixels={2}
+            onError={(error) => console.warn('DeckGL:', error.message)}
           >
             <Map
               mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"

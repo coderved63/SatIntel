@@ -233,53 +233,48 @@ export default function DashboardPage() {
           ) : <SkeletonCard />}
         </div>
 
-        {/* Map + Charts */}
-        <div className="grid lg:grid-cols-5 gap-6">
-          {/* Map — renders immediately, no loading dependency */}
-          <div className="lg:col-span-3">
-            <Card className="h-[500px] relative" padding="p-0">
-              <div className="absolute top-4 right-4 z-[1000]">
-                <LayerControl layers={layers} onToggle={handleLayerToggle} />
-              </div>
-              <MapView layers={layers} city={city} />
+        {/* Map — full width */}
+        <Card className="h-[500px] relative" padding="p-0">
+          <MapView layers={layers} city={city} layerControl={<LayerControl layers={layers} onToggle={handleLayerToggle} />} />
+        </Card>
+
+        {/* Charts — all in a row below the map */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {lstTs ? (
+            <Card>
+              <DrilldownChart
+                data={lstTs?.timeseries || []}
+                label="Temperature Trend"
+                color="#EF4444"
+                unit="°C"
+                height={180}
+              />
             </Card>
-          </div>
+          ) : <SkeletonChart />}
 
-          {/* Charts — each shows skeleton until its data arrives */}
-          <div className="lg:col-span-2 space-y-6">
-            {lstTs ? (
-              <Card>
-                <DrilldownChart
-                  data={lstTs?.timeseries || []}
-                  label="Temperature Trend"
-                  color="#EF4444"
-                  unit="°C"
-                />
-              </Card>
-            ) : <SkeletonChart />}
+          {ndviTs ? (
+            <Card>
+              <DrilldownChart
+                data={ndviTs?.timeseries || []}
+                label="Vegetation Health"
+                color="#10B981"
+                unit="NDVI"
+                height={180}
+              />
+            </Card>
+          ) : <SkeletonChart />}
 
-            {ndviTs ? (
-              <Card>
-                <DrilldownChart
-                  data={ndviTs?.timeseries || []}
-                  label="Vegetation Health"
-                  color="#10B981"
-                  unit="NDVI"
-                />
-              </Card>
-            ) : <SkeletonChart />}
-
-            {aqTimeseries[aqParam.id] ? (
-              <Card>
-                <DrilldownChart
-                  data={aqTimeseries[aqParam.id]?.timeseries || []}
-                  label={`${aqParam.label} Trend`}
-                  color={aqParam.color}
-                  unit={aqParam.unit}
-                />
-              </Card>
-            ) : <SkeletonChart />}
-          </div>
+          {aqTimeseries[aqParam.id] ? (
+            <Card>
+              <DrilldownChart
+                data={aqTimeseries[aqParam.id]?.timeseries || []}
+                label={`${aqParam.label} Trend`}
+                color={aqParam.color}
+                unit={aqParam.unit}
+                height={180}
+              />
+            </Card>
+          ) : <SkeletonChart />}
         </div>
       </div>
     </DashboardLayout>

@@ -81,7 +81,7 @@ const COLOR_RANGES = {
 
 const ELEVATION_RANGE = [0, 3000];
 
-export default function MapView({ layers = [], city }) {
+export default function MapView({ layers = [], city, layerControl }) {
   const navigate = useNavigate();
   const [heatmapData, setHeatmapData] = useState({});
   const [loadingLayers, setLoadingLayers] = useState(new Set());
@@ -403,7 +403,7 @@ export default function MapView({ layers = [], city }) {
   const currentStyle = MAP_STYLES[mapStyle];
 
   return (
-    <div style={{ height: '100%', width: '100%', borderRadius: '0.75rem', overflow: 'hidden', position: 'relative' }}>
+    <div id="satintel-map-container" style={{ height: '100%', width: '100%', borderRadius: '0.75rem', overflow: 'hidden', position: 'relative' }}>
       <DeckGL
         viewState={viewState}
         onViewStateChange={({ viewState: vs }) => setViewState(vs)}
@@ -421,9 +421,34 @@ export default function MapView({ layers = [], city }) {
           maxPitch={85}
         >
           <NavigationControl position="bottom-right" visualizePitch={true} />
-          <FullscreenControl position="bottom-right" />
         </Map>
       </DeckGL>
+
+      {/* ── Data Layer Control (top-right) ────────── */}
+      {layerControl && (
+        <div className="absolute top-3 right-3 z-20">
+          {layerControl}
+        </div>
+      )}
+
+      {/* ── Fullscreen Button (bottom-right, above nav controls) ── */}
+      <button
+        onClick={() => {
+          const el = document.getElementById('satintel-map-container');
+          if (!el) return;
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            el.requestFullscreen();
+          }
+        }}
+        className="absolute bottom-28 right-2 z-10 w-8 h-8 flex items-center justify-center bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-lg text-white/60 hover:text-white hover:bg-slate-800/90 transition-all shadow-lg"
+        title="Fullscreen"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
 
       {/* ── Unified Control Panel (top-left) ─────────── */}
       <div className="absolute top-3 left-3 z-10">
@@ -593,19 +618,14 @@ export default function MapView({ layers = [], city }) {
         </div>
       )}
 
-      {/* ── Research Mode Button (bottom-right) ───── */}
+      {/* ── Research Mode Button (bottom-left) ───── */}
       <button
         onClick={() => navigate('/research')}
-        className="absolute bottom-4 right-4 z-10 flex flex-col items-center gap-1 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 hover:bg-slate-800/90 hover:border-cyan-500/30 transition-all group shadow-lg"
+        className="absolute bottom-4 left-3 z-10 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl px-3 py-2 hover:bg-slate-800/90 hover:border-cyan-500/30 transition-all group shadow-lg"
       >
-        <Search className="h-5 w-5 text-cyan-400 group-hover:scale-110 transition-transform" />
-        <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest group-hover:text-cyan-400 transition-colors">Research</span>
+        <Search className="h-4 w-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+        <span className="text-[10px] font-semibold text-white/50 uppercase tracking-wider group-hover:text-cyan-400 transition-colors">Research</span>
       </button>
-
-      {/* ── Attribution (subtle) ──────────────────── */}
-      <div className="absolute bottom-1.5 left-2 text-[9px] text-white/20 pointer-events-none">
-        MapLibre GL | Deck.gl | CARTO | NASA FIRMS
-      </div>
     </div>
   );
 }
