@@ -115,10 +115,11 @@ export default function AnomalyList({ data }) {
                     <span className="text-[10px] font-mono" style={{ color: 'var(--text-faint)' }}>{anomaly.lat}, {anomaly.lng}</span>
                   </div>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                    {describeAnomaly(parameter, anomaly.value, anomaly.severity)}
+                    {anomaly.description || describeAnomaly(parameter, anomaly.value, anomaly.severity)}
                   </p>
                   <p className="text-[10px] mt-0.5 font-mono" style={{ color: 'var(--text-faint)' }}>
                     val: {anomaly.value} &middot; score: {anomaly.anomaly_score}
+                    {anomaly.deviation ? ` · ${anomaly.deviation}σ ${anomaly.direction || ''}` : ''}
                   </p>
                 </div>
                 <span className="text-xs font-mono shrink-0" style={{ color: 'var(--text-faint)' }}>{anomaly.date}</span>
