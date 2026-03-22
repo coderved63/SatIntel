@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SatIntel — Final Report | AETRIX 2026</title>
+<style>
+  @page {
+    size: A4;
+    margin: 2cm 2.2cm;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11.5pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  /* ── PAGE BREAK UTILITY ── */
+  .page-break { page-break-after: always; }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 3cm 2cm;
+  }
+  .cover-badge {
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #6b7280;
+    margin-bottom: 1.5cm;
+    border: 1px solid #d1d5db;
+    padding: 6px 18px;
+    border-radius: 4px;
+  }
+  .cover h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    color: #0f172a;
+    margin-bottom: 0.4cm;
+    line-height: 1.2;
+  }
+  .cover .subtitle {
+    font-size: 13pt;
+    color: #475569;
+    margin-bottom: 1.8cm;
+    font-style: italic;
+  }
+  .cover-info {
+    width: 80%;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .cover-info table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11pt;
+  }
+  .cover-info td {
+    padding: 6px 10px;
+    vertical-align: top;
+  }
+  .cover-info td:first-child {
+    font-weight: bold;
+    color: #374151;
+    width: 40%;
+  }
+  .cover-divider {
+    width: 60%;
+    border: none;
+    border-top: 2px solid #0f172a;
+    margin: 1.2cm auto;
+  }
+  .team-table {
+    width: 80%;
+    margin: 0.5cm auto 0;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+  }
+  .team-table th {
+    background: #f1f5f9;
+    padding: 5px 10px;
+    text-align: left;
+    border: 1px solid #cbd5e1;
+    font-size: 10pt;
+  }
+  .team-table td {
+    padding: 5px 10px;
+    border: 1px solid #cbd5e1;
+  }
+  .cover-footer {
+    margin-top: 1.5cm;
+    font-size: 10pt;
+    color: #6b7280;
+  }
+
+  /* ── CONTENT PAGES ── */
+  .content-page {
+    padding: 0.5cm 0;
+  }
+  .page-header {
+    font-size: 9pt;
+    color: #94a3b8;
+    text-align: right;
+    margin-bottom: 0.4cm;
+    border-bottom: 0.5px solid #e2e8f0;
+    padding-bottom: 3px;
+  }
+
+  h2 {
+    font-size: 15pt;
+    color: #0f172a;
+    margin: 0.5cm 0 0.25cm;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #0ea5e9;
+    display: inline-block;
+  }
+  h3 {
+    font-size: 12pt;
+    color: #1e40af;
+    margin: 0.35cm 0 0.15cm;
+  }
+  h4 {
+    font-size: 11pt;
+    color: #374151;
+    margin: 0.2cm 0 0.1cm;
+    font-weight: bold;
+  }
+  p {
+    margin-bottom: 0.2cm;
+    text-align: justify;
+  }
+  ul {
+    margin: 0.1cm 0 0.25cm 0.6cm;
+  }
+  li {
+    margin-bottom: 2px;
+  }
+
+  /* ── TABLES ── */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.2cm 0 0.3cm;
+    font-size: 10.5pt;
+  }
+  table.data-table th {
+    background: #0f172a;
+    color: #fff;
+    padding: 5px 8px;
+    text-align: left;
+    font-size: 10pt;
+  }
+  table.data-table td {
+    padding: 4px 8px;
+    border: 1px solid #d1d5db;
+  }
+  table.data-table tr:nth-child(even) {
+    background: #f8fafc;
+  }
+
+  /* ── ARCHITECTURE DIAGRAM (TEXT-BASED) ── */
+  .arch-diagram {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    white-space: pre;
+    margin: 0.2cm 0 0.3cm;
+    overflow: hidden;
+  }
+
+  .highlight-box {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+    padding: 8px 12px;
+    margin: 0.2cm 0 0.3cm;
+    font-size: 10.5pt;
+  }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 0.15cm 0 0.25cm;
+  }
+  .metric-item {
+    background: #f1f5f9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 10.5pt;
+  }
+  .metric-item strong { color: #0f172a; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 1 — COVER PAGE
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Final Submission Report</div>
+  <h1>SatIntel</h1>
+  <div class="subtitle">Satellite Environmental Intelligence Platform for Smart Cities</div>
+
+  <hr class="cover-divider">
+
+  <div class="cover-info">
+    <table>
+      <tr><td>Team Name</td><td>Team Nexus</td></tr>
+      <tr><td>Team ID</td><td>AETRIX-2026-PS4-NEXUS</td></tr>
+      <tr><td>Problem Statement</td><td>PS-4: Satellite Environmental Intelligence Platform for Smart Cities</td></tr>
+      <tr><td>Domain</td><td>Sustainable Environment</td></tr>
+      <tr><td>Hackathon</td><td>AETRIX 2026 — 36-Hour Hackathon, PDEU, Gandhinagar</td></tr>
+      <tr><td>Date</td><td>March 21–22, 2026</td></tr>
+    </table>
+  </div>
+
+  <table class="team-table">
+    <tr><th>Name</th><th>Role</th></tr>
+    <tr><td>Himanshu Mishra</td><td>Full-Stack Development, GEE Integration, ML Pipeline, UI/UX</td></tr>
+    <tr><td>Vedant Mehta</td><td>Backend Services, Specialized Analysis, Deployment</td></tr>
+    <tr><td>Riya Joshi</td><td>Frontend Development, Theme System, Research Mode</td></tr>
+  </table>
+
+  <div class="cover-footer">Confidential — For Jury Evaluation Only</div>
+</div>
+<div class="page-break"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 2 — EXECUTIVE SUMMARY + PROBLEM STATEMENT
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="page-header">SatIntel — AETRIX 2026 | Page 2</div>
+
+  <h2>Section 1: Executive Summary</h2>
+  <p>
+    <strong>SatIntel</strong> is a satellite environmental intelligence platform that transforms raw Earth observation data from NASA and ESA missions into actionable environmental policy for Indian cities. The platform ingests data from four satellite missions — MODIS, Sentinel-5P, SMAP, and Landsat — covering nine environmental parameters including land surface temperature, vegetation health, air pollution (NO₂, SO₂, CO, O₃, aerosol), soil moisture, and land use classification. All datasets are harmonized to a common 1 km grid using Inverse Distance Weighting (IDW) interpolation, enabling direct cross-parameter comparison at any location.
+  </p>
+  <p>
+    The platform runs five ML models — Isolation Forest for anomaly detection, LSTM and ARIMA for trend forecasting, DBSCAN for spatial hotspot clustering, and NDVI-LST regression for green infrastructure planning — across 14 Gujarat cities. A multi-agent system orchestrates the full pipeline: data ingestion, ML analysis, and automated generation of municipal-grade Environment Action Plans. The result is a tool that a municipal commissioner can use today — no satellite expertise required. SatIntel achieves sub-second dashboard loads (25× speedup via pre-computation) while processing over 225,000 harmonized data points per city, making satellite intelligence practically accessible for urban environmental governance.
+  </p>
+
+  <h2>Section 2: Problem Statement &amp; Domain Relevance</h2>
+
+  <h3>The Root Cause</h3>
+  <p>
+    Indian cities face escalating environmental crises — urban heat islands exceeding 48°C, vegetation loss from unregulated construction, hazardous air pollution corridors near industrial zones, and declining soil moisture signaling drought risk. NASA and ESA satellites photograph every city on Earth daily, generating petabytes of freely available environmental data. However, a critical gap exists: <strong>no practical tool bridges raw satellite data and municipal decision-making</strong>. The data exists; the analysis pipeline does not.
+  </p>
+
+  <h3>Why This Matters</h3>
+  <p>
+    Urban environmental degradation directly impacts public health (heat stroke mortality, respiratory illness from pollution), food security (farmland conversion, soil degradation), water resources (drought from declining soil moisture), and urban livability. Ahmedabad alone recorded 1,344 heat-related deaths in 2010, leading to India's first Heat Action Plan. Cities need continuous satellite-backed monitoring — not sporadic manual surveys — to respond proactively.
+  </p>
+
+  <h3>Who Is Affected</h3>
+  <p>
+    Over 26 million people across Gujarat's 14 major cities are directly affected. Municipal corporations, urban planning authorities, district collectors, environmental regulators, agricultural officers, and public health departments all require environmental intelligence but lack tools to access satellite data without specialized GIS expertise.
+  </p>
+
+  <h3>Existing Solutions &amp; Their Limitations</h3>
+  <ul>
+    <li><strong>Google Earth Engine:</strong> Powerful but requires programming expertise; produces raw data, not actionable reports.</li>
+    <li><strong>ISRO Bhuvan Portal:</strong> Visualization only; no ML analytics, no automated reporting, limited interactivity.</li>
+    <li><strong>Commercial Platforms (Planet, Maxar):</strong> Expensive ($5,000–50,000/year), not tailored for Indian municipalities.</li>
+    <li><strong>Manual Ground Surveys:</strong> Expensive, infrequent (annual), limited coverage, weeks to process.</li>
+  </ul>
+  <p>
+    None of these solutions provide an end-to-end pipeline from satellite data to ML-driven analysis to a ready-to-use municipal action plan — which is exactly what SatIntel delivers.
+  </p>
+</div>
+<div class="page-break"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 3 — PROPOSED SOLUTION + TECH STACK
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="page-header">SatIntel — AETRIX 2026 | Page 3</div>
+
+  <h2>Section 3: Proposed Solution</h2>
+
+  <h3>Overview</h3>
+  <p>
+    SatIntel is a full-stack web platform that automates the entire satellite-to-action pipeline. Users select a city, and the system loads pre-harmonized satellite data from four missions, runs five ML models, performs four domain-specific analyses (vegetation loss, urban heat islands, land conversion, farmland misuse), and generates a professional Environment Action Plan — all within one second of dashboard load.
+  </p>
+
+  <h3>Key Features</h3>
+  <ul>
+    <li><strong>Multi-Satellite Data Harmonization:</strong> Nine environmental parameters from four satellite missions, harmonized to a common 1 km grid (961 cells per city) via IDW interpolation — enabling direct cross-parameter spatial analysis.</li>
+    <li><strong>Five ML Models:</strong> Isolation Forest (anomaly detection), LSTM + ARIMA (trend forecasting), DBSCAN (hotspot clustering), NDVI-LST regression (green infrastructure gap analysis with projected cooling per plantation site).</li>
+    <li><strong>Multi-Agent Pipeline:</strong> Three specialized agents — Data Agent, Analysis Agent, Action Plan Agent — orchestrated to generate evidence-backed municipal reports with findings, risk matrices, recommendations, timelines, and KPI frameworks.</li>
+    <li><strong>Interactive Geospatial Dashboard:</strong> Eight toggleable heatmap layers on Leaflet maps, anomaly markers, hotspot clusters, time-series charts, city health scores, and a 14-city comparative ranking leaderboard.</li>
+    <li><strong>Green Infrastructure Optimizer:</strong> Identifies the top 50 tree plantation sites per city, ranked by projected temperature reduction (°C), with species recommendations based on Gujarat Forest Department guidelines.</li>
+  </ul>
+
+  <h3>Innovation vs. Existing Approaches</h3>
+  <p>
+    Unlike existing tools that stop at visualization, SatIntel closes the loop from data to decision. The multi-agent system generates reports in the language of municipal governance — not satellite science. The NDVI-LST regression quantifies the exact cooling impact of planting trees at specific coordinates, making environmental planning measurable and evidence-based.
+  </p>
+
+  <h3>Direct Users &amp; Benefits</h3>
+  <p>
+    Municipal commissioners receive ready-to-implement action plans. Urban planners see exactly where heat islands and pollution corridors exist. Agricultural officers identify farmland misuse via crop activity scoring. Environmental regulators get anomaly alerts backed by satellite evidence. No GIS expertise is needed — the platform translates satellite data into plain-language findings.
+  </p>
+
+  <h2>Section 4: Tech Stack &amp; Architecture</h2>
+
+  <table class="data-table">
+    <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Frontend</td><td>React 19, Vite 6, Tailwind CSS v4</td><td>Component-based UI, fast HMR, utility styling</td></tr>
+    <tr><td>Maps</td><td>React-Leaflet, leaflet.heat</td><td>8 interactive heatmap layers, markers, clusters</td></tr>
+    <tr><td>Charts</td><td>Recharts</td><td>Time-series area/line charts with forecasts</td></tr>
+    <tr><td>Backend</td><td>FastAPI, Uvicorn, Pydantic v2</td><td>Async REST API, validation, auto-docs</td></tr>
+    <tr><td>Auth</td><td>JWT (HS256), bcrypt, python-jose</td><td>Stateless token auth, 24h expiry</td></tr>
+    <tr><td>ML</td><td>scikit-learn, PyTorch, statsmodels</td><td>Isolation Forest, LSTM, ARIMA, DBSCAN</td></tr>
+    <tr><td>Satellite</td><td>Google Earth Engine (Python API)</td><td>MODIS, Sentinel-5P, SMAP, Landsat data</td></tr>
+    <tr><td>Harmonization</td><td>NumPy (IDW interpolation)</td><td>Resample all data to common 1 km grid</td></tr>
+    <tr><td>Database</td><td>PostgreSQL + PostGIS (Neon), JSON fallback</td><td>Spatial queries, user storage</td></tr>
+    <tr><td>Deployment</td><td>Vercel (frontend), Render (backend)</td><td>Production hosting with CI/CD</td></tr>
+  </table>
+
+  <h3>Architecture Diagram</h3>
+  <div class="arch-diagram">┌──────────────────────────────────────────────────────────────────────┐
+│  SATELLITE SOURCES                                                   │
+│  MODIS (LST, NDVI) │ Sentinel-5P (NO₂,SO₂,CO,O₃,Aerosol) │        │
+│  SMAP (Soil Moisture) │ Landsat 8/9 (Land Use)                      │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             ▼
+               ┌─────────────────────────┐
+               │  Google Earth Engine     │──→ Pre-fetched JSON files
+               │  (Cloud Processing)     │    /data/[14 cities]/*.json
+               └─────────────────────────┘
+                             ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  FASTAPI BACKEND                                                     │
+│  ┌──────────────┐  ┌───────────────┐  ┌─────────────────────────┐   │
+│  │ IDW Harmoni- │  │ ML Models     │  │ Multi-Agent Pipeline    │   │
+│  │ zation →     │→ │ IF│LSTM│DBSCAN│→ │ Data→Analysis→ActionPlan│   │
+│  │ 961-cell grid│  │ ARIMA│Regress.│  │ (Orchestrator)          │   │
+│  └──────────────┘  └───────────────┘  └─────────────────────────┘   │
+│  ┌──────────────────────────────────────────────┐                    │
+│  │ Domain Services: Vegetation│Heat│LandConv│Farm│GreenGap│Alerts   │
+│  └──────────────────────────────────────────────┘                    │
+│  Auth (JWT) │ Cache (Memory/Redis) │ 20+ REST Endpoints             │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  REACT FRONTEND                                                      │
+│  Dashboard (Map+Stats+Charts) │ Analytics (Anomalies+Trends+Hotspots)│
+│  Action Plan (PDF Export) │ Green Gap │ Rankings │ Research Mode      │
+└──────────────────────────────────────────────────────────────────────┘</div>
+</div>
+<div class="page-break"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 4 — IMPLEMENTATION DETAILS
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="page-header">SatIntel — AETRIX 2026 | Page 4</div>
+
+  <h2>Section 5: Implementation Details</h2>
+
+  <h3>Development Process — Key Milestones</h3>
+  <table class="data-table">
+    <tr><th>Phase</th><th>Hours</th><th>Milestone</th></tr>
+    <tr><td>Foundation</td><td>0–3</td><td>Project scaffolding, GEE authentication, pre-fetched satellite data for 14 Gujarat cities (9 parameters each), JWT auth flow end-to-end</td></tr>
+    <tr><td>Core Pipeline</td><td>3–10</td><td>IDW harmonization engine (961-cell grid), Isolation Forest anomaly detection, ARIMA trend prediction, DBSCAN clustering, interactive Leaflet map with 8 heatmap layers</td></tr>
+    <tr><td>Domain Analysis</td><td>10–18</td><td>Vegetation loss service, Urban Heat Island zone analysis, land conversion tracking (2020 vs 2024), farmland misuse detection via LSTM crop scoring, green infrastructure gap analysis with NDVI-LST regression</td></tr>
+    <tr><td>Multi-Agent</td><td>18–24</td><td>Three-agent orchestration pipeline (data → analysis → action plan), municipal-grade report generation with risk matrices and KPI frameworks, PDF/JSON export</td></tr>
+    <tr><td>Optimization</td><td>24–30</td><td>25× speedup via pre-harmonized data + pre-computed ML cache, startup cache warmup for all 14 cities, sub-second dashboard loads</td></tr>
+    <tr><td>Polish</td><td>30–36</td><td>City rankings leaderboard, CSV export, anomaly descriptions, alert system, edge case handling, demo rehearsal</td></tr>
+  </table>
+
+  <h3>Challenges &amp; Solutions</h3>
+  <p>
+    <strong>1. Cross-Sensor Grid Alignment:</strong> Four satellite missions produce data at different spatial resolutions (1 km, 7 km, 9 km, 30 m) on incompatible grids. Direct comparison was impossible. We implemented IDW interpolation to resample all datasets to a unified 0.01° grid (961 cells), enabling pixel-level cross-parameter analysis. This required 14.7 million interpolation calculations per city, which we solved by pre-computing and caching harmonized files.
+  </p>
+  <p>
+    <strong>2. Dashboard Load Time (23s → 0.92s):</strong> Raw pipeline (load JSON → harmonize → run ML) took 23 seconds per page load — unacceptable for a demo. We implemented a three-tier optimization: (a) pre-harmonized JSON files eliminate 12s of IDW computation, (b) pre-computed ML results cache eliminates 12s of model training, (c) startup cache warmup pre-loads all cities into memory. Result: 25× faster, sub-second loads.
+  </p>
+  <p>
+    <strong>3. Meaningful Anomaly Detection at Scale:</strong> Running Isolation Forest on 225,000 raw data points produced 18,000+ anomalies — mostly noise from spatial variance. We switched to date-level aggregation (city-wide mean per date), reducing input to ~43 meaningful time points. This surfaced genuine environmental events (heat waves, pollution spikes) instead of spatial noise, cutting results to dozens of actionable anomalies.
+  </p>
+
+  <h3>Scalability Measures</h3>
+  <ul>
+    <li><strong>City-Agnostic Design:</strong> Adding a new city requires only its bounding box coordinates and a GEE data fetch — the entire pipeline (harmonization, ML, action plan) works automatically. Currently supports 14 cities; designed for any city globally.</li>
+    <li><strong>Modular Services Layer:</strong> Each service (satellite, ML, vegetation, heat, etc.) has independent function signatures. Swapping MongoDB for PostGIS, ARIMA for LSTM, or file storage for Redis requires changing one service — no route or frontend changes.</li>
+    <li><strong>Async FastAPI:</strong> All endpoints are async, supporting concurrent requests. Background startup cache warmup ensures first-request performance matches subsequent requests.</li>
+    <li><strong>Three-Level Caching:</strong> Memory → Redis → File fallback chain ensures performance at any infrastructure level.</li>
+  </ul>
+
+  <h3>Security Considerations</h3>
+  <ul>
+    <li><strong>Authentication:</strong> JWT tokens (HS256) with bcrypt password hashing, 24-hour expiry, automatic logout on 401 responses.</li>
+    <li><strong>API Security:</strong> CORS whitelist restricted to frontend origin, Pydantic v2 input validation on all endpoints, HTTPException error handling prevents stack trace leakage.</li>
+    <li><strong>Data Protection:</strong> GEE service account credentials excluded from version control via .gitignore. Environment variables for all secrets (JWT secret, database URL).</li>
+    <li><strong>Protected Routes:</strong> All satellite, analytics, and action plan endpoints require valid JWT via dependency injection middleware.</li>
+  </ul>
+
+  <h2>Section 6: Future Scope &amp; Enhancements</h2>
+  <ul>
+    <li><strong>Real-Time Satellite Streaming:</strong> Replace pre-fetched data with live GEE queries triggered by schedule or user request, enabling near-real-time monitoring with automated alert dispatch via SMS/email to municipal officers.</li>
+    <li><strong>LLM-Powered Action Plans:</strong> Integrate Claude or GPT-4 API to generate context-aware natural language recommendations instead of template-based reports — adapting language and priorities to each city's specific challenges.</li>
+    <li><strong>National Scale Deployment:</strong> Expand from 14 Gujarat cities to all 4,000+ Indian municipalities. Partner with the Ministry of Environment, Forest and Climate Change (MoEFCC) for integration into the National Clean Air Programme (NCAP) monitoring infrastructure.</li>
+    <li><strong>Mobile App + Offline Mode:</strong> React Native companion app for field officers with offline caching for low-connectivity rural areas. GPS-tagged ground truth photo uploads to validate satellite findings.</li>
+    <li><strong>Carbon Credit Estimation:</strong> Use NDVI change data to estimate carbon sequestration from green cover improvements, enabling cities to participate in voluntary carbon markets.</li>
+  </ul>
+</div>
+<div class="page-break"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 5 — UX + MARKET VIABILITY
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="page-header">SatIntel — AETRIX 2026 | Page 5</div>
+
+  <h2>Section 7: User Experience &amp; Interface</h2>
+
+  <h3>Key User Journey</h3>
+  <p>
+    A user begins at the landing page, which presents the platform's value proposition — "Satellite Intelligence for Smarter Cities" — with three feature cards explaining multi-satellite data, ML-powered analytics, and automated action plans. After signing up or logging in (JWT-authenticated), the user enters the dashboard.
+  </p>
+  <p>
+    The dashboard opens with a city selector in the navigation bar (defaulting to Ahmedabad), four statistics cards displaying current averages for temperature, vegetation, air quality, and soil moisture, and a large interactive map centered on the selected city at zoom level 11. The map displays eight toggleable heatmap layers — users click layer controls to overlay urban heat islands, vegetation health, pollution corridors, or soil moisture in real time. Anomaly markers pulse in red; hotspot clusters appear as shaded circles. A time-series chart panel alongside the map shows parameter trends over two years.
+  </p>
+  <p>
+    From the sidebar, the user navigates to the Analytics page, where they select a parameter and explore three tabs — Anomalies (listing detected events with severity, deviation, and plain-language descriptions), Trends (LSTM forecast overlaid on historical data), and Hotspots (DBSCAN clusters mapped spatially). A fourth tab provides domain-specific analyses: vegetation loss metrics, UHI zone rankings, land conversion tracking, and farmland misuse detection.
+  </p>
+  <p>
+    The Action Plan page provides a one-click pipeline: the user presses "Generate Action Plan," observes a multi-step progress indicator (fetching data → running analysis → generating recommendations), and receives a professional municipal report with numbered findings, a risk assessment matrix, prioritized recommendations with timelines and budget categories, and a KPI monitoring framework. The report is exportable as PDF or JSON.
+  </p>
+  <p>
+    The Green Gap page presents the top 50 tree plantation sites ranked by projected cooling impact, with species recommendations. The City Rankings page compares all 14 Gujarat cities across environmental metrics with CSV export for further analysis.
+  </p>
+
+  <h3>Accessibility Considerations</h3>
+  <ul>
+    <li><strong>Device:</strong> Fully responsive design via Tailwind CSS — works on desktops, tablets, and mobile devices.</li>
+    <li><strong>Connectivity:</strong> Pre-computed data and three-level caching ensure sub-second loads even on moderate connections. JSON fallback eliminates dependency on external databases.</li>
+    <li><strong>Language:</strong> Reports use plain English with no jargon. All satellite-specific terms (NDVI, LST) are accompanied by human-readable labels ("Vegetation Health," "Surface Temperature").</li>
+    <li><strong>Theme:</strong> Dark/light mode toggle via ThemeContext for user preference and reduced eye strain during extended use.</li>
+  </ul>
+
+  <h3>Unique UX Decisions</h3>
+  <p>
+    We chose to display anomaly descriptions in natural language ("Extreme heat event — surface temperature significantly above seasonal average") rather than raw numbers, ensuring non-technical stakeholders immediately understand severity. The map defaults to showing the most impactful layers (UHI and anomalies enabled), with secondary layers (soil moisture, ozone) available on demand — reducing cognitive overload while maintaining depth.
+  </p>
+
+  <h2>Section 8: Market Viability &amp; Business Model</h2>
+
+  <h3>Target Users</h3>
+  <p>
+    Primary: Municipal corporations and urban local bodies across India (~4,000 municipalities). Secondary: State pollution control boards (29 states), district agricultural officers (~740 districts), urban planning authorities, and environmental consultancies. The platform is designed for non-technical government officers — no GIS or satellite expertise required.
+  </p>
+
+  <h3>Monetisation Strategy</h3>
+  <ul>
+    <li><strong>SaaS Tiered Licensing:</strong> Free tier (1 city, basic parameters) for awareness; Professional tier (₹50,000/year per city) for municipalities with full analytics, action plans, and alerts; Enterprise tier for state-level deployments covering all districts.</li>
+    <li><strong>Government Contracts:</strong> Direct procurement under Smart Cities Mission, AMRUT 2.0, and National Clean Air Programme budgets. India's Smart Cities Mission alone has ₹48,000 crore allocated — environmental monitoring is a mandatory component.</li>
+    <li><strong>Consulting Reports:</strong> On-demand detailed environmental assessments for real estate developers, infrastructure projects requiring Environmental Impact Assessments (EIA), and industrial compliance reporting.</li>
+  </ul>
+
+  <h3>Compliance &amp; Regulatory Alignment</h3>
+  <ul>
+    <li>Aligned with India's National Clean Air Programme (NCAP) monitoring requirements.</li>
+    <li>Supports Heat Action Plan compliance (mandated for all major Indian cities post-2013).</li>
+    <li>Uses only freely available public satellite data (NASA/ESA) — no licensing restrictions on data redistribution.</li>
+    <li>All data processing occurs server-side; no personal data collection beyond auth credentials.</li>
+  </ul>
+
+  <h3>Real-World Deployment Scenarios</h3>
+  <p>
+    <strong>Scenario 1 — Ahmedabad Municipal Corporation Heat Action Plan:</strong> AMC deploys SatIntel to monitor urban heat islands in real time. The platform identifies that the Naroda-Odhav industrial corridor consistently registers 4.2°C above city average. The Green Gap module recommends 12 specific plantation sites along this corridor, projecting 2.3°C average cooling. AMC allocates budget from Smart Cities Mission funds, plants 10,000 trees at GPS-tagged coordinates, and uses SatIntel's quarterly monitoring to track NDVI improvement and temperature reduction over 12 months.
+  </p>
+  <p>
+    <strong>Scenario 2 — Gujarat Pollution Control Board (GPCB) Industrial Monitoring:</strong> GPCB uses SatIntel's anomaly detection across 14 cities to flag unusual NO₂ and SO₂ spikes near GIDC industrial estates. When the system detects a critical SO₂ anomaly in Vapi's chemical hub, GPCB dispatches an inspection team within 48 hours — compared to the current quarterly inspection cycle. The platform's evidence-backed alerts (satellite timestamp, coordinates, deviation magnitude) provide legal standing for enforcement notices.
+  </p>
+</div>
+<div class="page-break"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PAGE 6 — CONCLUSION + APPENDIX
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="page-header">SatIntel — AETRIX 2026 | Page 6</div>
+
+  <h2>Section 9: Conclusion</h2>
+
+  <h3>Key Impact &amp; Achievements</h3>
+  <p>
+    SatIntel demonstrates that satellite environmental intelligence can be made practically accessible to non-technical municipal decision-makers. In 36 hours, we built a platform that ingests data from four NASA/ESA satellite missions, harmonizes nine environmental parameters to a common spatial grid, runs five ML models, performs four domain-specific analyses, and generates professional municipal action plans — all loading in under one second. The platform covers 14 Gujarat cities with over 225,000 harmonized data points per city, representing two years of continuous satellite observation.
+  </p>
+  <p>
+    The technical pipeline — from IDW interpolation for cross-sensor alignment, to Isolation Forest anomaly detection aggregated at city-level for noise reduction, to NDVI-LST regression for quantifying cooling potential at specific GPS coordinates — transforms abstract satellite imagery into concrete decisions: "Plant 500 Neem trees at (23.05, 72.40) for a projected 2.3°C cooling." Every number in every report traces back to an actual satellite measurement.
+  </p>
+
+  <h3>What We Are Most Proud Of</h3>
+  <p>
+    The 25× performance optimization — reducing dashboard load from 23 seconds to under 1 second through pre-harmonization and ML caching — and the Green Infrastructure Gap Analysis, which uses NDVI-LST regression to produce GPS-precise tree plantation recommendations with quantified temperature impact. This feature alone makes SatIntel immediately useful for any municipal corporation's urban forestry program.
+  </p>
+
+  <h3>Vision Statement</h3>
+  <p style="font-style: italic; font-size: 12pt; text-align: center; margin: 0.4cm 1cm; padding: 8px; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1;">
+    "Every city on Earth has satellite data. SatIntel gives every city the intelligence to act on it."
+  </p>
+
+  <h2>Section 10: Appendix</h2>
+
+  <h3>References &amp; Data Sources</h3>
+  <table class="data-table">
+    <tr><th>Source</th><th>Agency</th><th>Data</th><th>Dataset ID</th></tr>
+    <tr><td>MODIS Terra</td><td>NASA</td><td>LST (8-day, 1km)</td><td>MODIS/061/MOD11A2</td></tr>
+    <tr><td>MODIS Terra</td><td>NASA</td><td>NDVI (16-day, 1km)</td><td>MODIS/061/MOD13A2</td></tr>
+    <tr><td>Sentinel-5P TROPOMI</td><td>ESA/Copernicus</td><td>NO₂, SO₂, CO, O₃, Aerosol</td><td>COPERNICUS/S5P/OFFL/L3_*</td></tr>
+    <tr><td>NASA SMAP</td><td>NASA/JPL</td><td>Soil Moisture (daily, 9km)</td><td>NASA/SMAP/SPL3SMP_E/006</td></tr>
+    <tr><td>Landsat 8/9</td><td>USGS/NASA</td><td>Land Use (16-day, 30m)</td><td>LANDSAT/LC08-09/C02/T1_L2</td></tr>
+  </table>
+
+  <h3>APIs &amp; Libraries Used</h3>
+  <table class="data-table">
+    <tr><th>Category</th><th>Libraries</th></tr>
+    <tr><td>Frontend</td><td>React 19, Vite 6, React Router v7, Tailwind CSS v4, Recharts, React-Leaflet, leaflet.heat, Framer Motion, Axios, Lucide React</td></tr>
+    <tr><td>Backend</td><td>FastAPI, Uvicorn, Pydantic v2, python-jose, bcrypt/passlib, SQLAlchemy, GeoAlchemy2</td></tr>
+    <tr><td>ML / Data Science</td><td>scikit-learn (IsolationForest, DBSCAN), PyTorch (LSTM), statsmodels (ARIMA), NumPy, Pandas</td></tr>
+    <tr><td>Geospatial</td><td>Google Earth Engine Python API (earthengine-api), geemap, pyproj</td></tr>
+    <tr><td>Infrastructure</td><td>PostgreSQL + PostGIS (Neon Cloud), Vercel, Render</td></tr>
+  </table>
+
+  <h3>Acknowledgements</h3>
+  <ul>
+    <li>NASA Goddard Space Flight Center and ESA Copernicus Programme for freely available satellite data.</li>
+    <li>Google Earth Engine team for providing cloud-based geospatial processing at no cost for research.</li>
+    <li>PDEU and the AETRIX 2026 organizing committee for providing the platform and problem statement.</li>
+    <li>Gujarat Forest Department guidelines referenced for tree species recommendations in Green Gap analysis.</li>
+  </ul>
+
+  <div class="highlight-box" style="margin-top: 0.5cm;">
+    <strong>Project Repository:</strong> github.com/coderved63/Satellite<br>
+    <strong>Platform Metrics:</strong> 14 cities &bull; 9 parameters &bull; 4 satellite missions &bull; 5 ML models &bull; 20+ API endpoints &bull; 225K+ data points per city &bull; Sub-second dashboard loads
+  </div>
+
+</div>
+
+</body>
+</html>
