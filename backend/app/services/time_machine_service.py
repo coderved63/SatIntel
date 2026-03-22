@@ -1,16 +1,13 @@
 """
 Environmental Time Machine — computes per-cell yearly averages for side-by-side comparison.
-Returns two grids (year_a vs year_b) for any parameter.
+Uses harmonized satellite data (961 cells per city) for rich heatmap visualization.
 """
-import json
 import logging
 import numpy as np
-from pathlib import Path
 from collections import defaultdict
+from app.services import satellite_service
 
 logger = logging.getLogger(__name__)
-
-DATA_BASE = Path(__file__).resolve().parent.parent.parent.parent / "data"
 
 PARAM_META = {
     "LST": {"label": "Surface Temperature", "unit": "C", "scale": "temperature"},
@@ -22,30 +19,14 @@ PARAM_META = {
     "LAND_USE": {"label": "Land Use Change", "unit": "class", "scale": "landuse"},
 }
 
-FILENAME_MAP = {
-    "LST": "lst_timeseries.json",
-    "NDVI": "ndvi_timeseries.json",
-    "NO2": "no2_timeseries.json",
-    "SO2": "so2_timeseries.json",
-    "CO": "co_timeseries.json",
-    "SOIL_MOISTURE": "soil_moisture.json",
-}
-
-
-def _load_json(city: str, filename: str):
-    path = DATA_BASE / city.lower() / filename
-    if not path.exists():
-        return []
-    with open(path) as f:
-        return json.load(f)
-
 
 def _timeseries_to_yearly_grids(data, year_a="2023", year_b="2024"):
+    """Split harmonized time-series into per-cell yearly averages."""
     cells_a = defaultdict(list)
     cells_b = defaultdict(list)
 
     for point in data:
-        key = (round(point["lat"], 3), round(point["lng"], 3))
+        key = (round(point["lat"], 4), round(point["lng"], 4))
         date = str(point.get("date", ""))
         val = point.get("value")
         if val is None:
@@ -67,11 +48,17 @@ def _timeseries_to_yearly_grids(data, year_a="2023", year_b="2024"):
 
 
 def get_comparison(param: str, city: str = "ahmedabad") -> dict:
+    """Get year-over-year comparison grids using harmonized satellite data."""
     meta = PARAM_META.get(param, {"label": param, "unit": "", "scale": "default"})
 
     if param == "LAND_USE":
-        raw_a = _load_json(city, "land_use_2020.json")
-        raw_b = _load_json(city, "land_use_2024.json")
+        try:
+            lu_change = satellite_service.get_land_use_change(city)
+            raw_a = lu_change.get("data_2020", [])
+            raw_b = lu_change.get("data_2024", [])
+        except:
+            raw_a, raw_b = [], []
+
         class_map = {"water": 0, "sparse_vegetation": 1, "dense_vegetation": 2, "urban": 3, "urban_barren": 3}
 
         def encode(points):
@@ -88,19 +75,31 @@ def get_comparison(param: str, city: str = "ahmedabad") -> dict:
             "grid_a": encode(raw_a), "grid_b": encode(raw_b),
         }
 
-    filename = FILENAME_MAP.get(param)
-    if not filename:
-        return {"error": f"Unknown parameter: {param}"}
+    # Use harmonized data from satellite_service (961 cells per date after IDW)
+    try:
+        data = satellite_service._load_data(param, city)
+    except:
+        data = []
 
-    raw = _load_json(city, filename)
-    if not raw:
-        return {"error": f"No data for {param}/{city}"}
+    if not data:
+        return {"error": f"No data for {param}/{city}", "param": param, "meta": meta, "city": city,
+                "grid_a": [], "grid_b": []}
 
-    grid_a, grid_b = _timeseries_to_yearly_grids(raw, "2023", "2024")
+    grid_a, grid_b = _timeseries_to_yearly_grids(data, "2023", "2024")
+
+    # If one year is empty, try raw data as fallback
+    if not grid_a and not grid_b:
+        try:
+            raw_data = satellite_service._load_raw(param, city)
+            grid_a, grid_b = _timeseries_to_yearly_grids(raw_data, "2023", "2024")
+        except:
+            pass
 
     a_vals = [p["value"] for p in grid_a]
     b_vals = [p["value"] for p in grid_b]
     avg_change = round(float(np.mean(b_vals)) - float(np.mean(a_vals)), 4) if a_vals and b_vals else 0
+
+    logger.info(f"Time Machine {param}/{city}: A={len(grid_a)} pts, B={len(grid_b)} pts, change={avg_change}")
 
     return {
         "param": param, "meta": meta, "city": city,
