@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div className="relative z-10">
           <div className="w-12 h-1 bg-blue-500 rounded-full mb-8" />
           <blockquote className="text-3xl sm:text-4xl font-bold italic text-white/90 leading-snug max-w-lg" style={{ fontFamily: 'Georgia, serif' }}>
-            "Every city has a story the sky can tell. We turn orbit into action."
+            "Turning free satellite data into municipal action plans — one click."
           </blockquote>
           <p className="text-sm text-slate-500 mt-6 uppercase tracking-[0.15em]">
             SatIntel — Satellite Environmental Intelligence

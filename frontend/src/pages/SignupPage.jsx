@@ -60,7 +60,7 @@ export default function SignupPage() {
         <div className="relative z-10">
           <div className="w-12 h-1 bg-blue-500 rounded-full mb-8" />
           <blockquote className="text-3xl sm:text-4xl font-bold italic text-white/90 leading-snug max-w-lg" style={{ fontFamily: 'Georgia, serif' }}>
-            "The data is free. The satellites are overhead. All that's missing is you."
+            "What grows. What's lost. What's hidden."
           </blockquote>
           <p className="text-sm text-slate-500 mt-6 uppercase tracking-[0.15em]">
             SatIntel — 14 Cities, 9 Parameters, 4 Missions

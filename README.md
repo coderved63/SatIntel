@@ -312,7 +312,98 @@ DATABASE_URL=postgresql+asyncpg://user:pass@host/db  # optional, falls back to i
 
 ## Team
 
-Built for AETRIX 2026 — PS-4: Satellite Environmental Intelligence Platform for Smart Cities
+Built for **AETRIX 2026 — PS-4**: Satellite Environmental Intelligence Platform for Smart Cities
+
+| Name | Role |
+|------|------|
+| **Himanshu Mishra** | Full-Stack Development, GEE Integration, ML Pipeline, UI/UX |
+| **Vedant Mehta** | Backend Services, Specialized Analysis, Deployment |
+| **Riya Joshi** | Frontend Development, Theme System, Research Mode |
 
 **Domain:** Sustainability & Environment
 **Evaluation:** Problem Relevance (Critical) > Innovation & Technical Implementation (High) > Feasibility & Scalability (Medium)
+
+---
+
+## Problem Statement
+
+**PS-4:** Build a Satellite Environmental Intelligence Platform that helps municipal corporations, environmental regulators, and urban planners make data-driven decisions about urban heat islands, air quality, vegetation loss, soil moisture, and land use change — using free, publicly available satellite data from NASA and ESA missions.
+
+**Target Users:**
+- Municipal corporations and city planners making environmental management decisions
+- Environmental regulators (GPCB/CPCB) tracking pollution and land use change
+- Urban planners assessing heat islands, green cover, and drainage
+- Researchers querying spatial-temporal environmental data
+
+---
+
+## Setup & Run Instructions
+
+### Prerequisites
+- **Python 3.11+** with pip
+- **Node.js 18+** with npm
+- (Optional) PostgreSQL with PostGIS extension
+- (Optional) Google Earth Engine service account for live data fetch
+
+### Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate     # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env         # Edit with your settings
+# Required: JWT_SECRET
+# Optional: DATABASE_URL (PostgreSQL), GEE_SERVICE_ACCOUNT_EMAIL
+
+# Run the server
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Frontend Setup
+```bash
+cd frontend
+npm install
+
+# For local development (proxies API to localhost:8000)
+npm run dev
+# Opens at http://localhost:5173
+
+# For production build
+npm run build
+```
+
+### Database Setup (Optional)
+```bash
+# If using PostgreSQL + PostGIS for spatial queries & Research Mode
+# Set DATABASE_URL in backend/.env:
+# DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
+
+# Load satellite data into database
+cd ..
+python scripts/load_data_to_db.py
+# Loads ~98,000 rows across 14 cities with PostGIS spatial indexes
+```
+
+### GEE Data Fetch (Optional)
+```bash
+# To re-fetch satellite data from Google Earth Engine
+# Requires: gee_service_account.json in project root
+python notebooks/01_gee_data_fetch.py
+# Fetches data for 14 Gujarat cities, 10 parameters, 2020-2026
+```
+
+### Environment Variables
+```bash
+# backend/.env
+JWT_SECRET=your-secret-key
+JWT_ALGORITHM=HS256
+JWT_EXPIRY_HOURS=24
+DATABASE_URL=postgresql+asyncpg://user:pass@host/db   # optional
+GEE_SERVICE_ACCOUNT_EMAIL=your-sa@project.iam.gserviceaccount.com  # optional
+GEE_KEY_FILE=gee_service_account.json  # optional
+
+# frontend/.env.production
+VITE_API_URL=https://your-backend-url.com/api/v1
+```

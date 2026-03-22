@@ -5,7 +5,7 @@ const ThemeContext = createContext(null);
 function getInitial() {
   const s = localStorage.getItem('satintel-theme');
   if (s === 'light' || s === 'dark') return s;
-  return 'light';
+  return 'dark';
 }
 
 export function ThemeProvider({ children }) {
