@@ -101,18 +101,50 @@ def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: flo
     overall_mean = float(np.mean(means))
     overall_std = float(np.std(means)) if np.std(means) > 0 else 1.0
 
+    # Description templates per parameter and direction
+    DESCRIPTIONS = {
+        "LST": {
+            "high_up": "Extreme heat event — surface temperature significantly above seasonal average. Indicates heat wave conditions, increased energy demand, and heat stress risk.",
+            "high_down": "Unusual cold event — surface temperature dropped well below expected range. May indicate weather anomaly or sensor calibration event.",
+            "moderate_up": "Above-normal surface temperature detected. Mild heat stress — monitor for sustained trends.",
+            "moderate_down": "Below-normal surface temperature. Unusual for this period — possible weather system influence.",
+        },
+        "NDVI": {
+            "high_up": "Sudden vegetation surge — NDVI spiked above normal. Likely post-monsoon rapid growth or irrigation activity.",
+            "high_down": "Severe vegetation loss — NDVI dropped sharply. Possible deforestation, fire damage, or drought stress event.",
+            "moderate_up": "Slightly elevated vegetation index. Green cover above seasonal baseline.",
+            "moderate_down": "Mild vegetation decline detected. Early indicator of stress — recommend monitoring.",
+        },
+        "NO2": {
+            "high_up": "Pollution spike — NO2 concentration significantly elevated. Likely industrial emission event, traffic surge, or atmospheric inversion trapping pollutants.",
+            "high_down": "Unusually clean air — NO2 well below normal. Possible rainfall washout, holiday period, or industrial shutdown.",
+            "moderate_up": "Above-average NO2 levels. Gradual air quality degradation — check industrial and traffic sources.",
+            "moderate_down": "Slightly below-normal NO2. Minor air quality improvement detected.",
+        },
+        "SOIL_MOISTURE": {
+            "high_up": "Soil moisture spike — possible flooding, heavy rainfall, or irrigation event. Check drainage systems.",
+            "high_down": "Severe soil moisture deficit — drought conditions developing. Agricultural stress and groundwater depletion risk.",
+            "moderate_up": "Above-average soil moisture. Favorable for agriculture but monitor for waterlogging.",
+            "moderate_down": "Slightly dry conditions. Early drought indicator — recommend water conservation measures.",
+        },
+    }
+
+    def _get_description(param, severity, is_above):
+        templates = DESCRIPTIONS.get(param, DESCRIPTIONS["LST"])
+        direction = "up" if is_above else "down"
+        key = f"{'high' if severity in ('critical', 'high') else 'moderate'}_{direction}"
+        return templates.get(key, f"Anomalous {param} value detected — deviates significantly from baseline.")
+
     anomaly_list = []
     for i, date in enumerate(dates):
         if predictions[i] == -1:
             score = float(scores[i])
             severity = "critical" if score < -0.3 else ("high" if score < -0.15 else "moderate")
 
-            # Skip moderate — too noisy
-            if severity == "moderate":
-                continue
-
             mean_val = float(means[i][0])
             deviation = round(abs(mean_val - overall_mean) / overall_std, 2)
+            is_above = mean_val > overall_mean
+
             # Pick the most extreme point for this date as representative location
             pts = date_points[date]
             vals = date_values[date]
@@ -126,11 +158,14 @@ def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: flo
                 "severity": severity,
                 "anomaly_score": round(score, 4),
                 "deviation": deviation,
+                "direction": "above" if is_above else "below",
+                "description": _get_description(parameter, severity, is_above),
                 "parameter": parameter,
             })
 
-    # Sort by severity then score
-    anomaly_list.sort(key=lambda a: (0 if a["severity"] == "critical" else 1, a["anomaly_score"]))
+    # Sort: critical first, then high, then moderate
+    severity_order = {"critical": 0, "high": 1, "moderate": 2}
+    anomaly_list.sort(key=lambda a: (severity_order.get(a["severity"], 3), a["anomaly_score"]))
 
     return _set_cached("anomalies", parameter, city, {
         "parameter": parameter,
