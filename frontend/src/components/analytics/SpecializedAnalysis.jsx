@@ -5,34 +5,34 @@ import { Leaf, Building2, Wheat, Thermometer, TrendingDown, TrendingUp, AlertTri
 
 function MetricCard({ label, value, color, sub }) {
   return (
-    <div className="rounded-xl p-3" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
-      <p className="text-[10px] text-white/25 uppercase tracking-wider">{label}</p>
+    <div className="rounded-xl p-3" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
+      <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-faint)' }}>{label}</p>
       <p className="text-lg font-bold mt-0.5" style={{ color }}>{value}</p>
-      {sub && <p className="text-[10px] text-white/20 mt-0.5">{sub}</p>}
+      {sub && <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-faint)' }}>{sub}</p>}
     </div>
   );
 }
 
 function AnalysisSection({ title, icon: Icon, color, metrics, insights }) {
   return (
-    <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+    <div className="rounded-2xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
       <div className="flex items-center gap-2.5 mb-4">
         <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${color}15` }}>
           <Icon className="h-4 w-4" style={{ color }} />
         </div>
-        <h3 className="text-sm font-semibold text-white">{title}</h3>
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
       </div>
       <div className="grid grid-cols-3 gap-2 mb-3">
         {metrics.map((m, i) => (
-          <MetricCard key={i} label={m.label} value={m.value} color={m.color || '#fff'} sub={m.sub} />
+          <MetricCard key={i} label={m.label} value={m.value} color={m.color || 'var(--text-primary)'} sub={m.sub} />
         ))}
       </div>
       {insights && (
-        <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--bg-card-border)' }}>
           {insights.map((insight, i) => (
             <div key={i} className="flex items-center gap-2 py-1">
-              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: insight.color || 'rgba(255,255,255,0.2)' }} />
-              <span className="text-xs text-white/40">{insight.text}</span>
+              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: insight.color || 'var(--text-faint)' }} />
+              <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{insight.text}</span>
             </div>
           ))}
         </div>
@@ -77,7 +77,7 @@ export default function SpecializedAnalysis() {
         color="#10B981"
         metrics={[
           { label: 'NDVI Decline', value: `${veg.ndvi_decline_pct || 0}%`, color: veg.ndvi_decline_pct > 0 ? '#EF4444' : '#10B981' },
-          { label: 'Area Lost', value: `${veg.area_lost_sqkm || 0} km²`, color: '#F59E0B' },
+          { label: 'Area Lost', value: `${veg.area_lost_sqkm || 0} km\u00B2`, color: '#F59E0B' },
           { label: 'Current NDVI', value: veg.current_city_ndvi || '--', color: '#10B981' },
         ]}
         insights={[
@@ -93,7 +93,7 @@ export default function SpecializedAnalysis() {
         color="#94A3B8"
         metrics={[
           { label: 'Cells Changed', value: land.total_cells_changed || 0, color: '#F59E0B' },
-          { label: 'Area Changed', value: `${land.total_area_sqkm || 0} km²`, color: '#EF4444' },
+          { label: 'Area Changed', value: `${land.total_area_sqkm || 0} km\u00B2`, color: '#EF4444' },
           { label: 'Rapid Conv.', value: land.rapid_conversions || 0, color: '#EF4444' },
         ]}
         insights={
@@ -113,7 +113,7 @@ export default function SpecializedAnalysis() {
         metrics={[
           { label: 'Zones Analyzed', value: farm.total_zones_analyzed || 0, color: '#3B82F6' },
           { label: 'Suspicious', value: farm.total_suspicious_zones || 0, color: '#EF4444' },
-          { label: 'Susp. Area', value: `${farm.total_suspicious_area_sqkm || 0} km²`, color: '#F97316' },
+          { label: 'Susp. Area', value: `${farm.total_suspicious_area_sqkm || 0} km\u00B2`, color: '#F97316' },
         ]}
         insights={[
           { text: `Active farmland: ${farm.classifications?.active_farmland || 0}`, color: '#10B981' },

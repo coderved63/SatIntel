@@ -24,35 +24,35 @@ export default function RecommendationCard({ recommendation, index }) {
         {/* Content */}
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <h3 className="text-sm font-bold text-white leading-snug">{rec.title}</h3>
+            <h3 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>{rec.title}</h3>
             <span className={`text-xs px-2.5 py-0.5 rounded-full capitalize shrink-0 font-semibold ${priority.text} ${priority.bg}`}>
               {rec.priority}
             </span>
           </div>
 
           {/* Description — supports multiline with \n\n */}
-          <div className="text-sm text-slate-400 leading-relaxed mb-3 whitespace-pre-line">
+          <div className="text-sm leading-relaxed mb-3 whitespace-pre-line" style={{ color: 'var(--text-muted)' }}>
             {rec.description}
           </div>
 
           {/* Metadata grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-slate-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             {rec.timeline && (
               <span className="flex items-center gap-1.5">
-                <Clock className="h-3 w-3 text-slate-600" />
-                <span className="text-slate-400">{rec.timeline}</span>
+                <Clock className="h-3 w-3" style={{ color: 'var(--text-faint)' }} />
+                <span style={{ color: 'var(--text-muted)' }}>{rec.timeline}</span>
               </span>
             )}
             {rec.location && (
               <span className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3 text-slate-600" />
-                <span className="text-slate-400">{rec.location}</span>
+                <MapPin className="h-3 w-3" style={{ color: 'var(--text-faint)' }} />
+                <span style={{ color: 'var(--text-muted)' }}>{rec.location}</span>
               </span>
             )}
             {rec.responsible_authority && (
               <span className="flex items-center gap-1.5">
-                <Users className="h-3 w-3 text-slate-600" />
-                <span className="text-slate-400">{rec.responsible_authority}</span>
+                <Users className="h-3 w-3" style={{ color: 'var(--text-faint)' }} />
+                <span style={{ color: 'var(--text-muted)' }}>{rec.responsible_authority}</span>
               </span>
             )}
             {rec.estimated_impact && (
@@ -63,8 +63,8 @@ export default function RecommendationCard({ recommendation, index }) {
             )}
             {rec.budget_category && (
               <span className="flex items-center gap-1.5">
-                <Wallet className="h-3 w-3 text-slate-600" />
-                <span className="text-slate-400">{rec.budget_category}</span>
+                <Wallet className="h-3 w-3" style={{ color: 'var(--text-faint)' }} />
+                <span style={{ color: 'var(--text-muted)' }}>{rec.budget_category}</span>
               </span>
             )}
           </div>

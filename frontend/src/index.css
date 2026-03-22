@@ -3,21 +3,93 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+/* ── Light Theme (default) ─────────────────────────────── */
+:root {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255,255,255,0.8);
+  --bg-card-border: rgba(15,23,42,0.08);
+  --bg-card-hover: rgba(15,23,42,0.04);
+  --bg-nav: rgba(255,255,255,0.85);
+  --bg-nav-border: rgba(15,23,42,0.08);
+  --bg-input: #F1F5F9;
+  --bg-input-border: #E2E8F0;
+  --bg-badge: rgba(15,23,42,0.05);
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-faint: #CBD5E1;
+  --text-on-accent: #FFFFFF;
+  --accent: #0EA5E9;
+  --accent-hover: #0284C7;
+  --accent-light: rgba(14,165,233,0.1);
+  --border: #E2E8F0;
+  --shadow: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+  --shadow-lg: 0 4px 20px rgba(15,23,42,0.08);
+  --chart-grid: rgba(15,23,42,0.06);
+  --chart-text: #64748B;
+  --tooltip-bg: #FFFFFF;
+  --tooltip-border: #E2E8F0;
+  --tooltip-text: #334155;
+  --skeleton: #E2E8F0;
+  --skeleton-shine: #F1F5F9;
+}
+
+/* ── Dark Theme ────────────────────────────────────────── */
+.dark {
+  --bg-primary: #060A13;
+  --bg-secondary: #0F1219;
+  --bg-card: rgba(255,255,255,0.02);
+  --bg-card-border: rgba(255,255,255,0.05);
+  --bg-card-hover: rgba(255,255,255,0.04);
+  --bg-nav: rgba(255,255,255,0.06);
+  --bg-nav-border: rgba(255,255,255,0.08);
+  --bg-input: rgba(255,255,255,0.05);
+  --bg-input-border: rgba(255,255,255,0.1);
+  --bg-badge: rgba(255,255,255,0.06);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-faint: rgba(255,255,255,0.15);
+  --text-on-accent: #FFFFFF;
+  --accent: #06B6D4;
+  --accent-hover: #22D3EE;
+  --accent-light: rgba(6,182,212,0.1);
+  --border: rgba(255,255,255,0.06);
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.4);
+  --chart-grid: rgba(255,255,255,0.04);
+  --chart-text: #94A3B8;
+  --tooltip-bg: rgba(17,24,39,0.95);
+  --tooltip-border: rgba(255,255,255,0.08);
+  --tooltip-text: #E2E8F0;
+  --skeleton: rgba(255,255,255,0.05);
+  --skeleton-shine: rgba(255,255,255,0.08);
+}
+
 /* ── Base ──────────────────────────────────────────────── */
 * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 code, .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-html { background: #060A13; }
-body { background: #060A13; color: rgba(255,255,255,0.9); }
+html { background: var(--bg-primary); }
+body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; }
 
 /* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+::-webkit-scrollbar-thumb { background: var(--text-faint); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* ── Selection ─────────────────────────────────────────── */
-::selection { background: rgba(6,182,212,0.2); color: #fff; }
+::selection { background: rgba(14,165,233,0.2); }
 
 /* ── Focus ─────────────────────────────────────────────── */
-*:focus-visible { outline: 1px solid rgba(6,182,212,0.4); outline-offset: 2px; }
+*:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+
+/* ── Theme transition: instant, no jank ────────────────── */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, fill 0.15s ease !important;
+}

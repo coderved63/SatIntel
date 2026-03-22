@@ -51,17 +51,17 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
             <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
         <XAxis
           dataKey={xKey}
-          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tick={{ fill: 'var(--chart-text)', fontSize: 10 }}
           tickLine={false}
-          axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+          axisLine={{ stroke: 'var(--chart-grid)' }}
           interval={tickInterval}
           tickFormatter={(val, i) => formatSmartLabel(val, i, data)}
         />
         <YAxis
-          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tick={{ fill: 'var(--chart-text)', fontSize: 10 }}
           tickLine={false}
           axisLine={false}
           width={45}
@@ -69,13 +69,13 @@ export default function ChartWidget({ data, xKey = 'date', yKey = 'value', color
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: 'rgba(17,24,39,0.95)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            backgroundColor: 'var(--tooltip-bg)',
+            border: '1px solid var(--tooltip-border)',
             borderRadius: '8px',
             padding: '8px 12px',
-            backdropFilter: 'blur(12px)',
+            boxShadow: 'var(--shadow-lg)',
           }}
-          labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
+          labelStyle={{ color: 'var(--tooltip-text)', fontSize: 11, marginBottom: 4 }}
           itemStyle={{ color: color, fontSize: 13, fontWeight: 600 }}
           formatter={(value) => [`${Number(value).toFixed(4)} ${unit}`, '']}
           labelFormatter={(label) => formatTooltipDate(label)}

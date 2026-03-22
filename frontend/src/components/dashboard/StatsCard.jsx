@@ -13,13 +13,13 @@ export default function StatsCard({ title, value, icon: Icon, color = 'cyan', su
   return (
     <div
       className="rounded-2xl p-4"
-      style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+      style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[10px] font-medium text-white/25 uppercase tracking-wider">{title}</p>
-          <p className="text-2xl font-bold text-white mt-1.5 tracking-tight">{value}</p>
-          {subtitle && <p className="text-xs text-white/25 mt-1">{subtitle}</p>}
+          <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>{title}</p>
+          <p className="text-2xl font-bold mt-1.5 tracking-tight" style={{ color: 'var(--text-primary)' }}>{value}</p>
+          {subtitle && <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{subtitle}</p>}
           {trend && <p className="text-xs mt-1.5 font-medium" style={{ color: c.text }}>{trend}</p>}
         </div>
         {Icon && (

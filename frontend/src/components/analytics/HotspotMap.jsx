@@ -80,9 +80,9 @@ export default function HotspotMap({ data }) {
         Center: (${object.center_lat}, ${object.center_lng})
       </div>`,
       style: {
-        backgroundColor: '#1e293b',
-        color: '#e2e8f0',
-        border: '1px solid #475569',
+        backgroundColor: 'var(--tooltip-bg)',
+        color: 'var(--tooltip-text)',
+        border: '1px solid var(--tooltip-border)',
         borderRadius: '8px',
       },
     };
@@ -97,12 +97,12 @@ export default function HotspotMap({ data }) {
       <Card>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-white">Hotspot Clusters</h3>
-            <p className="text-sm text-slate-400">DBSCAN Clustering — {parameter}</p>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Hotspot Clusters</h3>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>DBSCAN Clustering — {parameter}</p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-orange-400">{cluster_count}</p>
-            <p className="text-xs text-slate-500">clusters found</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>clusters found</p>
           </div>
         </div>
 
@@ -127,14 +127,14 @@ export default function HotspotMap({ data }) {
       {/* Hotspot List */}
       {hotspots.length > 0 && (
         <Card>
-          <h3 className="text-sm font-medium text-slate-400 mb-3">Cluster Details</h3>
+          <h3 className="text-sm font-medium mb-3" style={{ color: 'var(--text-muted)' }}>Cluster Details</h3>
           <div className="space-y-2">
             {hotspots.map(h => (
-              <div key={h.cluster_id} className="flex items-center gap-3 p-2 rounded-lg bg-slate-800/50">
+              <div key={h.cluster_id} className="flex items-center gap-3 p-2 rounded-lg" style={{ background: 'var(--bg-card-hover)' }}>
                 <MapPin className="h-4 w-4" style={{ color: severityHex[h.severity] }} />
                 <div className="flex-1">
-                  <span className="text-sm text-white">Cluster #{h.cluster_id}</span>
-                  <span className="text-xs text-slate-500 ml-2">({h.center_lat}, {h.center_lng})</span>
+                  <span className="text-sm" style={{ color: 'var(--text-primary)' }}>Cluster #{h.cluster_id}</span>
+                  <span className="text-xs ml-2" style={{ color: 'var(--text-muted)' }}>({h.center_lat}, {h.center_lng})</span>
                 </div>
                 <span className="text-xs px-2 py-0.5 rounded-full capitalize" style={{
                   backgroundColor: `${severityHex[h.severity]}20`,
@@ -142,7 +142,7 @@ export default function HotspotMap({ data }) {
                 }}>
                   {h.severity}
                 </span>
-                <span className="text-xs text-slate-400">{h.num_points} pts</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{h.num_points} pts</span>
               </div>
             ))}
           </div>

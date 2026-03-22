@@ -66,7 +66,7 @@ export default function DrilldownChart({ data, label, color = '#06B6D4', unit = 
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-medium text-slate-400">
+        <h3 className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
           {label} {zoomedYear ? `— ${zoomedYear}` : ''}
         </h3>
         <div>
@@ -78,7 +78,7 @@ export default function DrilldownChart({ data, label, color = '#06B6D4', unit = 
               ← All Years
             </button>
           ) : (
-            <span className="text-[9px] text-white/20 italic">Click to drill in</span>
+            <span className="text-[9px] italic" style={{ color: 'var(--text-faint)' }}>Click to drill in</span>
           )}
         </div>
       </div>
@@ -95,23 +95,23 @@ export default function DrilldownChart({ data, label, color = '#06B6D4', unit = 
               <stop offset="100%" stopColor={color} stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
           <XAxis
             dataKey="label"
-            tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 500 }}
+            tick={{ fill: 'var(--chart-text)', fontSize: 10, fontWeight: 500 }}
             tickLine={false}
-            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            axisLine={{ stroke: 'var(--chart-grid)' }}
           />
-          <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={45} tickCount={5} />
+          <YAxis tick={{ fill: 'var(--chart-text)', fontSize: 10 }} tickLine={false} axisLine={false} width={45} tickCount={5} />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'rgba(17,24,39,0.95)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              backgroundColor: 'var(--tooltip-bg)',
+              border: '1px solid var(--tooltip-border)',
               borderRadius: '8px',
               padding: '8px 12px',
-              backdropFilter: 'blur(12px)',
+              boxShadow: 'var(--shadow-lg)',
             }}
-            labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
+            labelStyle={{ color: 'var(--tooltip-text)', fontSize: 11, marginBottom: 4 }}
             itemStyle={{ color, fontSize: 13, fontWeight: 600 }}
             formatter={(v, name, props) => {
               const d = props.payload;

@@ -3,7 +3,7 @@ export default function Loader({ size = 'md', text = 'Loading...' }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3">
       <div className={`${sizes[size]} border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin`} />
-      {text && <p className="text-sm text-slate-400">{text}</p>}
+      {text && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{text}</p>}
     </div>
   );
 }

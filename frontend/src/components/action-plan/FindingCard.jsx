@@ -11,7 +11,7 @@ const severityColors = {
 const paramConfig = {
   LST: { color: '#EF4444', label: 'Land Surface Temperature' },
   NDVI: { color: '#10B981', label: 'Vegetation Index' },
-  NO2: { color: '#8B5CF6', label: 'Air Quality (NO₂)' },
+  NO2: { color: '#8B5CF6', label: 'Air Quality (NO\u2082)' },
   SOIL_MOISTURE: { color: '#3B82F6', label: 'Soil Moisture' },
 };
 
@@ -24,7 +24,7 @@ export default function FindingCard({ finding }) {
       {/* Header bar */}
       <div className={`px-4 py-2 ${severity.bg} flex items-center justify-between`}>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold text-slate-400">{finding.id || ''}</span>
+          <span className="text-xs font-mono font-bold" style={{ color: 'var(--text-muted)' }}>{finding.id || ''}</span>
           <span className="text-xs font-medium px-2 py-0.5 rounded" style={{ backgroundColor: `${param.color}15`, color: param.color }}>
             {param.label}
           </span>
@@ -36,21 +36,21 @@ export default function FindingCard({ finding }) {
 
       {/* Body */}
       <div className="p-4">
-        <h3 className="text-sm font-bold text-white mb-2 leading-snug">{finding.title}</h3>
-        <p className="text-sm text-slate-400 leading-relaxed mb-3">{finding.description}</p>
+        <h3 className="text-sm font-bold mb-2 leading-snug" style={{ color: 'var(--text-primary)' }}>{finding.title}</h3>
+        <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-muted)' }}>{finding.description}</p>
 
         {/* Evidence box */}
         {finding.evidence && (
-          <div className="bg-slate-900/60 border border-slate-700/30 rounded-lg p-3 mb-3">
-            <p className="text-xs text-slate-400">
-              <span className="font-semibold text-slate-300">Satellite Evidence: </span>
+          <div className="rounded-lg p-3 mb-3" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--bg-card-border)' }}>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>Satellite Evidence: </span>
               {finding.evidence}
             </p>
           </div>
         )}
 
         {/* Affected population + Trend */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs" style={{ color: 'var(--text-muted)' }}>
           {finding.affected_population && (
             <span className="flex items-center gap-1">
               <Users className="h-3 w-3" />
@@ -63,7 +63,7 @@ export default function FindingCard({ finding }) {
                 ? <TrendingUp className="h-3 w-3 text-red-400" />
                 : <TrendingDown className="h-3 w-3 text-emerald-400" />
               }
-              <span className="text-slate-400">{finding.trend}</span>
+              <span style={{ color: 'var(--text-muted)' }}>{finding.trend}</span>
             </span>
           )}
         </div>

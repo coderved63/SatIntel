@@ -48,8 +48,8 @@ export default function GreenGapPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-white">Green Infrastructure Gap Analysis</h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Green Infrastructure Gap Analysis</h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
             Where to plant trees for maximum cooling impact — powered by NDVI-LST satellite regression
           </p>
         </div>
@@ -58,23 +58,23 @@ export default function GreenGapPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card padding="p-4 text-center">
             <Target className="h-5 w-5 text-red-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-white">{data?.critical_sites || 0}</p>
-            <p className="text-xs text-slate-500">Critical Sites</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.critical_sites || 0}</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Critical Sites</p>
           </Card>
           <Card padding="p-4 text-center">
             <TrendingDown className="h-5 w-5 text-emerald-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-white">{data?.avg_projected_cooling || 0}°C</p>
-            <p className="text-xs text-slate-500">Avg Projected Cooling</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.avg_projected_cooling || 0}°C</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Avg Projected Cooling</p>
           </Card>
           <Card padding="p-4 text-center">
             <Thermometer className="h-5 w-5 text-emerald-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-white">{data?.max_projected_cooling || 0}°C</p>
-            <p className="text-xs text-slate-500">Max Possible Cooling</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.max_projected_cooling || 0}°C</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Max Possible Cooling</p>
           </Card>
           <Card padding="p-4 text-center">
             <MapPin className="h-5 w-5 text-amber-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-white">{data?.total_candidate_cells || 0}</p>
-            <p className="text-xs text-slate-500">Candidate Sites</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.total_candidate_cells || 0}</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Candidate Sites</p>
           </Card>
         </div>
 
@@ -83,13 +83,13 @@ export default function GreenGapPage() {
           <Card className="border-emerald-500/20 bg-emerald-500/[0.03]">
             <div className="flex items-center gap-2 mb-2">
               <TreePine className="h-5 w-5 text-emerald-400" />
-              <span className="text-sm font-bold text-white">NDVI-LST Regression — Fitted from Satellite Data</span>
+              <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>NDVI-LST Regression — Fitted from Satellite Data</span>
             </div>
             <p className="text-sm text-emerald-300 mb-2">{reg.interpretation}</p>
-            <div className="flex gap-6 text-xs text-slate-400">
-              <span>Slope ({'\u03B2\u2081'}) = <span className="text-white font-mono">{reg.beta1}</span></span>
-              <span>R² = <span className="text-white font-mono">{reg.r_squared}</span></span>
-              <span>Sample = <span className="text-white font-mono">{reg.sample_size} cells</span></span>
+            <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
+              <span>Slope ({'\u03B2\u2081'}) = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.beta1}</span></span>
+              <span>R² = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.r_squared}</span></span>
+              <span>Sample = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.sample_size} cells</span></span>
             </div>
           </Card>
         )}
@@ -142,7 +142,7 @@ export default function GreenGapPage() {
               ].map(({ color, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
-                  <span className="text-xs text-slate-500">{label}</span>
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</span>
                 </div>
               ))}
             </div>
@@ -153,8 +153,8 @@ export default function GreenGapPage() {
             {/* Selected Site Detail */}
             {selected ? (
               <Card className="border-emerald-500/20">
-                <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">Site Detail</p>
-                <p className="text-xs font-mono text-slate-400 mb-3">{selected.lat.toFixed(4)}°N, {selected.lng.toFixed(4)}°E</p>
+                <p className="text-xs uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Site Detail</p>
+                <p className="text-xs font-mono mb-3" style={{ color: 'var(--text-muted)' }}>{selected.lat.toFixed(4)}°N, {selected.lng.toFixed(4)}°E</p>
 
                 {/* Before / After */}
                 <div className="grid grid-cols-2 gap-2 mb-3">
@@ -177,33 +177,33 @@ export default function GreenGapPage() {
                 </div>
 
                 {/* Species */}
-                <div className="bg-slate-800/50 rounded-lg p-3 mb-3">
-                  <p className="text-xs text-slate-400 mb-1 font-semibold">Recommended Species</p>
-                  <p className="text-xs text-slate-300">{selected.recommended_species}</p>
+                <div className="rounded-lg p-3 mb-3" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+                  <p className="text-xs mb-1 font-semibold" style={{ color: 'var(--text-muted)' }}>Recommended Species</p>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{selected.recommended_species}</p>
                 </div>
 
                 {/* Score */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-500">Priority:</span>
-                  <div className="flex-1 h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Priority:</span>
+                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--skeleton)' }}>
                     <div className="h-full rounded-full" style={{
                       width: `${selected.priority_score}%`,
                       backgroundColor: severityColor(selected.severity),
                     }} />
                   </div>
-                  <span className="text-xs text-white font-mono">{selected.priority_score}/100</span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-primary)' }}>{selected.priority_score}/100</span>
                 </div>
               </Card>
             ) : (
               <Card className="text-center py-8">
-                <TreePine className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-                <p className="text-sm text-slate-500">Click a site on the map to see details</p>
+                <TreePine className="h-8 w-8 mx-auto mb-2" style={{ color: 'var(--text-faint)' }} />
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Click a site on the map to see details</p>
               </Card>
             )}
 
             {/* Top Sites List */}
             <Card>
-              <p className="text-xs text-slate-400 uppercase tracking-wide mb-3">Top 50 Plantation Sites</p>
+              <p className="text-xs uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Top 50 Plantation Sites</p>
               <div className="space-y-1.5 max-h-[350px] overflow-y-auto">
                 {top50.map((site, i) => (
                   <button
@@ -212,17 +212,20 @@ export default function GreenGapPage() {
                     className={`w-full text-left flex items-center gap-3 p-2 rounded-lg transition-all ${
                       selected?.lat === site.lat && selected?.lng === site.lng
                         ? 'bg-emerald-500/10 border border-emerald-500/30'
-                        : 'hover:bg-slate-800/50'
+                        : ''
                     }`}
+                    style={!(selected?.lat === site.lat && selected?.lng === site.lng) ? { background: 'transparent' } : undefined}
+                    onMouseEnter={e => { if (!(selected?.lat === site.lat && selected?.lng === site.lng)) e.currentTarget.style.background = 'var(--bg-card-hover)'; }}
+                    onMouseLeave={e => { if (!(selected?.lat === site.lat && selected?.lng === site.lng)) e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <span className="text-xs font-mono text-slate-500 w-6">#{i + 1}</span>
+                    <span className="text-xs font-mono w-6" style={{ color: 'var(--text-muted)' }}>#{i + 1}</span>
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: severityColor(site.severity) }} />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between">
-                        <span className="text-xs text-slate-300 truncate">{site.lat.toFixed(3)}°N, {site.lng.toFixed(3)}°E</span>
+                        <span className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>{site.lat.toFixed(3)}°N, {site.lng.toFixed(3)}°E</span>
                         <span className="text-xs font-semibold text-emerald-400">-{site.projected_cooling}°C</span>
                       </div>
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
                         NDVI: {site.current_ndvi} | {site.current_lst}°C | {site.land_class}
                       </div>
                     </div>

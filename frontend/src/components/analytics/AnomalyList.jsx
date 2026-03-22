@@ -7,6 +7,25 @@ const SEVERITY = {
   moderate: { icon: Info, color: '#EAB308', label: 'Moderate' },
 };
 
+function describeAnomaly(parameter, value, severity) {
+  const s = severity === 'critical' ? 'extreme' : severity === 'high' ? 'significant' : 'notable';
+  const descriptions = {
+    LST: `${s} surface temperature of ${value}°C — indicates urban heat island stress`,
+    NDVI: value < 0.2
+      ? `${s} vegetation decline (NDVI ${value}) — possible deforestation or drought`
+      : `${s} NDVI spike (${value}) — unusual greening event detected`,
+    NO2: `${s} NO₂ concentration (${value} mol/m²) — elevated pollution from industrial/traffic sources`,
+    SO2: `${s} SO₂ level (${value} mol/m²) — industrial emission spike detected`,
+    CO: `${s} CO level (${value} mol/m²) — combustion or biomass burning indicator`,
+    O3: `${s} ozone column (${value} mol/m²) — atmospheric chemistry anomaly`,
+    AEROSOL: `${s} aerosol index (${value}) — dust storm, haze, or smoke event`,
+    SOIL_MOISTURE: value < 0.1
+      ? `${s} soil moisture deficit (${value} m³/m³) — drought risk for agriculture`
+      : `${s} soil saturation (${value} m³/m³) — potential waterlogging or flood risk`,
+  };
+  return descriptions[parameter] || `${s} anomaly detected — value ${value} deviates from expected range`;
+}
+
 export default function AnomalyList({ data }) {
   const [activeFilter, setActiveFilter] = useState('all');
 
@@ -29,27 +48,27 @@ export default function AnomalyList({ data }) {
       {/* Header */}
       <div className="flex items-end justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white">Anomaly Detection</h3>
-          <p className="text-xs text-white/30 mt-0.5">Isolation Forest &middot; {parameter} &middot; {total_points?.toLocaleString()} data points analyzed</p>
+          <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Anomaly Detection</h3>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-faint)' }}>Isolation Forest &middot; {parameter} &middot; {total_points?.toLocaleString()} data points analyzed</p>
         </div>
         <div className="text-right">
           <p className="text-3xl font-bold tracking-tight" style={{ color: anomaly_count > 100 ? '#EF4444' : '#EAB308' }}>
             {anomaly_count?.toLocaleString()}
           </p>
-          <p className="text-[10px] text-white/25 uppercase tracking-wider">anomalies found</p>
+          <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-faint)' }}>anomalies found</p>
         </div>
       </div>
 
       {/* Severity Filter Pills */}
       <div className="flex items-center gap-2">
-        <Filter className="h-3.5 w-3.5 text-white/20" />
+        <Filter className="h-3.5 w-3.5" style={{ color: 'var(--text-faint)' }} />
         <button
           onClick={() => setActiveFilter('all')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-            activeFilter === 'all'
-              ? 'bg-white/10 text-white'
-              : 'text-white/30 hover:text-white/50'
-          }`}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+          style={{
+            background: activeFilter === 'all' ? 'var(--bg-badge)' : 'transparent',
+            color: activeFilter === 'all' ? 'var(--text-primary)' : 'var(--text-faint)',
+          }}
         >
           All ({anomaly_count})
         </button>
@@ -60,7 +79,7 @@ export default function AnomalyList({ data }) {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
             style={{
               background: activeFilter === key ? `${cfg.color}15` : 'transparent',
-              color: activeFilter === key ? cfg.color : 'rgba(255,255,255,0.3)',
+              color: activeFilter === key ? cfg.color : 'var(--text-faint)',
               border: activeFilter === key ? `1px solid ${cfg.color}30` : '1px solid transparent',
             }}
           >
@@ -72,7 +91,7 @@ export default function AnomalyList({ data }) {
 
       {/* Anomaly List */}
       {filtered.length === 0 ? (
-        <div className="text-center py-12 text-white/20 text-sm">No anomalies in this category</div>
+        <div className="text-center py-12 text-sm" style={{ color: 'var(--text-faint)' }}>No anomalies in this category</div>
       ) : (
         <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
           {filtered.map((anomaly, idx) => {
@@ -81,8 +100,10 @@ export default function AnomalyList({ data }) {
             return (
               <div
                 key={idx}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/[0.03]"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
                 style={{ borderLeft: `3px solid ${cfg.color}30` }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-card-hover)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               >
                 <div className="flex items-center justify-center w-8 h-8 rounded-lg" style={{ background: `${cfg.color}10` }}>
                   <Icon className="h-4 w-4" style={{ color: cfg.color }} />
@@ -90,16 +111,17 @@ export default function AnomalyList({ data }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: cfg.color }}>{anomaly.severity}</span>
-                    <span className="text-[10px] text-white/15">&middot;</span>
-                    <span className="text-[10px] text-white/30 font-mono">{anomaly.lat}, {anomaly.lng}</span>
+                    <span className="text-[10px]" style={{ color: 'var(--text-faint)' }}>&middot;</span>
+                    <span className="text-[10px] font-mono" style={{ color: 'var(--text-faint)' }}>{anomaly.lat}, {anomaly.lng}</span>
                   </div>
-                  <p className="text-sm text-white/70 mt-0.5">
-                    <span className="font-mono font-semibold text-white">{anomaly.value}</span>
-                    <span className="text-white/20 mx-1.5">|</span>
-                    <span className="text-white/25 text-xs">score: {anomaly.anomaly_score}</span>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    {describeAnomaly(parameter, anomaly.value, anomaly.severity)}
+                  </p>
+                  <p className="text-[10px] mt-0.5 font-mono" style={{ color: 'var(--text-faint)' }}>
+                    val: {anomaly.value} &middot; score: {anomaly.anomaly_score}
                   </p>
                 </div>
-                <span className="text-xs text-white/20 font-mono shrink-0">{anomaly.date}</span>
+                <span className="text-xs font-mono shrink-0" style={{ color: 'var(--text-faint)' }}>{anomaly.date}</span>
               </div>
             );
           })}

@@ -56,8 +56,8 @@ export default function TrendChart({ data }) {
     <Card>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-white">Trend Prediction</h3>
-          <p className="text-sm text-slate-400">{model || 'ARIMA'} — {parameter}</p>
+          <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Trend Prediction</h3>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{model || 'ARIMA'} — {parameter}</p>
         </div>
         <div className={`flex items-center gap-2 ${trendColor}`}>
           <TrendIcon className="h-5 w-5" />
@@ -67,33 +67,33 @@ export default function TrendChart({ data }) {
 
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fill: '#94A3B8', fontSize: 10 }}
+            tick={{ fill: 'var(--chart-text)', fontSize: 10 }}
             tickLine={false}
-            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            axisLine={{ stroke: 'var(--chart-grid)' }}
             interval={tickInterval}
             tickFormatter={formatSmartLabel}
           />
-          <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickLine={false} axisLine={false} width={50} tickCount={5} />
+          <YAxis tick={{ fill: 'var(--chart-text)', fontSize: 10 }} tickLine={false} axisLine={false} width={50} tickCount={5} />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'rgba(17,24,39,0.95)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              backgroundColor: 'var(--tooltip-bg)',
+              border: '1px solid var(--tooltip-border)',
               borderRadius: '8px',
               padding: '8px 12px',
               backdropFilter: 'blur(12px)',
             }}
-            labelStyle={{ color: '#94A3B8', fontSize: 11, marginBottom: 4 }}
+            labelStyle={{ color: 'var(--tooltip-text)', fontSize: 11, marginBottom: 4 }}
             labelFormatter={formatTooltipDate}
           />
-          <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#3B82F6', stroke: '#1E293B', strokeWidth: 2 }} name="Historical" />
-          <Line type="monotone" dataKey="forecast" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 5" dot={false} activeDot={{ r: 4, fill: '#F59E0B', stroke: '#1E293B', strokeWidth: 2 }} name="Forecast" />
+          <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#3B82F6', stroke: 'var(--bg-secondary)', strokeWidth: 2 }} name="Historical" />
+          <Line type="monotone" dataKey="forecast" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 5" dot={false} activeDot={{ r: 4, fill: '#F59E0B', stroke: 'var(--bg-secondary)', strokeWidth: 2 }} name="Forecast" />
         </LineChart>
       </ResponsiveContainer>
 
-      <div className="flex items-center gap-6 mt-4 text-xs text-slate-400">
+      <div className="flex items-center gap-6 mt-4 text-xs" style={{ color: 'var(--text-muted)' }}>
         <div className="flex items-center gap-2">
           <span className="w-4 h-0.5 bg-blue-500" />
           Historical

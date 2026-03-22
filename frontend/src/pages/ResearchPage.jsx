@@ -77,9 +77,9 @@ function ResearchChart({ timeseries, label, color, unit }) {
   const gradId = `rg-${(color || '').replace('#', '')}`;
 
   return (
-    <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
+    <div className="rounded-xl p-3" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
       <div className="flex items-center justify-between mb-2">
-        <p className="text-[10px] text-white/30 uppercase tracking-wider">
+        <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-faint)' }}>
           {label} — {zoomedYear ? `Monthly (${zoomedYear})` : 'Yearly Overview'}
         </p>
         {zoomedYear && (
@@ -91,7 +91,7 @@ function ResearchChart({ timeseries, label, color, unit }) {
           </button>
         )}
         {!zoomedYear && (
-          <p className="text-[9px] text-white/20 italic">Click a bar to drill into months</p>
+          <p className="text-[9px] italic" style={{ color: 'var(--text-faint)' }}>Click a bar to drill into months</p>
         )}
       </div>
       <ResponsiveContainer width="100%" height={180}>
@@ -111,17 +111,17 @@ function ResearchChart({ timeseries, label, color, unit }) {
               <stop offset="100%" stopColor={color} stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
           <XAxis
             dataKey="label"
-            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 500 }}
+            tick={{ fill: 'var(--chart-text)', fontSize: 10, fontWeight: 500 }}
             tickLine={false}
-            axisLine={{ stroke: '#1e293b' }}
+            axisLine={{ stroke: 'var(--chart-grid)' }}
           />
-          <YAxis tick={{ fill: '#64748b', fontSize: 9 }} tickLine={false} axisLine={false} width={40} tickCount={5} />
+          <YAxis tick={{ fill: 'var(--chart-text)', fontSize: 9 }} tickLine={false} axisLine={false} width={40} tickCount={5} />
           <Tooltip
-            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', padding: '8px 12px' }}
-            labelStyle={{ color: '#94a3b8', fontSize: 11, marginBottom: 4 }}
+            contentStyle={{ backgroundColor: 'var(--tooltip-bg)', border: '1px solid var(--tooltip-border)', borderRadius: '8px', padding: '8px 12px' }}
+            labelStyle={{ color: 'var(--tooltip-text)', fontSize: 11, marginBottom: 4 }}
             itemStyle={{ color, fontSize: 13, fontWeight: 600 }}
             formatter={(v, name, props) => {
               const d = props.payload;
@@ -135,8 +135,8 @@ function ResearchChart({ timeseries, label, color, unit }) {
             stroke={color}
             strokeWidth={2}
             fill={`url(#${gradId})`}
-            dot={{ r: 4, fill: color, stroke: '#0f172a', strokeWidth: 2 }}
-            activeDot={{ r: 6, fill: color, stroke: '#0f172a', strokeWidth: 2 }}
+            dot={{ r: 4, fill: color, stroke: 'var(--bg-primary)', strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: color, stroke: 'var(--bg-primary)', strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -147,12 +147,12 @@ function ResearchChart({ timeseries, label, color, unit }) {
 const PARAMETERS = [
   { id: 'LST', label: 'Temperature (LST)', unit: '°C', color: '#EF4444' },
   { id: 'NDVI', label: 'Vegetation (NDVI)', unit: 'index', color: '#10B981' },
-  { id: 'NO2', label: 'NO₂', unit: 'mol/m²', color: '#8B5CF6' },
-  { id: 'SO2', label: 'SO₂', unit: 'mol/m²', color: '#F59E0B' },
-  { id: 'CO', label: 'CO', unit: 'mol/m²', color: '#DC2626' },
-  { id: 'O3', label: 'O₃', unit: 'mol/m²', color: '#2563EB' },
+  { id: 'NO2', label: 'NO\u2082', unit: 'mol/m\u00B2', color: '#8B5CF6' },
+  { id: 'SO2', label: 'SO\u2082', unit: 'mol/m\u00B2', color: '#F59E0B' },
+  { id: 'CO', label: 'CO', unit: 'mol/m\u00B2', color: '#DC2626' },
+  { id: 'O3', label: 'O\u2083', unit: 'mol/m\u00B2', color: '#2563EB' },
   { id: 'AEROSOL', label: 'Aerosol Index', unit: 'index', color: '#92400E' },
-  { id: 'SOIL_MOISTURE', label: 'Soil Moisture', unit: 'm³/m³', color: '#3B82F6' },
+  { id: 'SOIL_MOISTURE', label: 'Soil Moisture', unit: 'm\u00B3/m\u00B3', color: '#3B82F6' },
 ];
 
 export default function ResearchPage() {
@@ -311,7 +311,7 @@ export default function ResearchPage() {
   const activeParamConfig = PARAMETERS.find(p => p.id === activeResultParam);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950">
+    <div className="fixed inset-0 z-50" style={{ background: 'var(--bg-primary)' }}>
       {/* Map */}
       <DeckGL
         viewState={viewState}
@@ -331,7 +331,7 @@ export default function ResearchPage() {
           if (!object || object.value === undefined) return null;
           return {
             html: `<div style="padding:6px;font-size:11px;"><b>${object.value}</b><br/>${object.date}<br/>(${object.lat}, ${object.lng})</div>`,
-            style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #334155', borderRadius: '6px' },
+            style: { backgroundColor: 'var(--tooltip-bg)', color: 'var(--tooltip-text)', border: '1px solid var(--tooltip-border)', borderRadius: '6px' },
           };
         }}
       >
@@ -348,7 +348,8 @@ export default function ResearchPage() {
       {/* Close button */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="absolute top-4 left-4 z-30 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white/80 hover:bg-slate-800 transition-all"
+        className="absolute top-4 left-4 z-30 flex items-center gap-2 backdrop-blur-md rounded-xl px-4 py-2.5 text-sm transition-all"
+        style={{ background: 'var(--bg-nav)', border: '1px solid var(--bg-nav-border)', color: 'var(--text-secondary)' }}
       >
         <X className="h-4 w-4" />
         Exit Research
@@ -356,13 +357,13 @@ export default function ResearchPage() {
 
       {/* Coordinates display */}
       {pin && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-slate-900/80 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2 text-sm flex items-center gap-3">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2 text-sm flex items-center gap-3" style={{ background: 'var(--bg-nav)' }}>
           <span className="text-cyan-400 font-mono">{pin.lat.toFixed(6)}°N, {pin.lng.toFixed(6)}°E</span>
-          <span className="text-white/20">|</span>
-          <span className="text-white/30">r = {radiusKm}km</span>
+          <span style={{ color: 'var(--text-faint)' }}>|</span>
+          <span style={{ color: 'var(--text-faint)' }}>r = {radiusKm}km</span>
           {results?.nearest_city && (
             <>
-              <span className="text-white/20">|</span>
+              <span style={{ color: 'var(--text-faint)' }}>|</span>
               <span className="text-emerald-400 text-xs capitalize">{results.nearest_city}</span>
             </>
           )}
@@ -372,10 +373,10 @@ export default function ResearchPage() {
       {/* Instruction overlay (when no pin) */}
       {!pin && !results && (
         <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-          <div className="bg-slate-900/70 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-6 text-center max-w-md">
+          <div className="backdrop-blur-md rounded-2xl px-8 py-6 text-center max-w-md" style={{ background: 'var(--bg-nav)', border: '1px solid var(--bg-nav-border)' }}>
             <MapPin className="h-10 w-10 text-cyan-400 mx-auto mb-3" />
-            <h2 className="text-xl font-bold text-white mb-2">Research Mode</h2>
-            <p className="text-white/50 text-sm">
+            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Research Mode</h2>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
               Click anywhere on the map to drop a pin. Then configure parameters, date range, and radius to query the satellite database.
             </p>
           </div>
@@ -388,36 +389,38 @@ export default function ResearchPage() {
           {/* Toggle panel */}
           <button
             onClick={() => setShowPanel(!showPanel)}
-            className="absolute -left-10 top-1/2 -translate-y-1/2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-l-xl px-2 py-4 text-white/60 hover:text-white transition-colors"
+            className="absolute -left-10 top-1/2 -translate-y-1/2 backdrop-blur-md rounded-l-xl px-2 py-4 transition-colors"
+            style={{ background: 'var(--bg-nav)', border: '1px solid var(--bg-nav-border)', color: 'var(--text-muted)' }}
           >
             <ChevronDown className={`h-4 w-4 transition-transform ${showPanel ? 'rotate-[-90deg]' : 'rotate-90'}`} />
           </button>
 
           {showPanel && (
-            <div className="h-full bg-slate-900/95 backdrop-blur-xl border-l border-white/10 overflow-y-auto">
+            <div className="h-full backdrop-blur-xl overflow-y-auto" style={{ background: 'var(--bg-secondary)', borderLeft: '1px solid var(--border)' }}>
               <div className="p-5 space-y-5">
                 {/* Header */}
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                     <Search className="h-5 w-5 text-cyan-400" />
                     Query Builder
                   </h3>
-                  <p className="text-xs text-white/40 mt-1">Configure your spatial-temporal query</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Configure your spatial-temporal query</p>
                 </div>
 
                 {/* Parameters */}
                 <div>
-                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">Parameters</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-faint)' }}>Parameters</label>
                   <div className="grid grid-cols-2 gap-1.5 mt-2">
                     {PARAMETERS.map(p => (
                       <button
                         key={p.id}
                         onClick={() => toggleParam(p.id)}
-                        className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium transition-all ${
-                          selectedParams.includes(p.id)
-                            ? 'bg-white/10 text-white ring-1 ring-white/20'
-                            : 'text-white/30 hover:bg-white/5 hover:text-white/60'
-                        }`}
+                        className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium transition-all`}
+                        style={{
+                          background: selectedParams.includes(p.id) ? 'var(--bg-badge)' : 'transparent',
+                          color: selectedParams.includes(p.id) ? 'var(--text-primary)' : 'var(--text-faint)',
+                          border: selectedParams.includes(p.id) ? '1px solid var(--border)' : '1px solid transparent',
+                        }}
                       >
                         <span className="w-2 h-2 rounded-full" style={{
                           backgroundColor: p.color,
@@ -431,7 +434,7 @@ export default function ResearchPage() {
 
                 {/* Date Range */}
                 <div>
-                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider flex items-center gap-1">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1" style={{ color: 'var(--text-faint)' }}>
                     <Calendar className="h-3 w-3" /> Date Range
                   </label>
                   <div className="flex gap-2 mt-2">
@@ -439,20 +442,22 @@ export default function ResearchPage() {
                       type="date"
                       value={startDate}
                       onChange={e => setStartDate(e.target.value)}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-cyan-500/50"
+                      className="flex-1 rounded-lg px-3 py-2 text-xs outline-none focus:border-cyan-500/50"
+                      style={{ background: 'var(--bg-input)', border: '1px solid var(--bg-input-border)', color: 'var(--text-primary)' }}
                     />
                     <input
                       type="date"
                       value={endDate}
                       onChange={e => setEndDate(e.target.value)}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-cyan-500/50"
+                      className="flex-1 rounded-lg px-3 py-2 text-xs outline-none focus:border-cyan-500/50"
+                      style={{ background: 'var(--bg-input)', border: '1px solid var(--bg-input-border)', color: 'var(--text-primary)' }}
                     />
                   </div>
                 </div>
 
                 {/* Radius */}
                 <div>
-                  <label className="text-[10px] font-semibold text-white/30 uppercase tracking-wider flex items-center gap-1">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1" style={{ color: 'var(--text-faint)' }}>
                     <Sliders className="h-3 w-3" /> Search Radius: {radiusKm}km
                   </label>
                   <input
@@ -463,7 +468,7 @@ export default function ResearchPage() {
                     onChange={e => setRadiusKm(parseInt(e.target.value))}
                     className="w-full mt-2 accent-cyan-500"
                   />
-                  <div className="flex justify-between text-[10px] text-white/20">
+                  <div className="flex justify-between text-[10px]" style={{ color: 'var(--text-faint)' }}>
                     <span>1km</span><span>25km</span><span>50km</span>
                   </div>
                 </div>
@@ -472,7 +477,8 @@ export default function ResearchPage() {
                 <button
                   onClick={runQuery}
                   disabled={loading || selectedParams.length === 0}
-                  className="w-full flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-700 text-white font-medium py-3 rounded-xl text-sm transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white font-medium py-3 rounded-xl text-sm transition-all disabled:opacity-50"
+                  style={loading || selectedParams.length === 0 ? { background: 'var(--skeleton)', color: 'var(--text-muted)' } : undefined}
                 >
                   {loading ? (
                     <><Loader2 className="h-4 w-4 animate-spin" /> Querying...</>
@@ -485,7 +491,7 @@ export default function ResearchPage() {
                 {results && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-white">Results</h4>
+                      <h4 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Results</h4>
                       <button
                         onClick={exportCSV}
                         className="flex items-center gap-1 text-[10px] text-cyan-400 hover:text-cyan-300"
@@ -503,15 +509,16 @@ export default function ResearchPage() {
                           <button
                             key={pid}
                             onClick={() => setActiveResultParam(pid)}
-                            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all flex items-center gap-1.5 ${
-                              activeResultParam === pid
-                                ? 'bg-white/10 text-white ring-1 ring-white/20'
-                                : 'text-white/30 hover:text-white/60'
-                            }`}
+                            className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all flex items-center gap-1.5"
+                            style={{
+                              background: activeResultParam === pid ? 'var(--bg-badge)' : 'transparent',
+                              color: activeResultParam === pid ? 'var(--text-primary)' : 'var(--text-faint)',
+                              border: activeResultParam === pid ? '1px solid var(--border)' : '1px solid transparent',
+                            }}
                           >
                             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pConfig?.color }} />
                             {pConfig?.label}
-                            <span className="text-white/20">{pData?.total_points || 0}</span>
+                            <span style={{ color: 'var(--text-faint)' }}>{pData?.total_points || 0}</span>
                           </button>
                         );
                       })}
@@ -535,9 +542,9 @@ export default function ResearchPage() {
                           { label: 'Min', value: activeParamData.statistics.min },
                           { label: 'Max', value: activeParamData.statistics.max },
                         ].map(s => (
-                          <div key={s.label} className="bg-white/5 rounded-xl p-2.5 text-center border border-white/5">
-                            <p className="text-[10px] text-white/30">{s.label}</p>
-                            <p className="text-sm font-bold text-white mt-0.5">{s.value?.toFixed?.(4) ?? '--'}</p>
+                          <div key={s.label} className="rounded-xl p-2.5 text-center" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
+                            <p className="text-[10px]" style={{ color: 'var(--text-faint)' }}>{s.label}</p>
+                            <p className="text-sm font-bold mt-0.5" style={{ color: 'var(--text-primary)' }}>{s.value?.toFixed?.(4) ?? '--'}</p>
                           </div>
                         ))}
                       </div>
@@ -545,7 +552,7 @@ export default function ResearchPage() {
 
                     {/* Data count */}
                     {activeParamData && (
-                      <p className="text-[10px] text-white/20 text-center">
+                      <p className="text-[10px] text-center" style={{ color: 'var(--text-faint)' }}>
                         {activeParamData.total_points} data points found within {radiusKm}km radius
                       </p>
                     )}

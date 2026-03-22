@@ -13,7 +13,7 @@ import { useCity } from '../context/CityContext';
 const PARAMETERS = [
   { id: 'LST', label: 'Temperature', color: '#EF4444' },
   { id: 'NDVI', label: 'Vegetation', color: '#10B981' },
-  { id: 'NO2', label: 'NO₂', color: '#8B5CF6' },
+  { id: 'NO2', label: 'NO\u2082', color: '#8B5CF6' },
   { id: 'SOIL_MOISTURE', label: 'Soil Moisture', color: '#3B82F6' },
 ];
 
@@ -61,8 +61,8 @@ export default function AnalyticsPage() {
         {/* Header + Parameter Selector inline */}
         <div className="flex items-end justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">ML Analytics</h1>
-            <p className="text-white/30 text-sm mt-1">Anomaly detection, trend prediction, and hotspot clustering</p>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>ML Analytics</h1>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Anomaly detection, trend prediction, and hotspot clustering</p>
           </div>
           <div className="flex gap-1.5">
             {PARAMETERS.map(p => (
@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                 style={{
                   background: activeParam === p.id ? `${p.color}15` : 'transparent',
-                  color: activeParam === p.id ? p.color : 'rgba(255,255,255,0.3)',
+                  color: activeParam === p.id ? p.color : 'var(--text-faint)',
                   border: activeParam === p.id ? `1px solid ${p.color}30` : '1px solid transparent',
                 }}
               >
@@ -84,7 +84,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1" style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '3px', border: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex gap-1" style={{ background: 'var(--bg-card)', borderRadius: '12px', padding: '3px', border: '1px solid var(--bg-card-border)' }}>
           {TABS.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -96,8 +96,8 @@ export default function AnalyticsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className="flex items-center gap-2 px-4 py-2 rounded-[10px] text-sm font-medium transition-all flex-1 justify-center"
                 style={{
-                  background: isActive ? 'rgba(255,255,255,0.06)' : 'transparent',
-                  color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                  background: isActive ? 'var(--bg-card-hover)' : 'transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-faint)',
                 }}
               >
                 <Icon className="h-3.5 w-3.5" />

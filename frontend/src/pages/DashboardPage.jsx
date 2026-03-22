@@ -31,8 +31,8 @@ function SkeletonCard() {
           <span className="text-[10px] text-cyan-400/70 font-medium tracking-wide">ML PIPELINE RUNNING</span>
         </div>
         <div className="animate-pulse space-y-2">
-          <div className="h-7 w-32 bg-slate-700/50 rounded" />
-          <div className="h-3 w-20 bg-slate-700/30 rounded" />
+          <div className="h-7 w-32 rounded" style={{ background: 'var(--skeleton)' }} />
+          <div className="h-3 w-20 rounded" style={{ background: 'var(--skeleton)' }} />
         </div>
       </div>
     </Card>
@@ -44,7 +44,7 @@ function SkeletonChart() {
     <Card>
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <div className="animate-pulse h-3 w-32 bg-slate-700 rounded" />
+          <div className="animate-pulse h-3 w-32 rounded" style={{ background: 'var(--skeleton)' }} />
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
@@ -57,7 +57,8 @@ function SkeletonChart() {
           {Array.from({ length: 20 }).map((_, i) => (
             <div
               key={i}
-              className="flex-1 bg-slate-700/30 rounded-t animate-pulse"
+              className="flex-1 rounded-t animate-pulse"
+              style={{ background: 'var(--skeleton)' }}
               style={{ height: `${30 + Math.sin(i * 0.5) * 30 + 20}%`, animationDelay: `${i * 50}ms` }}
             />
           ))}
@@ -146,8 +147,8 @@ export default function DashboardPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-white">{city.name} Environmental Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-1">Satellite-based environmental monitoring — MODIS, Sentinel-5P, SMAP</p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{city.name} Environmental Dashboard</h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Satellite-based environmental monitoring — MODIS, Sentinel-5P, SMAP</p>
         </div>
 
         {error && (
@@ -188,19 +189,20 @@ export default function DashboardPage() {
                   <div className="relative">
                     <button
                       onClick={() => setAqDropdownOpen(!aqDropdownOpen)}
-                      className="flex items-center gap-1 text-xs font-medium text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+                      className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider transition-colors"
+                    style={{ color: 'var(--text-muted)' }}
                     >
                       Air Quality ({aqParam.label})
                       <ChevronDown className={`h-3 w-3 transition-transform ${aqDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {aqDropdownOpen && (
-                      <div className="absolute left-0 top-full mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-50 min-w-[160px]">
+                      <div className="absolute left-0 top-full mt-1 rounded-lg z-50 min-w-[160px]" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
                         {AQ_PARAMS.map(p => (
                           <button
                             key={p.id}
                             onClick={() => { setAqParam(p); setAqDropdownOpen(false); }}
                             className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors ${
-                              p.id === aqParam.id ? 'bg-cyan-600/20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+                              p.id === aqParam.id ? 'text-cyan-500' : ''
                             }`}
                           >
                             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
@@ -210,8 +212,8 @@ export default function DashboardPage() {
                       </div>
                     )}
                   </div>
-                  <p className="text-2xl font-bold text-white mt-1">{aqMean} {aqParam.displayUnit}</p>
-                  <p className="text-xs text-slate-500 mt-1">Peak: {aqMax} {aqParam.displayUnit}</p>
+                  <p className="text-2xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>{aqMean} {aqParam.displayUnit}</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Peak: {aqMax} {aqParam.displayUnit}</p>
                   {aqAnomalies > 0 && <p className="text-xs text-amber-400 mt-1">{aqAnomalies} anomalies</p>}
                 </div>
                 <div className="p-2 rounded-lg bg-purple-500/10">

@@ -5,7 +5,7 @@ const ThemeContext = createContext(null);
 function getInitial() {
   const s = localStorage.getItem('satintel-theme');
   if (s === 'light' || s === 'dark') return s;
-  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  return 'light';
 }
 
 export function ThemeProvider({ children }) {
@@ -18,7 +18,12 @@ export function ThemeProvider({ children }) {
     localStorage.setItem('satintel-theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme(p => p === 'dark' ? 'light' : 'dark');
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    root.classList.add('theme-transitioning');
+    setTheme(p => p === 'dark' ? 'light' : 'dark');
+    setTimeout(() => root.classList.remove('theme-transitioning'), 200);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

@@ -1,8 +1,9 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCity } from '../../context/CityContext';
-import { Satellite, LogOut, User, ChevronDown, LayoutDashboard, BarChart3, FileText, TreePine, Menu, X } from 'lucide-react';
+import { Satellite, LogOut, User, ChevronDown, LayoutDashboard, BarChart3, FileText, TreePine, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 const F = { fontFamily: "'Space Grotesk', sans-serif" };
 
@@ -16,6 +17,7 @@ const navLinks = [
 export default function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
   const { city, cities, changeCity } = useCity();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [cityOpen, setCityOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -30,7 +32,7 @@ export default function Navbar() {
       {/* Centered floating pill */}
       <div
         className="flex items-center gap-1 px-2 py-2 rounded-full"
-        style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}
+        style={{ background: 'var(--bg-nav)', backdropFilter: 'blur(20px)', border: '1px solid var(--bg-nav-border)' }}
       >
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 pl-2 pr-3">
@@ -46,12 +48,12 @@ export default function Navbar() {
               key={to}
               to={to}
               className={({ isActive }) =>
-                `px-4 py-1.5 rounded-full text-sm transition-all duration-200 ${
-                  isActive
-                    ? 'text-white bg-white/[0.1]'
-                    : 'text-slate-300 hover:text-white'
-                }`
+                `px-4 py-1.5 rounded-full text-sm transition-all duration-200`
               }
+              style={({ isActive }) => ({
+                color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                background: isActive ? 'var(--bg-card-hover)' : 'transparent',
+              })}
             >
               {label}
             </NavLink>
@@ -65,21 +67,21 @@ export default function Navbar() {
               onClick={() => setCityOpen(!cityOpen)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all hover:bg-white/[0.04]"
             >
-              <span className="text-blue-400 text-xs">City:</span>
-              <span className="text-white font-medium">{city.name}</span>
-              <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform ${cityOpen ? 'rotate-180' : ''}`} />
+              <span className="text-xs" style={{ color: 'var(--accent)' }}>City:</span>
+              <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{city.name}</span>
+              <ChevronDown className={`h-3 w-3 transition-transform ${cityOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--text-muted)' }} />
             </button>
             {cityOpen && (
-              <div className="absolute right-0 top-full mt-2 rounded-xl shadow-2xl max-h-72 overflow-y-auto min-w-[180px] py-1" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="absolute right-0 top-full mt-2 rounded-xl max-h-72 overflow-y-auto min-w-[180px] py-1" style={{ background: 'var(--bg-secondary)', backdropFilter: 'blur(20px)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
                 {cities.map(c => (
                   <button
                     key={c.key}
                     onClick={() => { changeCity(c.key); setCityOpen(false); }}
-                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-                      c.key === city.key
-                        ? 'text-blue-400 bg-blue-500/10'
-                        : 'text-slate-300 hover:bg-white/[0.04]'
-                    }`}
+                    className="w-full text-left px-4 py-2 text-sm transition-colors"
+                    style={{
+                      color: c.key === city.key ? 'var(--accent)' : 'var(--text-secondary)',
+                      background: c.key === city.key ? 'var(--accent-light)' : 'transparent',
+                    }}
                   >
                     {c.name}
                   </button>
@@ -89,19 +91,29 @@ export default function Navbar() {
           </div>
         )}
 
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full transition-all hover:bg-white/[0.06]"
+          style={{ color: 'var(--text-muted)' }}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+
         {/* User pill / Sign up */}
         {isAuthenticated ? (
           <div className="hidden sm:flex items-center gap-1 ml-1">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 text-slate-400 text-xs">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
               <User className="h-3.5 w-3.5" />
               <span>{user?.name}</span>
             </div>
-            <button onClick={handleLogout} className="p-2 rounded-full text-slate-500 hover:text-red-400 hover:bg-white/[0.04] transition-colors">
+            <button onClick={handleLogout} className="p-2 rounded-full hover:text-red-400 transition-colors" style={{ color: 'var(--text-muted)' }}>
               <LogOut className="h-3.5 w-3.5" />
             </button>
           </div>
         ) : (
-          <Link to="/signup" className="text-sm font-medium px-5 py-2 rounded-full bg-white text-[#0A0E1A] hover:bg-slate-100 transition-all duration-200 ml-2" style={F}>
+          <Link to="/signup" className="text-sm font-medium px-5 py-2 rounded-full transition-all duration-200 ml-2" style={{ ...F, background: 'var(--accent)', color: 'var(--text-on-accent)' }}>
             Sign up
           </Link>
         )}

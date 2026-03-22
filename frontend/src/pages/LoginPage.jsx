@@ -6,9 +6,9 @@ import { Loader2, Satellite, Mail, Lock, ArrowLeft } from 'lucide-react';
 
 const F = { fontFamily: "'Space Grotesk', sans-serif" };
 
-const inputStyle = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' };
+const inputStyle = { background: 'var(--bg-input)', border: '1px solid var(--bg-input-border)', color: 'var(--text-primary)' };
 const onFocus = (e) => { e.target.style.borderColor = 'rgba(59,130,246,0.5)'; e.target.style.boxShadow = '0 0 0 2px rgba(59,130,246,0.12)'; };
-const onBlur = (e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.boxShadow = 'none'; };
+const onBlur = (e) => { e.target.style.borderColor = 'var(--bg-input-border)'; e.target.style.boxShadow = 'none'; };
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -33,10 +33,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#0A0E1A' }}>
+    <div className="min-h-screen flex" style={{ background: 'var(--bg-primary)' }}>
 
       {/* ── LEFT PANEL — quote + texture ── */}
-      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden flex-col justify-between p-10">
+      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden flex-col justify-between p-10" style={{ background: '#0A0E1A' }}>
         {/* Diagonal grid texture */}
         <div className="absolute inset-0" style={{
           backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.03) 75%, transparent 75%)',
@@ -76,7 +76,7 @@ export default function LoginPage() {
       </div>
 
       {/* ── RIGHT PANEL — form ── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 relative" style={{ background: '#0d1117' }}>
+      <div className="flex-1 flex items-center justify-center px-6 py-12 relative" style={{ background: 'var(--bg-secondary)' }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -89,21 +89,21 @@ export default function LoginPage() {
             Back to home
           </Link>
 
-          <h1 className="text-3xl font-bold text-white mb-2" style={F}>Welcome back</h1>
-          <p className="text-sm text-slate-500 mb-8">Sign in to your account</p>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)', ...F }}>Welcome back</h1>
+          <p className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>Sign in to your account</p>
 
           {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-faint)' }} />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
                 required
-                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-white placeholder-slate-600 text-sm"
+                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-sm"
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -111,14 +111,14 @@ export default function LoginPage() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-faint)' }} />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 required
-                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-white placeholder-slate-600 text-sm"
+                className="w-full rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all duration-200 text-sm"
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -142,7 +142,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
+          <p className="mt-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
             Don&apos;t have an account?{' '}
             <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
               Create one
