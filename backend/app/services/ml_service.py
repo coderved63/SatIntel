@@ -20,20 +20,41 @@ def _cache_key(fn_name: str, parameter: str, city: str) -> str:
     return f"{fn_name}:{city.lower()}:{parameter}"
 
 def _get_cached(fn_name: str, parameter: str, city: str):
-    # Try memory cache first
-    result = _ml_cache.get(_cache_key(fn_name, parameter, city))
+    key = _cache_key(fn_name, parameter, city)
+
+    # 1. Memory cache (fastest)
+    result = _ml_cache.get(key)
     if result:
         return result
 
-    # Try loading pre-computed file cache (runs once per city)
+    # 2. Redis cache (persists across restarts)
+    try:
+        from app.services import cache_service
+        redis_result = cache_service.get(f"ml:{key}")
+        if redis_result:
+            _ml_cache[key] = redis_result  # promote to memory
+            return redis_result
+    except Exception:
+        pass
+
+    # 3. File cache (legacy fallback)
     city_key = city.lower()
     if city_key not in _file_cache_loaded:
         _load_file_cache(city_key)
 
-    return _ml_cache.get(_cache_key(fn_name, parameter, city))
+    return _ml_cache.get(key)
 
 def _set_cached(fn_name: str, parameter: str, city: str, result):
-    _ml_cache[_cache_key(fn_name, parameter, city)] = result
+    key = _cache_key(fn_name, parameter, city)
+    _ml_cache[key] = result
+
+    # Persist to Redis (24h TTL)
+    try:
+        from app.services import cache_service
+        cache_service.set(f"ml:{key}", result, ttl=86400)
+    except Exception:
+        pass
+
     return result
 
 def _load_file_cache(city: str):
@@ -297,10 +318,20 @@ def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, mi
 _summary_cache: dict = {}
 
 def get_city_summary(city: str = "Ahmedabad") -> dict:
-    """Get comprehensive analytics summary for a city. Cached after first run."""
+    """Get comprehensive analytics summary for a city. Cached in memory + Redis."""
     cache_key = city.lower()
     if cache_key in _summary_cache:
         return _summary_cache[cache_key]
+
+    # Try Redis
+    try:
+        from app.services import cache_service
+        redis_result = cache_service.get(f"summary:{cache_key}")
+        if redis_result:
+            _summary_cache[cache_key] = redis_result
+            return redis_result
+    except Exception:
+        pass
 
     from app.services import satellite_service
 
@@ -324,4 +355,9 @@ def get_city_summary(city: str = "Ahmedabad") -> dict:
             summary["parameters"][param_id] = {"error": str(e)}
 
     _summary_cache[cache_key] = summary
+    try:
+        from app.services import cache_service
+        cache_service.set(f"summary:{cache_key}", summary, ttl=86400)
+    except Exception:
+        pass
     return summary

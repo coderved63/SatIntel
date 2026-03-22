@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     database_url: str = ""  # e.g. "postgresql+asyncpg://user:pass@localhost:5432/satellite_intel"
     gee_service_account_email: str = ""
     gee_key_file: str = "gee_service_account.json"
+    redis_url: str = ""
     anthropic_api_key: str = ""
     openai_api_key: str = ""
 

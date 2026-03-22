@@ -200,6 +200,23 @@ async def get_cities():
     return get_city_list()
 
 
+@router.get("/last-synced")
+async def get_last_synced():
+    """Get last data sync timestamp + cache stats."""
+    from app.services import cache_service
+    return {
+        "last_synced": cache_service.get_last_synced() or "2026-03-22T02:00:00",
+        "cache": cache_service.info(),
+    }
+
+
+@router.get("/cache-info")
+async def get_cache_info():
+    """Get Redis/memory cache statistics."""
+    from app.services import cache_service
+    return cache_service.info()
+
+
 @router.get("/health-score")
 async def get_health_score(city: str = "ahmedabad"):
     from app.services import health_score_service

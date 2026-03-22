@@ -12,6 +12,37 @@ import { analyticsService } from '../services/analyticsService';
 import { Thermometer, Leaf, Wind, Droplets, ChevronDown, Cloud, Flame, Sun, Haze } from 'lucide-react';
 import { useCity } from '../context/CityContext';
 
+function SyncBadge() {
+  const [syncInfo, setSyncInfo] = useState(null);
+  useEffect(() => {
+    fetch('/api/v1/satellite/last-synced')
+      .then(r => r.json())
+      .then(setSyncInfo)
+      .catch(() => {});
+  }, []);
+
+  const ts = syncInfo?.last_synced;
+  const display = ts ? new Date(ts).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Syncing...';
+  const cacheBackend = syncInfo?.cache?.backend || 'memory';
+
+  return (
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+      </span>
+      <div className="flex flex-col">
+        <span className="text-[10px] font-medium" style={{ color: 'var(--text-secondary)' }}>
+          Last synced: <span className="text-emerald-400">{display}</span>
+        </span>
+        <span className="text-[9px]" style={{ color: 'var(--text-faint)' }}>
+          Cache: {cacheBackend === 'redis' ? 'Redis' : 'In-memory'} &middot; Auto-refresh: nightly
+        </span>
+      </div>
+    </div>
+  );
+}
+
 const AQ_PARAMS = [
   { id: 'NO2', label: 'NO₂', unit: 'mol/m²', scale: 1e6, displayUnit: 'µmol/m²', color: '#8B5CF6', icon: Wind },
   { id: 'SO2', label: 'SO₂', unit: 'mol/m²', scale: 1e6, displayUnit: 'µmol/m²', color: '#F59E0B', icon: Cloud },
@@ -148,9 +179,12 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{city.name} Environmental Dashboard</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Satellite-based environmental monitoring — MODIS, Sentinel-5P, SMAP</p>
+        <div className="flex items-end justify-between">
+          <div>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{city.name} Environmental Dashboard</h1>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Satellite-based environmental monitoring — MODIS, Sentinel-5P, SMAP</p>
+          </div>
+          <SyncBadge />
         </div>
 
         {error && (
