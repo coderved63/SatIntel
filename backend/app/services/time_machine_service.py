@@ -1,16 +1,13 @@
 """
 Environmental Time Machine — computes per-cell yearly averages for side-by-side comparison.
-Returns two grids (year_a vs year_b) for any parameter.
+Uses harmonized satellite data (961 cells per city) for rich heatmap visualization.
 """
-import json
 import logging
 import numpy as np
-from pathlib import Path
 from collections import defaultdict
+from app.services import satellite_service
 
 logger = logging.getLogger(__name__)
-
-DATA_BASE = Path(__file__).resolve().parent.parent.parent.parent / "data"
 
 PARAM_META = {
     "LST": {"label": "Surface Temperature", "unit": "C", "scale": "temperature"},
@@ -22,30 +19,14 @@ PARAM_META = {
     "LAND_USE": {"label": "Land Use Change", "unit": "class", "scale": "landuse"},
 }
 
-FILENAME_MAP = {
-    "LST": "lst_timeseries.json",
-    "NDVI": "ndvi_timeseries.json",
-    "NO2": "no2_timeseries.json",
-    "SO2": "so2_timeseries.json",
-    "CO": "co_timeseries.json",
-    "SOIL_MOISTURE": "soil_moisture.json",
-}
-
-
-def _load_json(city: str, filename: str):
-    path = DATA_BASE / city.lower() / filename
-    if not path.exists():
-        return []
-    with open(path) as f:
-        return json.load(f)
-
 
 def _timeseries_to_yearly_grids(data, year_a="2023", year_b="2024"):
+    """Split harmonized time-series into per-cell yearly averages."""
     cells_a = defaultdict(list)
     cells_b = defaultdict(list)
 
     for point in data:
-        key = (round(point["lat"], 3), round(point["lng"], 3))
+        key = (round(point["lat"], 4), round(point["lng"], 4))
         date = str(point.get("date", ""))
         val = point.get("value")
         if val is None:
@@ -67,11 +48,17 @@ def _timeseries_to_yearly_grids(data, year_a="2023", year_b="2024"):
 
 
 def get_comparison(param: str, city: str = "ahmedabad") -> dict:
+    """Get year-over-year comparison grids using harmonized satellite data."""
     meta = PARAM_META.get(param, {"label": param, "unit": "", "scale": "default"})
 
     if param == "LAND_USE":
-        raw_a = _load_json(city, "land_use_2020.json")
-        raw_b = _load_json(city, "land_use_2024.json")
+        try:
+            lu_change = satellite_service.get_land_use_change(city)
+            raw_a = lu_change.get("data_2020", [])
+            raw_b = lu_change.get("data_2024", [])
+        except:
+            raw_a, raw_b = [], []
+
         class_map = {"water": 0, "sparse_vegetation": 1, "dense_vegetation": 2, "urban": 3, "urban_barren": 3}
 
         def encode(points):
@@ -88,19 +75,98 @@ def get_comparison(param: str, city: str = "ahmedabad") -> dict:
             "grid_a": encode(raw_a), "grid_b": encode(raw_b),
         }
 
-    filename = FILENAME_MAP.get(param)
-    if not filename:
-        return {"error": f"Unknown parameter: {param}"}
+    # Use harmonized data from satellite_service (961 cells per date after IDW)
+    try:
+        data = satellite_service._load_data(param, city)
+    except:
+        data = []
 
-    raw = _load_json(city, filename)
-    if not raw:
-        return {"error": f"No data for {param}/{city}"}
+    if not data:
+        return {"error": f"No data for {param}/{city}", "param": param, "meta": meta, "city": city,
+                "grid_a": [], "grid_b": []}
 
-    grid_a, grid_b = _timeseries_to_yearly_grids(raw, "2023", "2024")
+    grid_a, grid_b = _timeseries_to_yearly_grids(data, "2023", "2024")
+
+    # If one year is empty, try raw data as fallback
+    if not grid_a and not grid_b:
+        try:
+            raw_data = satellite_service._load_raw(param, city)
+            grid_a, grid_b = _timeseries_to_yearly_grids(raw_data, "2023", "2024")
+        except:
+            pass
 
     a_vals = [p["value"] for p in grid_a]
     b_vals = [p["value"] for p in grid_b]
     avg_change = round(float(np.mean(b_vals)) - float(np.mean(a_vals)), 4) if a_vals and b_vals else 0
+
+    # ── Change Analysis: per-cell diff ──────────────────────
+    map_a = {(round(p["lat"], 4), round(p["lng"], 4)): p["value"] for p in grid_a}
+    cell_changes = []
+    for p in grid_b:
+        key = (round(p["lat"], 4), round(p["lng"], 4))
+        val_a = map_a.get(key)
+        if val_a is not None:
+            diff = round(p["value"] - val_a, 4)
+            cell_changes.append({"lat": key[0], "lng": key[1], "value_2023": round(val_a, 4), "value_2024": round(p["value"], 4), "change": diff})
+
+    cell_changes.sort(key=lambda c: c["change"])
+
+    # For LST/NO2/SO2/CO — increase = worse. For NDVI/SOIL_MOISTURE — decrease = worse.
+    invert = param in ("NDVI", "SOIL_MOISTURE")
+    if invert:
+        top_worsened = cell_changes[:5]  # most decreased = worst for NDVI
+        top_improved = cell_changes[-5:][::-1]  # most increased = best
+    else:
+        top_worsened = cell_changes[-5:][::-1]  # most increased = worst for LST
+        top_improved = cell_changes[:5]  # most decreased = best
+
+    # ── Zone-level breakdown ────────────────────────────────
+    ZONES = {
+        "City Core": {"lat": (23.00, 23.06), "lng": (72.53, 72.62)},
+        "Industrial East": {"lat": (22.90, 23.00), "lng": (72.60, 72.70)},
+        "Western Suburbs": {"lat": (23.00, 23.06), "lng": (72.40, 72.53)},
+        "North": {"lat": (23.06, 23.20), "lng": (72.40, 72.70)},
+        "South": {"lat": (22.90, 23.00), "lng": (72.40, 72.60)},
+    }
+    zone_changes = []
+    for zone_name, bounds in ZONES.items():
+        zone_cells = [c for c in cell_changes
+                      if bounds["lat"][0] <= c["lat"] <= bounds["lat"][1]
+                      and bounds["lng"][0] <= c["lng"] <= bounds["lng"][1]]
+        if zone_cells:
+            zone_avg = round(float(np.mean([c["change"] for c in zone_cells])), 4)
+            zone_changes.append({"zone": zone_name, "avg_change": zone_avg, "cells": len(zone_cells)})
+    zone_changes.sort(key=lambda z: z["avg_change"], reverse=not invert)
+
+    # ── Auto-generate interpretation ────────────────────────
+    INSIGHTS = {
+        "LST": {"worse": "Urban Heat Island intensifying", "better": "Cooling effect detected — possible greening", "unit": "°C"},
+        "NDVI": {"worse": "Vegetation loss / deforestation detected", "better": "Green cover recovery observed", "unit": "NDVI"},
+        "NO2": {"worse": "Air pollution increasing — industrial/traffic sources", "better": "Air quality improving", "unit": "mol/m²"},
+        "SO2": {"worse": "Industrial SO₂ emissions rising", "better": "SO₂ levels declining", "unit": "mol/m²"},
+        "CO": {"worse": "Carbon monoxide rising — combustion sources", "better": "CO levels declining", "unit": "mol/m²"},
+        "SOIL_MOISTURE": {"worse": "Soil drying — drought stress increasing", "better": "Soil moisture improving", "unit": "m³/m³"},
+    }
+    insight = INSIGHTS.get(param, {"worse": "Conditions changed", "better": "Conditions changed", "unit": ""})
+
+    worst_zone = zone_changes[0] if zone_changes else None
+    best_zone = zone_changes[-1] if zone_changes else None
+
+    summary_parts = []
+    if worst_zone:
+        direction = "heated" if param == "LST" else ("lost" if param == "NDVI" else "increased")
+        summary_parts.append(f"{worst_zone['zone']} {direction} by {abs(worst_zone['avg_change']):.3f} {insight['unit']}")
+    if best_zone and best_zone != worst_zone:
+        direction = "cooled" if param == "LST" else ("recovered" if param == "NDVI" else "decreased")
+        summary_parts.append(f"{best_zone['zone']} {direction} by {abs(best_zone['avg_change']):.3f} {insight['unit']}")
+
+    interpretation = {
+        "summary": ". ".join(summary_parts) if summary_parts else f"{meta['label']} changed by {avg_change} overall",
+        "insight": insight["worse"] if (not invert and avg_change > 0) or (invert and avg_change < 0) else insight["better"],
+        "severity": "critical" if abs(avg_change) > np.std(a_vals) * 1.5 else ("warning" if abs(avg_change) > np.std(a_vals) * 0.5 else "normal"),
+    }
+
+    logger.info(f"Time Machine {param}/{city}: A={len(grid_a)} pts, B={len(grid_b)} pts, change={avg_change}")
 
     return {
         "param": param, "meta": meta, "city": city,
@@ -108,6 +174,11 @@ def get_comparison(param: str, city: str = "ahmedabad") -> dict:
         "grid_a": grid_a, "grid_b": grid_b,
         "avg_change": avg_change,
         "change_direction": "increased" if avg_change > 0 else "decreased",
+        "top_worsened": top_worsened,
+        "top_improved": top_improved,
+        "zone_changes": zone_changes,
+        "interpretation": interpretation,
+        "total_cells_compared": len(cell_changes),
     }
 
 
