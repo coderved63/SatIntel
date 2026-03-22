@@ -42,6 +42,30 @@ async def startup():
     except Exception as e:
         print(f"Database setup skipped: {e} — using in-memory fallback")
 
+    # Pre-warm cache — harmonize data + run ML on startup so first request is instant
+    import threading
+    def _prewarm():
+        import time
+        t0 = time.time()
+        try:
+            from app.services import satellite_service, ml_service
+            city = "ahmedabad"
+            for param in ["LST", "NDVI", "NO2", "SOIL_MOISTURE"]:
+                try:
+                    satellite_service._load_data(param, city)
+                except Exception as e:
+                    print(f"  Pre-warm {param}: {e}")
+            # Pre-compute ML summary (caches anomalies + trends + hotspots for all params)
+            try:
+                ml_service.get_city_summary(city)
+            except Exception as e:
+                print(f"  Pre-warm ML: {e}")
+            print(f"Cache pre-warmed in {time.time()-t0:.1f}s — first request will be instant")
+        except Exception as e:
+            print(f"Pre-warm failed: {e}")
+
+    threading.Thread(target=_prewarm, daemon=True).start()
+
     print("Satellite Environmental Intelligence Platform started")
 
     # ── Warm up caches in background thread ──────────────

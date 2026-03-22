@@ -14,16 +14,48 @@ logger = logging.getLogger(__name__)
 
 # ── ML Result Cache ──────────────────────────────────────
 _ml_cache: dict = {}
+_file_cache_loaded: set = set()
 
 def _cache_key(fn_name: str, parameter: str, city: str) -> str:
     return f"{fn_name}:{city.lower()}:{parameter}"
 
 def _get_cached(fn_name: str, parameter: str, city: str):
+    # Try memory cache first
+    result = _ml_cache.get(_cache_key(fn_name, parameter, city))
+    if result:
+        return result
+
+    # Try loading pre-computed file cache (runs once per city)
+    city_key = city.lower()
+    if city_key not in _file_cache_loaded:
+        _load_file_cache(city_key)
+
     return _ml_cache.get(_cache_key(fn_name, parameter, city))
 
 def _set_cached(fn_name: str, parameter: str, city: str, result):
     _ml_cache[_cache_key(fn_name, parameter, city)] = result
     return result
+
+def _load_file_cache(city: str):
+    """Load pre-computed ML results from JSON file if available."""
+    import json
+    from pathlib import Path
+    cache_file = Path(__file__).resolve().parent.parent.parent.parent / "data" / city / "ml_results_cache.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file) as f:
+                results = json.load(f)
+            for param, data in results.items():
+                if "anomalies" in data:
+                    _ml_cache[_cache_key("anomalies", param, city)] = data["anomalies"]
+                if "trends" in data:
+                    _ml_cache[_cache_key("trends", param, city)] = data["trends"]
+                if "hotspots" in data:
+                    _ml_cache[_cache_key("hotspots", param, city)] = data["hotspots"]
+            logger.info(f"Loaded pre-computed ML results for {city} ({len(results)} params)")
+        except Exception as e:
+            logger.warning(f"Failed to load ML cache for {city}: {e}")
+    _file_cache_loaded.add(city)
 
 
 def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
@@ -33,7 +65,12 @@ def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
 
 
 def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: float = 0.08) -> dict:
-    """Detect anomalies using Isolation Forest. Results are cached."""
+    """
+    Detect anomalies using Isolation Forest on DATE-AGGREGATED data.
+    Instead of running on 225K individual points (slow, too many results),
+    we aggregate by date → ~43 time-series points → fast, meaningful anomalies.
+    Only returns critical + high severity (no moderate noise).
+    """
     cached = _get_cached("anomalies", parameter, city)
     if cached:
         return cached
@@ -41,38 +78,66 @@ def detect_anomalies(parameter: str, city: str = "Ahmedabad", contamination: flo
     if not data or len(data) < 10:
         return {"anomalies": [], "total_points": 0, "anomaly_count": 0}
 
-    df = pd.DataFrame(data)
-    values = df[["value"]].values
+    # Aggregate by date — city-wide mean per date
+    date_values = defaultdict(list)
+    date_points = defaultdict(list)  # keep sample lat/lng per date
+    for d in data:
+        date_values[d["date"]].append(d["value"])
+        date_points[d["date"]].append((d["lat"], d["lng"]))
 
+    dates = sorted(date_values.keys())
+    means = np.array([np.mean(date_values[d]) for d in dates]).reshape(-1, 1)
+
+    if len(means) < 5:
+        return _set_cached("anomalies", parameter, city, {
+            "anomalies": [], "total_points": len(data), "anomaly_count": 0
+        })
+
+    # Run Isolation Forest on aggregated time-series (~43 points, very fast)
     model = IsolationForest(contamination=contamination, random_state=42, n_estimators=100)
-    predictions = model.fit_predict(values)
-    scores = model.decision_function(values)
+    predictions = model.fit_predict(means)
+    scores = model.decision_function(means)
 
-    df["is_anomaly"] = predictions == -1
-    df["anomaly_score"] = scores
-
-    anomalies = df[df["is_anomaly"]].copy()
-    anomalies["severity"] = anomalies["anomaly_score"].apply(
-        lambda s: "critical" if s < -0.3 else ("high" if s < -0.15 else "moderate")
-    )
+    overall_mean = float(np.mean(means))
+    overall_std = float(np.std(means)) if np.std(means) > 0 else 1.0
 
     anomaly_list = []
-    for _, row in anomalies.iterrows():
-        anomaly_list.append({
-            "date": row["date"],
-            "lat": round(float(row["lat"]), 4),
-            "lng": round(float(row["lng"]), 4),
-            "value": round(float(row["value"]), 4),
-            "severity": row["severity"],
-            "anomaly_score": round(float(row["anomaly_score"]), 4),
-            "parameter": parameter,
-        })
+    for i, date in enumerate(dates):
+        if predictions[i] == -1:
+            score = float(scores[i])
+            severity = "critical" if score < -0.3 else ("high" if score < -0.15 else "moderate")
+
+            # Skip moderate — too noisy
+            if severity == "moderate":
+                continue
+
+            mean_val = float(means[i][0])
+            deviation = round(abs(mean_val - overall_mean) / overall_std, 2)
+            # Pick the most extreme point for this date as representative location
+            pts = date_points[date]
+            vals = date_values[date]
+            extreme_idx = np.argmax(np.abs(np.array(vals) - overall_mean))
+
+            anomaly_list.append({
+                "date": date,
+                "lat": round(float(pts[extreme_idx][0]), 4),
+                "lng": round(float(pts[extreme_idx][1]), 4),
+                "value": round(mean_val, 4),
+                "severity": severity,
+                "anomaly_score": round(score, 4),
+                "deviation": deviation,
+                "parameter": parameter,
+            })
+
+    # Sort by severity then score
+    anomaly_list.sort(key=lambda a: (0 if a["severity"] == "critical" else 1, a["anomaly_score"]))
 
     return _set_cached("anomalies", parameter, city, {
         "parameter": parameter,
         "city": city,
         "anomalies": anomaly_list,
-        "total_points": len(df),
+        "total_points": len(data),
+        "dates_analyzed": len(dates),
         "anomaly_count": len(anomaly_list),
         "contamination": contamination,
     })

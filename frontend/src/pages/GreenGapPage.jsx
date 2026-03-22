@@ -7,6 +7,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { TreePine, Thermometer, Leaf, MapPin, TrendingDown, Target } from 'lucide-react';
 import { useCity } from '../context/CityContext';
+import ExportButton from '../components/common/ExportButton';
+import { exportToCsv } from '../utils/exportCsv';
 
 const severityColor = (s) => s === 'critical' ? '#dc2626' : s === 'high' ? '#f59e0b' : '#16a34a';
 
@@ -203,7 +205,19 @@ export default function GreenGapPage() {
 
             {/* Top Sites List */}
             <Card>
-              <p className="text-xs uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Top 50 Plantation Sites</p>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Top 50 Plantation Sites</p>
+                <ExportButton onClick={() => exportToCsv(top50, `green_gap_${city.key}`, [
+                  { key: 'lat', label: 'Latitude' },
+                  { key: 'lng', label: 'Longitude' },
+                  { key: 'current_ndvi', label: 'Current NDVI' },
+                  { key: 'current_lst', label: 'Current LST (C)' },
+                  { key: 'projected_cooling', label: 'Projected Cooling (C)' },
+                  { key: 'priority_score', label: 'Priority Score' },
+                  { key: 'severity', label: 'Severity' },
+                  { key: 'recommended_species', label: 'Recommended Species' },
+                ])} label="Export Sites CSV" />
+              </div>
               <div className="space-y-1.5 max-h-[350px] overflow-y-auto">
                 {top50.map((site, i) => (
                   <button

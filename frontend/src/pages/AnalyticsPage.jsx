@@ -9,6 +9,8 @@ import { analyticsService } from '../services/analyticsService';
 import SpecializedAnalysis from '../components/analytics/SpecializedAnalysis';
 import { AlertTriangle, TrendingUp, MapPin, Layers } from 'lucide-react';
 import { useCity } from '../context/CityContext';
+import ExportButton from '../components/common/ExportButton';
+import { exportToCsv } from '../utils/exportCsv';
 
 const PARAMETERS = [
   { id: 'LST', label: 'Temperature', color: '#EF4444' },
@@ -120,7 +122,14 @@ export default function AnalyticsPage() {
           <div className="flex justify-center py-20"><Loader text="Running ML analysis..." /></div>
         ) : (
           <div>
-            {activeTab === 'anomalies' && <AnomalyList data={anomalies} />}
+            {activeTab === 'anomalies' && (
+              <div>
+                <div className="flex justify-end mb-3">
+                  <ExportButton onClick={() => exportToCsv(anomalies?.anomalies || [], `anomalies_${activeParam}`)} />
+                </div>
+                <AnomalyList data={anomalies} />
+              </div>
+            )}
             {activeTab === 'trends' && <TrendChart data={trends} />}
             {activeTab === 'hotspots' && <HotspotMap data={hotspots} />}
             {activeTab === 'specialized' && <SpecializedAnalysis />}
