@@ -317,8 +317,10 @@ Built for **AETRIX 2026 — PS-4**: Satellite Environmental Intelligence Platfor
 | Name | Role |
 |------|------|
 | **Himanshu Mishra** | Full-Stack Development, GEE Integration, ML Pipeline, UI/UX |
-| **Vedant Mehta** | Backend Services, Specialized Analysis, Deployment |
-| **Riya Joshi** | Frontend Development, Theme System, Research Mode |
+| **Vedant Mehta** | Backend Services, Specialized Analysis, Deployment,Landing page and login page ui/ux|
+| **Riya Joshi** | Research,Ideation,Integration,Dashboard Design|
+| **Soham Gor** | ,Frontend Animation,Frontend Development, Theme System, Research Mode |
+
 
 **Domain:** Sustainability & Environment
 **Evaluation:** Problem Relevance (Critical) > Innovation & Technical Implementation (High) > Feasibility & Scalability (Medium)
