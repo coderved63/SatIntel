@@ -14,16 +14,48 @@ logger = logging.getLogger(__name__)
 
 # ── ML Result Cache ──────────────────────────────────────
 _ml_cache: dict = {}
+_file_cache_loaded: set = set()
 
 def _cache_key(fn_name: str, parameter: str, city: str) -> str:
     return f"{fn_name}:{city.lower()}:{parameter}"
 
 def _get_cached(fn_name: str, parameter: str, city: str):
+    # Try memory cache first
+    result = _ml_cache.get(_cache_key(fn_name, parameter, city))
+    if result:
+        return result
+
+    # Try loading pre-computed file cache (runs once per city)
+    city_key = city.lower()
+    if city_key not in _file_cache_loaded:
+        _load_file_cache(city_key)
+
     return _ml_cache.get(_cache_key(fn_name, parameter, city))
 
 def _set_cached(fn_name: str, parameter: str, city: str, result):
     _ml_cache[_cache_key(fn_name, parameter, city)] = result
     return result
+
+def _load_file_cache(city: str):
+    """Load pre-computed ML results from JSON file if available."""
+    import json
+    from pathlib import Path
+    cache_file = Path(__file__).resolve().parent.parent.parent.parent / "data" / city / "ml_results_cache.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file) as f:
+                results = json.load(f)
+            for param, data in results.items():
+                if "anomalies" in data:
+                    _ml_cache[_cache_key("anomalies", param, city)] = data["anomalies"]
+                if "trends" in data:
+                    _ml_cache[_cache_key("trends", param, city)] = data["trends"]
+                if "hotspots" in data:
+                    _ml_cache[_cache_key("hotspots", param, city)] = data["hotspots"]
+            logger.info(f"Loaded pre-computed ML results for {city} ({len(results)} params)")
+        except Exception as e:
+            logger.warning(f"Failed to load ML cache for {city}: {e}")
+    _file_cache_loaded.add(city)
 
 
 def _load_parameter_data(parameter: str, city: str = "ahmedabad") -> list[dict]:

@@ -169,16 +169,26 @@ def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
     if cache_key in _data_cache:
         return _data_cache[cache_key]
 
+    # Skip harmonization for land use (categorical data — can't interpolate classes)
+    if parameter == "LAND_USE":
+        raw_data = _load_raw(parameter, city)
+        _data_cache[cache_key] = raw_data
+        return raw_data
+
+    # Try loading pre-harmonized file first (instant, ~0.01s)
+    harmonized_file = _get_data_dir(city) / f"{parameter.lower()}_harmonized.json"
+    if harmonized_file.exists():
+        with open(harmonized_file, "r") as f:
+            harmonized = json.load(f)
+        _data_cache[cache_key] = harmonized
+        logger.info(f"Loaded pre-harmonized {parameter}/{city}: {len(harmonized)} points (instant)")
+        return harmonized
+
+    # Fall back to live IDW harmonization (slow, ~12s per param)
     raw_data = _load_raw(parameter, city)
     if not raw_data:
         return []
 
-    # Skip harmonization for land use (categorical data — can't interpolate classes)
-    if parameter == "LAND_USE":
-        _data_cache[cache_key] = raw_data
-        return raw_data
-
-    # Harmonize to common 1km grid
     from app.utils.geo_helpers import harmonize_timeseries
     harmonized = harmonize_timeseries(raw_data, city=city, parameter=parameter)
 
