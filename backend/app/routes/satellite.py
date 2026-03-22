@@ -198,3 +198,15 @@ async def get_cities():
     """List all supported cities."""
     from app.utils.cities import get_city_list
     return get_city_list()
+
+
+@router.get("/health-score")
+async def get_health_score(city: str = "ahmedabad"):
+    from app.services import health_score_service
+    return health_score_service.calculate(city)
+
+
+@router.get("/alerts")
+async def get_alerts(city: str = "ahmedabad"):
+    from app.services import alert_service
+    return alert_service.check_alerts(city)

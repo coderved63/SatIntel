@@ -5,6 +5,8 @@ import MapView from '../components/dashboard/MapView';
 import StatsCard from '../components/dashboard/StatsCard';
 import DrilldownChart from '../components/dashboard/DrilldownChart';
 import LayerControl from '../components/dashboard/LayerControl';
+import HealthScore from '../components/dashboard/HealthScore';
+import AlertBanner from '../components/dashboard/AlertBanner';
 import { satelliteService } from '../services/satelliteService';
 import { analyticsService } from '../services/analyticsService';
 import { Thermometer, Leaf, Wind, Droplets, ChevronDown, Cloud, Flame, Sun, Haze } from 'lucide-react';
@@ -157,6 +159,9 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {/* Alert Banner */}
+        <AlertBanner />
+
         {/* Stats Cards — show skeletons while summary loads */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summary ? (
@@ -234,6 +239,9 @@ export default function DashboardPage() {
             />
           ) : <SkeletonCard />}
         </div>
+
+        {/* Environmental Health Score */}
+        <HealthScore />
 
         {/* Map — full width */}
         <Card className="h-[500px] relative" padding="p-0">
