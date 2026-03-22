@@ -44,6 +44,73 @@ async def startup():
 
     print("Satellite Environmental Intelligence Platform started")
 
+    # ── Warm up caches in background thread ──────────────
+    import threading
+    threading.Thread(target=_warmup_caches, daemon=True).start()
+
+
+def _warmup_caches():
+    """Pre-load all data + run ML models for all 14 cities at startup."""
+    import time
+    start = time.time()
+
+    try:
+        from app.utils.cities import CITIES
+        from app.services import satellite_service, ml_service
+
+        params = ["LST", "NDVI", "NO2", "SO2", "CO", "O3", "AEROSOL", "SOIL_MOISTURE"]
+        ml_params = ["LST", "NDVI", "NO2", "SOIL_MOISTURE"]
+        city_keys = list(CITIES.keys())
+
+        print(f"[WARMUP] Pre-loading data for {len(city_keys)} cities...")
+
+        for i, city_key in enumerate(city_keys):
+            # Load + harmonize all parameters (populates _raw_cache and _data_cache)
+            for param in params:
+                try:
+                    satellite_service._load_data(param, city_key)
+                except Exception:
+                    pass
+
+            # Pre-compute heatmap data
+            for param in params:
+                try:
+                    satellite_service.get_heatmap_data(param, city_key)
+                except Exception:
+                    pass
+
+            # Pre-compute timeseries
+            for param in params:
+                try:
+                    satellite_service.get_timeseries(param, city_key)
+                except Exception:
+                    pass
+
+            # Run ML models (populates _ml_cache)
+            for param in ml_params:
+                try:
+                    ml_service.detect_anomalies(param, city_key)
+                except Exception:
+                    pass
+                try:
+                    ml_service.find_hotspots(param, city_key)
+                except Exception:
+                    pass
+
+            # Pre-compute city summary (uses cached ML results)
+            try:
+                ml_service.get_city_summary(city_key)
+            except Exception:
+                pass
+
+            print(f"[WARMUP] {city_key} done ({i+1}/{len(city_keys)})")
+
+        elapsed = round(time.time() - start, 1)
+        print(f"[WARMUP] All {len(city_keys)} cities cached in {elapsed}s — ready for instant responses")
+
+    except Exception as e:
+        print(f"[WARMUP] Cache warmup error: {e}")
+
 @app.on_event("shutdown")
 async def shutdown():
     print("Shutting down...")

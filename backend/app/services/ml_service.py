@@ -229,8 +229,14 @@ def find_hotspots(parameter: str, city: str = "Ahmedabad", eps: float = 0.02, mi
     })
 
 
+_summary_cache: dict = {}
+
 def get_city_summary(city: str = "Ahmedabad") -> dict:
-    """Get comprehensive analytics summary for a city."""
+    """Get comprehensive analytics summary for a city. Cached after first run."""
+    cache_key = city.lower()
+    if cache_key in _summary_cache:
+        return _summary_cache[cache_key]
+
     from app.services import satellite_service
 
     summary = {"city": city, "parameters": {}}
@@ -252,4 +258,5 @@ def get_city_summary(city: str = "Ahmedabad") -> dict:
             logger.error(f"Error computing summary for {param_id}: {e}")
             summary["parameters"][param_id] = {"error": str(e)}
 
+    _summary_cache[cache_key] = summary
     return summary
