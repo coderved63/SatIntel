@@ -4,6 +4,7 @@ Dynamic City Data Generator — creates realistic satellite data for any city.
 """
 import json
 import math
+import os
 import random
 import logging
 import numpy as np
@@ -11,7 +12,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
-DATA_BASE = Path(__file__).resolve().parent.parent.parent.parent / "data"
+DATA_BASE = Path(os.environ.get("DATA_DIR", Path(__file__).resolve().parent.parent.parent.parent / "data"))
 
 WORLD_CITIES = {
     # INDIA
@@ -50,6 +51,46 @@ WORLD_CITIES = {
     "goa": {"name": "Goa", "bbox": [73.75, 15.35, 73.95, 15.55], "center": [15.50, 73.83], "climate": "tropical", "temp_range": [20, 36], "pollution": "low", "moisture": "wet", "ndvi_base": 0.55},
     "madurai": {"name": "Madurai", "bbox": [78.05, 9.85, 78.25, 10.0], "center": [9.93, 78.12], "climate": "semi_arid", "temp_range": [20, 40], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.28},
     "raipur": {"name": "Raipur", "bbox": [81.55, 21.2, 81.75, 21.35], "center": [21.25, 81.63], "climate": "subtropical", "temp_range": [10, 46], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.30},
+    # More Indian Municipal Corporations
+    "allahabad": {"name": "Prayagraj", "bbox": [81.75, 25.35, 81.95, 25.5], "center": [25.43, 81.85], "climate": "subtropical", "temp_range": [6, 47], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.25},
+    "meerut": {"name": "Meerut", "bbox": [77.65, 28.9, 77.85, 29.05], "center": [28.98, 77.71], "climate": "semi_arid", "temp_range": [4, 46], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.25},
+    "nashik": {"name": "Nashik", "bbox": [73.7, 19.9, 73.9, 20.1], "center": [20.0, 73.79], "climate": "semi_arid", "temp_range": [10, 40], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.32},
+    "thane": {"name": "Thane", "bbox": [72.9, 19.15, 73.1, 19.3], "center": [19.22, 72.97], "climate": "tropical", "temp_range": [18, 38], "pollution": "high", "moisture": "wet", "ndvi_base": 0.33},
+    "navi_mumbai": {"name": "Navi Mumbai", "bbox": [73.0, 19.0, 73.15, 19.15], "center": [19.03, 73.04], "climate": "tropical", "temp_range": [18, 37], "pollution": "high", "moisture": "wet", "ndvi_base": 0.30},
+    "solapur": {"name": "Solapur", "bbox": [75.85, 17.6, 76.05, 17.75], "center": [17.68, 75.91], "climate": "semi_arid", "temp_range": [12, 43], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.20},
+    "hubli": {"name": "Hubli-Dharwad", "bbox": [75.05, 15.3, 75.25, 15.5], "center": [15.36, 75.12], "climate": "semi_arid", "temp_range": [14, 38], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.32},
+    "belgaum": {"name": "Belagavi", "bbox": [74.45, 15.8, 74.65, 15.95], "center": [15.85, 74.50], "climate": "semi_arid", "temp_range": [12, 38], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.35},
+    "mangalore": {"name": "Mangalore", "bbox": [74.8, 12.8, 75.0, 13.0], "center": [12.87, 74.88], "climate": "tropical", "temp_range": [20, 37], "pollution": "low", "moisture": "wet", "ndvi_base": 0.50},
+    "tiruchirappalli": {"name": "Tiruchirappalli", "bbox": [78.6, 10.75, 78.8, 10.9], "center": [10.79, 78.69], "climate": "tropical", "temp_range": [20, 40], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.28},
+    "salem": {"name": "Salem", "bbox": [78.05, 11.6, 78.25, 11.75], "center": [11.66, 78.15], "climate": "semi_arid", "temp_range": [18, 39], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.30},
+    "warangal": {"name": "Warangal", "bbox": [79.55, 17.9, 79.75, 18.05], "center": [17.98, 79.60], "climate": "semi_arid", "temp_range": [14, 43], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.30},
+    "guntur": {"name": "Guntur", "bbox": [80.4, 16.25, 80.55, 16.4], "center": [16.31, 80.44], "climate": "tropical", "temp_range": [18, 43], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.28},
+    "bikaner": {"name": "Bikaner", "bbox": [73.2, 27.95, 73.4, 28.15], "center": [28.02, 73.31], "climate": "arid", "temp_range": [2, 48], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.08},
+    "ajmer": {"name": "Ajmer", "bbox": [74.55, 26.4, 74.75, 26.55], "center": [26.45, 74.64], "climate": "semi_arid", "temp_range": [5, 45], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.18},
+    "kota": {"name": "Kota", "bbox": [75.8, 25.1, 76.0, 25.25], "center": [25.18, 75.86], "climate": "semi_arid", "temp_range": [6, 46], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.20},
+    "jabalpur": {"name": "Jabalpur", "bbox": [79.9, 23.1, 80.1, 23.25], "center": [23.18, 79.95], "climate": "subtropical", "temp_range": [8, 45], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.35},
+    "gorakhpur": {"name": "Gorakhpur", "bbox": [83.35, 26.7, 83.55, 26.85], "center": [26.76, 83.37], "climate": "subtropical", "temp_range": [6, 44], "pollution": "high", "moisture": "wet", "ndvi_base": 0.35},
+    "bareilly": {"name": "Bareilly", "bbox": [79.35, 28.3, 79.55, 28.45], "center": [28.37, 79.42], "climate": "subtropical", "temp_range": [5, 45], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.28},
+    "aligarh": {"name": "Aligarh", "bbox": [78.0, 27.85, 78.15, 28.0], "center": [27.88, 78.08], "climate": "semi_arid", "temp_range": [4, 46], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.22},
+    "moradabad": {"name": "Moradabad", "bbox": [78.7, 28.8, 78.9, 28.95], "center": [28.84, 78.78], "climate": "subtropical", "temp_range": [4, 45], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.25},
+    "durgapur": {"name": "Durgapur", "bbox": [87.25, 23.45, 87.4, 23.6], "center": [23.55, 87.32], "climate": "tropical", "temp_range": [10, 42], "pollution": "high", "moisture": "wet", "ndvi_base": 0.35},
+    "siliguri": {"name": "Siliguri", "bbox": [88.35, 26.7, 88.5, 26.8], "center": [26.73, 88.43], "climate": "subtropical", "temp_range": [8, 36], "pollution": "medium", "moisture": "wet", "ndvi_base": 0.48},
+    "jammu": {"name": "Jammu", "bbox": [74.8, 32.7, 74.95, 32.8], "center": [32.73, 74.87], "climate": "subtropical", "temp_range": [4, 42], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.35},
+    "cuttack": {"name": "Cuttack", "bbox": [85.85, 20.45, 86.0, 20.55], "center": [20.46, 85.88], "climate": "tropical", "temp_range": [14, 42], "pollution": "medium", "moisture": "wet", "ndvi_base": 0.38},
+    "tirupati": {"name": "Tirupati", "bbox": [79.35, 13.6, 79.5, 13.7], "center": [13.63, 79.42], "climate": "tropical", "temp_range": [18, 40], "pollution": "low", "moisture": "moderate", "ndvi_base": 0.35},
+    "nellore": {"name": "Nellore", "bbox": [79.95, 14.4, 80.1, 14.5], "center": [14.44, 79.99], "climate": "tropical", "temp_range": [20, 42], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.28},
+    "kolhapur": {"name": "Kolhapur", "bbox": [74.2, 16.65, 74.35, 16.75], "center": [16.70, 74.24], "climate": "semi_arid", "temp_range": [12, 38], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.38},
+    "sangli": {"name": "Sangli", "bbox": [74.5, 16.8, 74.65, 16.95], "center": [16.85, 74.57], "climate": "semi_arid", "temp_range": [12, 40], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.30},
+    "latur": {"name": "Latur", "bbox": [76.5, 18.35, 76.65, 18.5], "center": [18.40, 76.57], "climate": "semi_arid", "temp_range": [12, 42], "pollution": "medium", "moisture": "dry", "ndvi_base": 0.22},
+    "dhanbad": {"name": "Dhanbad", "bbox": [86.4, 23.75, 86.55, 23.85], "center": [23.79, 86.44], "climate": "subtropical", "temp_range": [8, 42], "pollution": "very_high", "moisture": "moderate", "ndvi_base": 0.30},
+    "bokaro": {"name": "Bokaro", "bbox": [85.95, 23.65, 86.1, 23.75], "center": [23.67, 86.15], "climate": "subtropical", "temp_range": [8, 42], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.32},
+    "bilaspur": {"name": "Bilaspur", "bbox": [82.1, 22.05, 82.25, 22.15], "center": [22.08, 82.16], "climate": "subtropical", "temp_range": [10, 45], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.35},
+    "imphal": {"name": "Imphal", "bbox": [93.9, 24.75, 94.05, 24.85], "center": [24.82, 93.95], "climate": "subtropical", "temp_range": [4, 32], "pollution": "low", "moisture": "wet", "ndvi_base": 0.55},
+    "agartala": {"name": "Agartala", "bbox": [91.2, 23.8, 91.35, 23.9], "center": [23.83, 91.28], "climate": "tropical", "temp_range": [10, 36], "pollution": "low", "moisture": "wet", "ndvi_base": 0.50},
+    "shillong": {"name": "Shillong", "bbox": [91.85, 25.55, 91.95, 25.6], "center": [25.57, 91.88], "climate": "subtropical", "temp_range": [2, 24], "pollution": "low", "moisture": "wet", "ndvi_base": 0.58},
+    "gangtok": {"name": "Gangtok", "bbox": [88.6, 27.3, 88.7, 27.4], "center": [27.33, 88.62], "climate": "temperate", "temp_range": [-2, 22], "pollution": "low", "moisture": "wet", "ndvi_base": 0.60},
+    "aizawl": {"name": "Aizawl", "bbox": [92.7, 23.7, 92.8, 23.8], "center": [23.73, 92.72], "climate": "subtropical", "temp_range": [8, 28], "pollution": "low", "moisture": "wet", "ndvi_base": 0.55},
+    "pondicherry": {"name": "Pondicherry", "bbox": [79.8, 11.9, 79.9, 12.0], "center": [11.93, 79.83], "climate": "tropical", "temp_range": [22, 38], "pollution": "low", "moisture": "wet", "ndvi_base": 0.35},
     # Gujarat (real GEE data exists)
     "surat": {"name": "Surat", "bbox": [72.7, 21.1, 73.0, 21.3], "center": [21.17, 72.83], "climate": "tropical", "temp_range": [14, 42], "pollution": "high", "moisture": "wet", "ndvi_base": 0.30},
     "vadodara": {"name": "Vadodara", "bbox": [73.1, 22.2, 73.4, 22.4], "center": [22.31, 73.18], "climate": "semi_arid", "temp_range": [10, 44], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.28},
@@ -251,6 +292,42 @@ def get_available_cities():
             "data_source": "gee" if key in _GEE_CITIES else "generated",
         })
     return sorted(cities, key=lambda c: (0 if c["data_source"] == "gee" else 1, c["name"]))
+
+
+def _estimate_climate_from_lat(lat: float) -> dict:
+    """Estimate climate profile from latitude alone — used for unknown cities."""
+    abs_lat = abs(lat)
+    if abs_lat < 10:
+        return {"climate": "tropical", "temp_range": [22, 35], "pollution": "medium", "moisture": "wet", "ndvi_base": 0.45}
+    elif abs_lat < 23.5:
+        return {"climate": "tropical", "temp_range": [18, 40], "pollution": "medium", "moisture": "moderate", "ndvi_base": 0.35}
+    elif abs_lat < 35:
+        return {"climate": "subtropical", "temp_range": [5, 42], "pollution": "high", "moisture": "moderate", "ndvi_base": 0.28}
+    elif abs_lat < 50:
+        return {"climate": "temperate", "temp_range": [-2, 32], "pollution": "medium", "moisture": "wet", "ndvi_base": 0.40}
+    elif abs_lat < 60:
+        return {"climate": "continental", "temp_range": [-10, 28], "pollution": "low", "moisture": "wet", "ndvi_base": 0.38}
+    else:
+        return {"climate": "continental", "temp_range": [-20, 20], "pollution": "low", "moisture": "wet", "ndvi_base": 0.25}
+
+
+def generate_custom_city(name: str, lat: float, lng: float) -> bool:
+    """Generate data for a completely custom city using lat/lng coordinates.
+    Climate is estimated from latitude. Works for ANY city on Earth."""
+    city_key = name.lower().replace(" ", "_").replace("-", "_")
+    city_dir = DATA_BASE / city_key
+    if city_dir.exists() and (city_dir / "lst_timeseries.json").exists():
+        return False
+
+    climate_est = _estimate_climate_from_lat(lat)
+    # Create a temporary entry in WORLD_CITIES
+    WORLD_CITIES[city_key] = {
+        "name": name.title(),
+        "bbox": [lng - 0.15, lat - 0.15, lng + 0.15, lat + 0.15],
+        "center": [lat, lng],
+        **climate_est,
+    }
+    return generate_city_data(city_key)
 
 
 def ensure_city_data(city_key: str) -> bool:

@@ -61,7 +61,8 @@ def _load_file_cache(city: str):
     """Load pre-computed ML results from JSON file if available."""
     import json
     from pathlib import Path
-    cache_file = Path(__file__).resolve().parent.parent.parent.parent / "data" / city / "ml_results_cache.json"
+    from app.services.satellite_service import DATA_BASE
+    cache_file = DATA_BASE / city / "ml_results_cache.json"
     if cache_file.exists():
         try:
             with open(cache_file) as f:
