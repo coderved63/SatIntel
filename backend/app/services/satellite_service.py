@@ -10,8 +10,8 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Base path to pre-fetched data
-DATA_BASE = Path(__file__).resolve().parent.parent.parent.parent / "data"
+# Base path to pre-fetched data (DATA_DIR env var for Docker/HF Spaces, fallback for local dev)
+DATA_BASE = Path(os.environ.get("DATA_DIR", Path(__file__).resolve().parent.parent.parent.parent / "data"))
 
 
 def _get_data_dir(city: str = "ahmedabad") -> Path:
@@ -131,7 +131,11 @@ _data_cache: dict = {}  # harmonized
 
 
 def _load_raw(parameter: str, city: str = "ahmedabad") -> list[dict]:
-    """Load raw JSON data without harmonization."""
+    """Load raw JSON data without harmonization. Auto-generates if city not found."""
+    # Auto-generate data for cities without pre-fetched GEE data
+    from app.utils.city_generator import ensure_city_data
+    ensure_city_data(city)
+
     cache_key = f"{city.lower()}:{parameter}"
     if cache_key in _raw_cache:
         return _raw_cache[cache_key]

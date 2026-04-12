@@ -195,9 +195,30 @@ async def research_query(
 
 @router.get("/cities")
 async def get_cities():
-    """List all supported cities."""
-    from app.utils.cities import get_city_list
-    return get_city_list()
+    """List all supported cities (79 global + 14 Gujarat with real GEE data)."""
+    from app.utils.city_generator import get_available_cities
+    return get_available_cities()
+
+
+@router.post("/generate-city")
+async def generate_city(city: str = "delhi"):
+    """Generate climate-accurate satellite data for a city on demand."""
+    from app.utils.city_generator import generate_city_data
+    success = generate_city_data(city)
+    if success:
+        return {"status": "generated", "city": city}
+    return {"status": "already_exists_or_unknown", "city": city}
+
+
+@router.post("/generate-custom-city")
+async def generate_custom_city(name: str, lat: float, lng: float):
+    """Generate data for any city on Earth using lat/lng coordinates.
+    Climate is estimated from latitude. Use this for cities not in our database."""
+    from app.utils.city_generator import generate_custom_city
+    success = generate_custom_city(name, lat, lng)
+    if success:
+        return {"status": "generated", "city": name.lower().replace(' ', '_'), "name": name.title(), "center": [lat, lng]}
+    return {"status": "already_exists", "city": name.lower().replace(' ', '_')}
 
 
 @router.get("/last-synced")
