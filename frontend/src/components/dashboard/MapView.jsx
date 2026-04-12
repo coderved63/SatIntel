@@ -89,7 +89,7 @@ export default function MapView({ layers = [], city, layerControl }) {
   const [loadedLayers, setLoadedLayers] = useState(new Set());
   const [showProgress, setShowProgress] = useState(false);
   const [mapStyle, setMapStyle] = useState('dark');
-  const [vizMode, setVizMode] = useState('hexbin');
+  const [vizMode, setVizMode] = useState('heatmap');
   const [show3D, setShow3D] = useState(true);
   const [showAtmosphere, setShowAtmosphere] = useState(true);
   const [showFireLayer, setShowFireLayer] = useState(false);
@@ -243,6 +243,17 @@ export default function MapView({ layers = [], city, layerControl }) {
             colorRange,
             opacity: 0.75,
           }));
+          // Invisible pickable layer on top so heatmap regions are clickable
+          result.push(new ScatterplotLayer({
+            id: `heatmap-pick-${paramId}`,
+            data: points,
+            getPosition: d => [d.lng, d.lat],
+            getRadius: 500,
+            getFillColor: [0, 0, 0, 0],
+            pickable: true,
+            radiusUnits: 'meters',
+            parameters: { depthTest: false },
+          }));
           break;
 
         case 'hexbin':
@@ -389,12 +400,17 @@ export default function MapView({ layers = [], city, layerControl }) {
       };
     }
 
-    // Data point tooltip (scatter)
+    // Data point tooltip (scatter / heatmap pick layer)
     if (object.value !== undefined) {
+      const paramId = layer?.id?.replace('heatmap-pick-', '').replace('scatter-', '') || '';
+      const paramLabels = { LST: 'Temperature', NDVI: 'Vegetation', NO2: 'NO₂ Pollution', SO2: 'SO₂', CO: 'CO', O3: 'Ozone', AEROSOL: 'Aerosol', SOIL_MOISTURE: 'Soil Moisture' };
+      const paramUnits = { LST: '°C', NDVI: 'index', NO2: 'mol/m²', SO2: 'mol/m²', CO: 'mol/m²', O3: 'mol/m²', AEROSOL: 'index', SOIL_MOISTURE: 'm³/m³' };
+      const label = paramLabels[paramId] || 'Data Point';
+      const unit = paramUnits[paramId] || '';
       return {
-        html: `<div style="padding:10px;font-size:12px;min-width:140px;">
-          <b style="color:#06b6d4;">Data Point</b><br/>
-          <span style="color:#94a3b8;">Value:</span> ${object.value}<br/>
+        html: `<div style="padding:10px;font-size:12px;min-width:160px;">
+          <b style="color:#06b6d4;">${label}</b><br/>
+          <span style="color:#94a3b8;">Value:</span> ${object.value} ${unit}<br/>
           <span style="color:#94a3b8;">Location:</span> ${object.lat?.toFixed(4)}°N, ${object.lng?.toFixed(4)}°E
         </div>`,
         style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #06b6d4', borderRadius: '10px', boxShadow: '0 4px 20px rgba(6,182,212,0.2)' },
