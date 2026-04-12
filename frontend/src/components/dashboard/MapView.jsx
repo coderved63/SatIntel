@@ -89,7 +89,7 @@ export default function MapView({ layers = [], city, layerControl }) {
   const [loadedLayers, setLoadedLayers] = useState(new Set());
   const [showProgress, setShowProgress] = useState(false);
   const [mapStyle, setMapStyle] = useState('dark');
-  const [vizMode, setVizMode] = useState('heatmap');
+  const [vizMode, setVizMode] = useState('hexbin');
   const [show3D, setShow3D] = useState(true);
   const [showAtmosphere, setShowAtmosphere] = useState(true);
   const [showFireLayer, setShowFireLayer] = useState(false);
@@ -372,25 +372,32 @@ export default function MapView({ layers = [], city, layerControl }) {
 
     // Aggregation layer tooltip (hexbin/grid)
     if (object.colorValue !== undefined) {
+      const paramId = layer?.id?.split('-')[1] || '';
+      const paramLabels = { LST: 'Temperature', NDVI: 'Vegetation', NO2: 'NO₂ Pollution', SO2: 'SO₂', CO: 'CO', O3: 'Ozone', AEROSOL: 'Aerosol', SOIL_MOISTURE: 'Soil Moisture' };
+      const paramUnits = { LST: '°C', NDVI: 'index', NO2: 'mol/m²', SO2: 'mol/m²', CO: 'mol/m²', O3: 'mol/m²', AEROSOL: 'index', SOIL_MOISTURE: 'm³/m³' };
+      const label = paramLabels[paramId] || paramId;
+      const unit = paramUnits[paramId] || '';
+      const avg = (object.colorValue / (object.count || 1)).toFixed(4);
       return {
-        html: `<div style="padding:8px;font-size:12px;">
-          <b>Aggregated Cell</b><br/>
-          Points: ${object.count}<br/>
-          Avg Value: ${(object.colorValue / (object.count || 1)).toFixed(4)}
+        html: `<div style="padding:10px;font-size:12px;min-width:140px;">
+          <b style="color:#06b6d4;">${label}</b><br/>
+          <span style="color:#94a3b8;">Data Points:</span> ${object.count}<br/>
+          <span style="color:#94a3b8;">Avg Value:</span> ${avg} ${unit}<br/>
+          <span style="color:#94a3b8;">Intensity:</span> ${object.elevationValue ? object.elevationValue.toFixed(2) : avg}
         </div>`,
-        style: { backgroundColor: '#1e293b', color: '#e2e8f0', border: '1px solid #475569', borderRadius: '8px' },
+        style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #06b6d4', borderRadius: '10px', boxShadow: '0 4px 20px rgba(6,182,212,0.2)' },
       };
     }
 
-    // Data point tooltip
+    // Data point tooltip (scatter)
     if (object.value !== undefined) {
       return {
-        html: `<div style="padding:8px;font-size:12px;">
-          <b>Value:</b> ${object.value}<br/>
-          <b>Lat:</b> ${object.lat}<br/>
-          <b>Lng:</b> ${object.lng}
+        html: `<div style="padding:10px;font-size:12px;min-width:140px;">
+          <b style="color:#06b6d4;">Data Point</b><br/>
+          <span style="color:#94a3b8;">Value:</span> ${object.value}<br/>
+          <span style="color:#94a3b8;">Location:</span> ${object.lat?.toFixed(4)}°N, ${object.lng?.toFixed(4)}°E
         </div>`,
-        style: { backgroundColor: '#1e293b', color: '#e2e8f0', border: '1px solid #475569', borderRadius: '8px' },
+        style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #06b6d4', borderRadius: '10px', boxShadow: '0 4px 20px rgba(6,182,212,0.2)' },
       };
     }
 
