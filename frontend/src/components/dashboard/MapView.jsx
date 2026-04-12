@@ -145,26 +145,23 @@ export default function MapView({ layers = [], city, layerControl }) {
       const paramId = layer.id.toUpperCase();
 
       // Skip if already loaded for THIS city
-      setHeatmapData(prev => {
-        if (prev[paramId]) return prev;
-        // Trigger fetch
-        setLoadingLayers(p => new Set([...p, paramId]));
-        fetch(`/api/v1/maps/heatmap/${paramId}?city=${currentCity}`)
-          .then(res => res.json())
-          .then(data => {
-            // Only apply if city hasn't changed
-            if (cityRef.current !== currentCity) return;
-            if (data.raw_points) {
-              setHeatmapData(p => ({ ...p, [paramId]: data.raw_points }));
-              setLoadedLayers(p => new Set([...p, paramId]));
-            }
-          })
-          .catch(err => console.error(`Failed to load ${paramId}:`, err))
-          .finally(() => {
-            setLoadingLayers(p => { const s = new Set(p); s.delete(paramId); return s; });
-          });
-        return prev;
-      });
+      if (heatmapData[paramId]) return;
+
+      setLoadingLayers(p => new Set([...p, paramId]));
+      try {
+        const res = await fetch(`/api/v1/maps/heatmap/${paramId}?city=${currentCity}`);
+        const data = await res.json();
+        // Only apply if city hasn't changed
+        if (cityRef.current !== currentCity) return;
+        if (data.raw_points && data.raw_points.length > 0) {
+          setHeatmapData(p => ({ ...p, [paramId]: data.raw_points }));
+          setLoadedLayers(p => new Set([...p, paramId]));
+        }
+      } catch (err) {
+        console.error(`Failed to load ${paramId}:`, err);
+      } finally {
+        setLoadingLayers(p => { const s = new Set(p); s.delete(paramId); return s; });
+      }
     });
   }, [layers, city.key]);
 
