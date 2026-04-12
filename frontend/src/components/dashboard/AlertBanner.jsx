@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCity } from '../../context/CityContext';
 import { AlertTriangle, AlertCircle, CheckCircle, X, Bell } from 'lucide-react';
+import api from '../../services/api';
 
 export default function AlertBanner() {
   const { city } = useCity();
@@ -9,9 +10,8 @@ export default function AlertBanner() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/v1/satellite/alerts?city=${city.key}`)
-      .then(r => r.json())
-      .then(d => { setData(d); setDismissed([]); })
+    api.get(`/satellite/alerts?city=${city.key}`)
+      .then(r => { setData(r.data); setDismissed([]); })
       .catch(() => setData(null));
   }, [city.key]);
 

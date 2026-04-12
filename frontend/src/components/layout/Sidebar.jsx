@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, BarChart3, FileText, Database, Info, ChevronDown, TreePine, Trophy, Search, Satellite, Globe, Loader2, MapPin } from 'lucide-react';
 import { useCity } from '../../context/CityContext';
 import { useState, useMemo, useRef, useEffect } from 'react';
+import api from '../../services/api';
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -53,7 +54,7 @@ export default function Sidebar() {
       // City needs data generated — trigger backend
       setGenerating(true);
       try {
-        await fetch(`/api/v1/satellite/generate-city?city=${c.key}`, { method: 'POST' });
+        await api.post(`/satellite/generate-city?city=${c.key}`);
       } catch {}
       setGenerating(false);
     }
@@ -70,10 +71,9 @@ export default function Sidebar() {
     try {
       // Try generating — backend auto-generates on first data request
       const key = cityName.toLowerCase().replace(/\s+/g, '_');
-      await fetch(`/api/v1/satellite/generate-city?city=${key}`, { method: 'POST' });
+      await api.post(`/satellite/generate-city?city=${key}`);
       // Refresh city list
-      const res = await fetch('/api/v1/satellite/cities');
-      const allCities = await res.json();
+      const { data: allCities } = await api.get('/satellite/cities');
       // Find the new city and select it
       const newCity = allCities.find(c => c.key === key);
       if (newCity) {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCity } from '../../context/CityContext';
 import { Activity } from 'lucide-react';
+import api from '../../services/api';
 
 export default function HealthScore() {
   const { city } = useCity();
@@ -8,9 +9,8 @@ export default function HealthScore() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/v1/satellite/health-score?city=${city.key}`)
-      .then(r => r.json())
-      .then(setData)
+    api.get(`/satellite/health-score?city=${city.key}`)
+      .then(r => setData(r.data))
       .catch(() => setData(null));
   }, [city.key]);
 

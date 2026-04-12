@@ -3,6 +3,7 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import Card from '../components/common/Card';
 import Loader from '../components/common/Loader';
 import { Trophy, TrendingUp, TrendingDown, Medal, MapPin } from 'lucide-react';
+import api from '../services/api';
 
 const CITIES = [
   'ahmedabad', 'surat', 'vadodara', 'rajkot', 'bhavnagar',
@@ -30,8 +31,7 @@ export default function CityRankingPage() {
       const results = [];
       for (const city of CITIES) {
         try {
-          const res = await fetch(`/api/v1/satellite/health-score?city=${city}`);
-          const data = await res.json();
+          const { data } = await api.get(`/satellite/health-score?city=${city}`);
           results.push(data);
           setLoaded(results.length);
         } catch {

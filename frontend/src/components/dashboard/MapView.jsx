@@ -6,6 +6,7 @@ import { ScatterplotLayer, ColumnLayer, ArcLayer, IconLayer, GeoJsonLayer } from
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Globe, Mountain, Satellite, Map as MapIcon, Layers, Eye, Flame, Wind, BarChart3, Hexagon, Grid3x3, CircleDot, Activity, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 // ── Map Styles (all free, no API key) ──────────────────────────
 const MAP_STYLES = {
@@ -149,8 +150,7 @@ export default function MapView({ layers = [], city, layerControl }) {
 
       setLoadingLayers(p => new Set([...p, paramId]));
       try {
-        const res = await fetch(`/api/v1/maps/heatmap/${paramId}?city=${currentCity}`);
-        const data = await res.json();
+        const { data } = await api.get(`/maps/heatmap/${paramId}?city=${currentCity}`);
         // Only apply if city hasn't changed
         if (cityRef.current !== currentCity) return;
         if (data.raw_points && data.raw_points.length > 0) {
