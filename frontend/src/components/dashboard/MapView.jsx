@@ -248,10 +248,12 @@ export default function MapView({ layers = [], city, layerControl }) {
             id: `heatmap-pick-${paramId}`,
             data: points,
             getPosition: d => [d.lng, d.lat],
-            getRadius: 500,
+            getRadius: 350,
             getFillColor: [0, 0, 0, 0],
             pickable: true,
             radiusUnits: 'meters',
+            radiusMinPixels: 2,
+            radiusMaxPixels: 15,
             parameters: { depthTest: false },
           }));
           break;
@@ -407,11 +409,13 @@ export default function MapView({ layers = [], city, layerControl }) {
       const paramUnits = { LST: '°C', NDVI: 'index', NO2: 'mol/m²', SO2: 'mol/m²', CO: 'mol/m²', O3: 'mol/m²', AEROSOL: 'index', SOIL_MOISTURE: 'm³/m³' };
       const label = paramLabels[paramId] || 'Data Point';
       const unit = paramUnits[paramId] || '';
+      const displayVal = paramId === 'NDVI' || paramId === 'SOIL_MOISTURE' || paramId === 'AEROSOL'
+        ? object.value?.toFixed(4) : object.value?.toFixed(2);
       return {
         html: `<div style="padding:10px;font-size:12px;min-width:160px;">
           <b style="color:#06b6d4;">${label}</b><br/>
-          <span style="color:#94a3b8;">Value:</span> ${object.value} ${unit}<br/>
-          <span style="color:#94a3b8;">Location:</span> ${object.lat?.toFixed(4)}°N, ${object.lng?.toFixed(4)}°E
+          <span style="color:#94a3b8;">Value:</span> ${displayVal} ${unit}<br/>
+          <span style="color:#94a3b8;">Location:</span> ${object.lat?.toFixed(3)}°N, ${object.lng?.toFixed(3)}°E
         </div>`,
         style: { backgroundColor: '#0f172a', color: '#e2e8f0', border: '1px solid #06b6d4', borderRadius: '10px', boxShadow: '0 4px 20px rgba(6,182,212,0.2)' },
       };
