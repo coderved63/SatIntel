@@ -1,5 +1,6 @@
 import Navbar from './Navbar';
 import DateRangeControl from '../common/DateRangeControl';
+import SaarthiWidget from '../common/SaarthiWidget';
 
 export default function DashboardLayout({ children }) {
   return (
@@ -10,6 +11,7 @@ export default function DashboardLayout({ children }) {
           <DateRangeControl />
         </div>
         {children}
+        <SaarthiWidget />
       </main>
     </div>
   );

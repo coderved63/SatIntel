@@ -14,7 +14,6 @@ import DataExplorerPage from './pages/DataExplorerPage';
 import AboutPage from './pages/AboutPage';
 import GreenGapPage from './pages/GreenGapPage';
 import CityRankingPage from './pages/CityRankingPage';
-import SaarthiPage from './pages/SaarthiPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -35,7 +34,6 @@ export default function App() {
           <Route path="/about" element={<ProtectedRoute><AboutPage /></ProtectedRoute>} />
           <Route path="/green-gap" element={<ProtectedRoute><GreenGapPage /></ProtectedRoute>} />
           <Route path="/rankings" element={<ProtectedRoute><CityRankingPage /></ProtectedRoute>} />
-          <Route path="/saarthi" element={<ProtectedRoute><SaarthiPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </AnalysisProvider>

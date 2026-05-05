@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, FileText, Database, Info, ChevronDown, TreePine, Trophy, Search, Satellite, Globe, Bot } from 'lucide-react';
+import { LayoutDashboard, BarChart3, FileText, Database, Info, ChevronDown, TreePine, Trophy, Search, Satellite, Globe } from 'lucide-react';
 import { useCity } from '../../context/CityContext';
 import { useState, useMemo, useRef, useEffect } from 'react';
 
@@ -11,7 +11,6 @@ const links = [
   { to: '/about', label: 'About', icon: Info },
   { to: '/green-gap', label: 'Green Gap', icon: TreePine },
   { to: '/rankings', label: 'City Rankings', icon: Trophy },
-  { to: '/saarthi', label: 'Saarthi', icon: Bot },
 ];
 
 export default function Sidebar() {
