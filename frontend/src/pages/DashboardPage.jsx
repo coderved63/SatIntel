@@ -6,6 +6,7 @@ import EvidenceContextPanel from '../components/common/EvidenceContextPanel';
 import MapView from '../components/dashboard/MapView';
 import StatsCard from '../components/dashboard/StatsCard';
 import DrilldownChart from '../components/dashboard/DrilldownChart';
+import DashboardForecastChart from '../components/dashboard/DashboardForecastChart';
 import LayerControl from '../components/dashboard/LayerControl';
 import HealthScore from '../components/dashboard/HealthScore';
 import AlertBanner from '../components/dashboard/AlertBanner';
@@ -55,10 +56,10 @@ function SkeletonCard() {
 }
 
 const AQ_PARAMS = [
-  { id: 'NO2', label: 'NO2', unit: 'mol/mÂ²', scale: 1e6, displayUnit: 'Âµmol/mÂ²', color: '#8B5CF6', icon: Wind },
-  { id: 'SO2', label: 'SO2', unit: 'mol/mÂ²', scale: 1e6, displayUnit: 'Âµmol/mÂ²', color: '#F59E0B', icon: Cloud },
-  { id: 'CO', label: 'CO', unit: 'mol/mÂ²', scale: 1e2, displayUnit: 'x10^-2 mol/mÂ²', color: '#DC2626', icon: Flame },
-  { id: 'O3', label: 'O3', unit: 'mol/mÂ²', scale: 1e3, displayUnit: 'mmol/mÂ²', color: '#2563EB', icon: Sun },
+  { id: 'NO2', label: 'NO2', unit: 'mol/m^2', scale: 1e6, displayUnit: 'umol/m^2', color: '#8B5CF6', icon: Wind },
+  { id: 'SO2', label: 'SO2', unit: 'mol/m^2', scale: 1e6, displayUnit: 'umol/m^2', color: '#F59E0B', icon: Cloud },
+  { id: 'CO', label: 'CO', unit: 'mol/m^2', scale: 1e2, displayUnit: 'x10^-2 mol/m^2', color: '#DC2626', icon: Flame },
+  { id: 'O3', label: 'O3', unit: 'mol/m^2', scale: 1e3, displayUnit: 'mmol/m^2', color: '#2563EB', icon: Sun },
   { id: 'AEROSOL', label: 'Aerosol', unit: 'index', scale: 1, displayUnit: 'index', color: '#92400E', icon: Haze },
 ];
 
@@ -79,6 +80,9 @@ export default function DashboardPage() {
   const [aqParam, setAqParam] = useState(AQ_PARAMS[0]);
   const [aqDropdownOpen, setAqDropdownOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [forecastLST, setForecastLST] = useState(null);
+  const [forecastNDVI, setForecastNDVI] = useState(null);
+  const [forecastAQ, setForecastAQ] = useState(null);
   const [layers, setLayers] = useState([
     { id: 'LST', label: 'Temperature (LST)', color: '#EF4444', enabled: true },
     { id: 'NDVI', label: 'Vegetation (NDVI)', color: '#10B981', enabled: true },
@@ -95,13 +99,21 @@ export default function DashboardPage() {
     setLstTs(null);
     setNdviTs(null);
     setAqTimeseries({});
+    setForecastLST(null);
+    setForecastNDVI(null);
     setError(null);
 
     satelliteService.getTimeSeries('LST', city.key, dateRange).then(setLstTs).catch(() => {});
     satelliteService.getTimeSeries('NDVI', city.key, dateRange).then(setNdviTs).catch(() => {});
     satelliteService.getTimeSeries('NO2', city.key, dateRange).then(data => setAqTimeseries(prev => ({ ...prev, NO2: data }))).catch(() => {});
     analyticsService.getSummary(city.key, dateRange).then(setSummary).catch(err => setError(err.message));
+    analyticsService.getTrends('LST', city.key, dateRange).then(setForecastLST).catch(() => setForecastLST(null));
+    analyticsService.getTrends('NDVI', city.key, dateRange).then(setForecastNDVI).catch(() => setForecastNDVI(null));
   }, [city.key, dateRange.start_date, dateRange.end_date]);
+
+  useEffect(() => {
+    analyticsService.getTrends(aqParam.id, city.key, dateRange).then(setForecastAQ).catch(() => setForecastAQ(null));
+  }, [aqParam.id, city.key, dateRange.start_date, dateRange.end_date]);
 
   useEffect(() => {
     if (!aqTimeseries[aqParam.id]) {
@@ -132,10 +144,10 @@ export default function DashboardPage() {
   const statCardData = [
     {
       title: 'Avg Temperature',
-      value: `${formatMetric(lstMean, 2)}Â°C`,
+      value: `${formatMetric(lstMean, 2)} deg C`,
       icon: Thermometer,
       color: 'red',
-      subtitle: `Max: ${formatMetric(lstMax, 2)}Â°C`,
+      subtitle: `Max: ${formatMetric(lstMax, 2)} deg C`,
       trend: summary?.parameters?.LST?.anomaly_count ? `${summary.parameters.LST.anomaly_count} anomalies` : null,
       coverage: `${summary?.parameters?.LST?.data_coverage?.start_date || '--'} to ${summary?.parameters?.LST?.data_coverage?.end_date || '--'}`,
       note: summary?.parameters?.LST?.metric_represents,
@@ -152,7 +164,7 @@ export default function DashboardPage() {
     },
     {
       title: 'Soil Moisture',
-      value: `${formatMetric(soilMean, 3)} mÂ³/mÂ³`,
+      value: `${formatMetric(soilMean, 3)} m3/m3`,
       icon: Droplets,
       color: 'blue',
       subtitle: soilMean == null ? 'No data in selected window' : (soilMean < 0.15 ? 'Below average' : 'Normal range'),
@@ -162,7 +174,7 @@ export default function DashboardPage() {
         : `Available data: ${soilAvailableCoverage?.start_date || '--'} to ${soilAvailableCoverage?.end_date || '--'}`,
       note: soilHasWindowData
         ? summary?.parameters?.SOIL_MOISTURE?.metric_represents
-        : 'The active dashboard window does not include valid soil-moisture scenes for this city. The available Ahmedabad soil-moisture archive currently runs only through 2020-05-29.',
+        : 'The active dashboard window does not include valid soil-moisture scenes for this city.',
     },
   ];
 
@@ -246,7 +258,7 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <DrilldownChart data={lstTs?.timeseries || []} label="Temperature Trend" color="#EF4444" unit="Â°C" height={180} />
+            <DrilldownChart data={lstTs?.timeseries || []} label="Temperature Trend" color="#EF4444" unit="deg C" height={180} />
           </Card>
           <Card>
             <DrilldownChart data={ndviTs?.timeseries || []} label="Vegetation Health" color="#10B981" unit="NDVI" height={180} />
@@ -254,6 +266,46 @@ export default function DashboardPage() {
           <Card>
             <DrilldownChart data={aqTimeseries[aqParam.id]?.timeseries || []} label={`${aqParam.label} Trend`} color={aqParam.color} unit={aqParam.unit} height={180} />
           </Card>
+        </div>
+
+        <div>
+          <div className="mb-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+              ML timelines (analysis window)
+            </h2>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-faint)' }}>
+              City-mean series with a short forward continuation path from the same directional model as ML Analytics — timeline only, no accuracy metrics.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <DashboardForecastChart
+                data={forecastLST}
+                label="Land surface temperature"
+                histColor="#EF4444"
+                unit="deg C"
+                height={200}
+              />
+            </Card>
+            <Card>
+              <DashboardForecastChart
+                data={forecastNDVI}
+                label="Vegetation (NDVI)"
+                histColor="#10B981"
+                unit="NDVI"
+                height={200}
+              />
+            </Card>
+            <Card>
+              <DashboardForecastChart
+                data={forecastAQ}
+                label={`${aqParam.label} (city mean)`}
+                histColor={aqParam.color}
+                unit={aqParam.displayUnit}
+                height={200}
+              />
+            </Card>
+          </div>
         </div>
       </div>
     </DashboardLayout>

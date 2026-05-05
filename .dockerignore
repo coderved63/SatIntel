@@ -1,0 +1,15 @@
+.git
+.github
+.cursor
+**/node_modules
+**/venv
+**/.venv
+**/__pycache__
+**/*.pyc
+frontend
+*.md
+!.dockerignore
+.env
+**/.env
+**/.env.*
+notebooks/.ipynb_checkpoints

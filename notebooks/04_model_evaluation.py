@@ -40,15 +40,33 @@ def load(name):
     with open(os.path.join(DATA_DIR, name)) as f:
         return pd.DataFrame(json.load(f))
 
+
+def load_param_prefer_harmonized(base: str) -> tuple[pd.DataFrame, str]:
+    """Prefer `*_harmonized.json` (961-cell IDW grid) matching production `_load_data`."""
+    if base == "soil":
+        hm = os.path.join(DATA_DIR, "soil_moisture_harmonized.json")
+        raw_path = os.path.join(DATA_DIR, "soil_moisture.json")
+    else:
+        hm = os.path.join(DATA_DIR, f"{base}_harmonized.json")
+        raw_path = os.path.join(DATA_DIR, f"{base}_timeseries.json")
+    if os.path.isfile(hm):
+        return load(os.path.basename(hm)), hm
+    return load(os.path.basename(raw_path)), raw_path
+
+
 # -- LOAD DATA ----------------------------------------
 print("=" * 70)
 print("  SatIntel - Model Evaluation on Ahmedabad Satellite Data")
 print("=" * 70)
 
-lst = load('lst_timeseries.json')
-ndvi = load('ndvi_timeseries.json')
-no2 = load('no2_timeseries.json')
-soil = load('soil_moisture.json')
+lst, lst_src = load_param_prefer_harmonized("lst")
+ndvi, ndvi_src = load_param_prefer_harmonized("ndvi")
+no2, no2_src = load_param_prefer_harmonized("no2")
+soil, soil_src = load_param_prefer_harmonized("soil")
+print(f"  LST from: {os.path.basename(lst_src)} ({len(lst)} rows)")
+print(f"  NDVI from: {os.path.basename(ndvi_src)} ({len(ndvi)} rows)")
+print(f"  NO2 from: {os.path.basename(no2_src)} ({len(no2)} rows)")
+print(f"  Soil moisture from: {os.path.basename(soil_src)} ({len(soil)} rows)")
 
 for name, df in [('LST', lst), ('NDVI', ndvi), ('NO2', no2), ('Soil Moisture', soil)]:
     print(f"  {name}: {len(df)} records, {df.date.nunique()} dates, range [{df.value.min():.2f}, {df.value.max():.2f}]")

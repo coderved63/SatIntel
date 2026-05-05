@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     gemini_api_key: str = ""
     google_api_key: str = ""
-    gemini_model: str = "gemma-4-31B-it"
+    gemini_model: str = "gemma-4-31b-it"
 
     class Config:
         env_file = BACKEND_DIR / ".env"

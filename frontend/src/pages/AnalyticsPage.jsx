@@ -6,7 +6,8 @@ import AnomalyList from '../components/analytics/AnomalyList';
 import HotspotMap from '../components/analytics/HotspotMap';
 import { analyticsService } from '../services/analyticsService';
 import SpecializedAnalysis from '../components/analytics/SpecializedAnalysis';
-import { AlertTriangle, MapPin, Layers } from 'lucide-react';
+import { AlertTriangle, MapPin, Layers, LineChart } from 'lucide-react';
+import DashboardForecastChart from '../components/dashboard/DashboardForecastChart';
 import { useCity } from '../context/CityContext';
 import { useAnalysisContext } from '../context/AnalysisContext';
 import ExportButton from '../components/common/ExportButton';
@@ -22,6 +23,7 @@ const PARAMETERS = [
 
 const TABS = [
   { id: 'anomalies', label: 'Anomalies', icon: AlertTriangle },
+  { id: 'trends', label: 'Forecast path', icon: LineChart },
   { id: 'hotspots', label: 'Hotspots', icon: MapPin },
   { id: 'specialized', label: 'Domain Analysis', icon: Layers },
 ];
@@ -60,25 +62,18 @@ function AnalyticsContext({ activeTab, activeParam, anomalies, trends, hotspots 
   if (activeTab === 'trends' && trends) {
     return (
       <Card>
-        <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Trend context</h3>
-        <div className="grid md:grid-cols-3 gap-3 text-xs">
+        <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Reading the timeline</h3>
+        <div className="grid md:grid-cols-2 gap-3 text-xs">
           <div>
-            <p style={{ color: 'var(--text-secondary)' }}>History window</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Active window</p>
             <p style={{ color: 'var(--text-muted)' }}>
-              {trends.historical_points || Object.keys(trends.historical || {}).length} historical timestamps from {trends.date_range?.start || '--'} to {trends.date_range?.end || '--'}.
-            </p>
-          </div>
-          <div>
-            <p style={{ color: 'var(--text-secondary)' }}>Forecast model</p>
-            <p style={{ color: 'var(--text-muted)' }}>
-              {trends.model || 'Directional trend estimate'} with a {trends.forecast_days || 0}-day directional projection.
-              
+              {trends.historical_points || Object.keys(trends.historical || {}).length} city-mean points from {trends.date_range?.start || '--'} to {trends.date_range?.end || '--'}, plus up to {trends.forecast_days || 30} continuation steps on the same axis.
             </p>
           </div>
           <div>
             <p style={{ color: 'var(--text-secondary)' }}>Interpretation</p>
             <p style={{ color: 'var(--text-muted)' }}>
-              {trends.interpretation || 'The forecast extends the city-level series; it is directional evidence, not a literal daily guarantee.'}
+              {trends.interpretation || 'The dashed segment extends the observed city mean as a directional path for screening — not calibrated point forecasts.'}
             </p>
           </div>
         </div>
@@ -125,10 +120,19 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(false);
   const [anomalies, setAnomalies] = useState(null);
   const [hotspots, setHotspots] = useState(null);
+  const [trends, setTrends] = useState(null);
 
   useEffect(() => {
     runAnalysis();
   }, [activeParam, city.key, dateRange.start_date, dateRange.end_date]);
+
+  useEffect(() => {
+    if (activeTab !== 'trends') return;
+    setTrends(null);
+    analyticsService.getTrends(activeParam, city.key, dateRange)
+      .then(setTrends)
+      .catch(() => setTrends(null));
+  }, [activeTab, activeParam, city.key, dateRange.start_date, dateRange.end_date]);
 
   const runAnalysis = async () => {
     setLoading(true);
@@ -145,6 +149,9 @@ export default function AnalyticsPage() {
       setLoading(false);
     }
   };
+
+  const paramMeta = PARAMETERS.find(p => p.id === activeParam);
+  const paramLabel = paramMeta?.label || activeParam;
 
   return (
     <DashboardLayout>
@@ -180,7 +187,7 @@ export default function AnalyticsPage() {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             const count = tab.id === 'anomalies' ? anomalies?.anomaly_count
-              : tab.id === 'hotspots' ? hotspots?.cluster_count : null;
+              : tab.id === 'hotspots' ? hotspots?.cluster_count : null; // no count badge on forecast tab
             return (
               <button
                 key={tab.id}
@@ -213,13 +220,14 @@ export default function AnalyticsPage() {
           <div>
             <EvidenceContextPanel
               title="Analytics Evidence Context"
-              evidence={activeTab === 'anomalies' ? anomalies : hotspots}
+              evidence={activeTab === 'anomalies' ? anomalies : activeTab === 'trends' ? trends : hotspots}
               compact
             />
             <AnalyticsContext
               activeTab={activeTab}
               activeParam={activeParam}
               anomalies={anomalies}
+              trends={trends}
               hotspots={hotspots}
             />
             {activeTab === 'anomalies' && (
@@ -229,6 +237,17 @@ export default function AnalyticsPage() {
                 </div>
                 <AnomalyList data={anomalies} />
               </div>
+            )}
+            {activeTab === 'trends' && (
+              <Card>
+                <DashboardForecastChart
+                  data={trends}
+                  label={`${paramLabel} — city mean & continuation`}
+                  histColor={PARAMETERS.find(p => p.id === activeParam)?.color || '#3B82F6'}
+                  unit={activeParam === 'NDVI' ? 'NDVI' : activeParam === 'LST' ? 'deg C' : activeParam === 'SOIL_MOISTURE' ? 'm3/m3' : 'units'}
+                  height={320}
+                />
+              </Card>
             )}
             {activeTab === 'hotspots' && <HotspotMap data={hotspots} />}
             {activeTab === 'specialized' && <SpecializedAnalysis />}

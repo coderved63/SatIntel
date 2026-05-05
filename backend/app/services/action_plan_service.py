@@ -45,6 +45,11 @@ def model_supports_json_mode(model_name: str | None) -> bool:
     return "gemma" not in normalized
 
 
+def normalize_model_name(model_name: str | None) -> str:
+    """Normalize configured model IDs for provider APIs while preserving env control."""
+    return (model_name or "").strip().lower()
+
+
 def _get_city_areas(city: str) -> dict:
     """Get city-specific area names for the action plan."""
     from app.utils.cities import get_city
@@ -183,6 +188,7 @@ def _generate_model_content(model_name: str, api_key: str, prompt: str, temperat
     from google import genai
     from google.genai import types
 
+    model_name = normalize_model_name(model_name)
     client = genai.Client(api_key=api_key)
     config_kwargs = {
         "temperature": temperature,
@@ -303,7 +309,7 @@ def _normalize_ai_plan(ai_plan: dict, fallback_plan: dict, city: str) -> dict:
 
     normalized["generated_at"] = datetime.now().isoformat()
     normalized["source"] = "llm_generated_action_plan"
-    normalized["llm_model"] = get_settings().gemini_model
+    normalized["llm_model"] = normalize_model_name(get_settings().gemini_model)
     return normalized
 
 

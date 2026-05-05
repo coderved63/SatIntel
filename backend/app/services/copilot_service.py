@@ -73,7 +73,7 @@ def _sanitize_response(parsed: dict, page: str, analysis_context: dict) -> dict:
         "confidence_note": confidence.strip(),
         "follow_up_suggestions": [str(item) for item in follow_ups if str(item).strip()],
         "llm_status": "gemini",
-        "llm_model": get_settings().gemini_model,
+        "llm_model": action_plan_service.normalize_model_name(get_settings().gemini_model),
         "generation_path": "llm_multi_agent",
     }
 

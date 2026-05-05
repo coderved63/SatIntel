@@ -27,7 +27,7 @@ PARAMETERS = {
     "LST": {
         "id": "LST",
         "name": "Land Surface Temperature",
-        "unit": "°C",
+        "unit": "deg C",
         "source": "MODIS Terra (MOD11A2)",
         "resolution": "1km",
         "frequency": "8-day composite",
@@ -49,7 +49,7 @@ PARAMETERS = {
     "NO2": {
         "id": "NO2",
         "name": "Nitrogen Dioxide (NO2)",
-        "unit": "mol/m²",
+        "unit": "mol/m^2",
         "source": "Sentinel-5P TROPOMI",
         "resolution": "7km",
         "frequency": "Daily",
@@ -60,7 +60,7 @@ PARAMETERS = {
     "SOIL_MOISTURE": {
         "id": "SOIL_MOISTURE",
         "name": "Soil Moisture",
-        "unit": "m³/m³",
+        "unit": "m3/m3",
         "source": "NASA SMAP (SPL3SMP_E)",
         "resolution": "9km",
         "frequency": "Daily",
@@ -71,7 +71,7 @@ PARAMETERS = {
     "SO2": {
         "id": "SO2",
         "name": "Sulfur Dioxide (SO2)",
-        "unit": "mol/m²",
+        "unit": "mol/m^2",
         "source": "Sentinel-5P TROPOMI",
         "resolution": "7km",
         "frequency": "Monthly composite",
@@ -82,7 +82,7 @@ PARAMETERS = {
     "CO": {
         "id": "CO",
         "name": "Carbon Monoxide (CO)",
-        "unit": "mol/m²",
+        "unit": "mol/m^2",
         "source": "Sentinel-5P TROPOMI",
         "resolution": "7km",
         "frequency": "Monthly composite",
@@ -93,7 +93,7 @@ PARAMETERS = {
     "O3": {
         "id": "O3",
         "name": "Ozone (O3)",
-        "unit": "mol/m²",
+        "unit": "mol/m^2",
         "source": "Sentinel-5P TROPOMI",
         "resolution": "7km",
         "frequency": "Monthly composite",

@@ -52,7 +52,13 @@ async def startup():
 
 def _warmup_caches():
     """Pre-load all data + run ML models for all 14 cities at startup."""
+    import os
     import time
+
+    if os.getenv("SKIP_WARMUP", "").lower() in ("1", "true", "yes"):
+        print("[WARMUP] Skipped (SKIP_WARMUP=1 — use on small hosts e.g. HF Spaces)")
+        return
+
     start = time.time()
 
     try:

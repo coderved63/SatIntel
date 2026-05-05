@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.middleware.auth_middleware import get_current_user
 from app.models.schemas import SatelliteDataRequest
+from app.config import get_settings
 from app.services import satellite_service
 
 router = APIRouter()
@@ -220,9 +221,23 @@ async def research_query(
 
 @router.get("/cities")
 async def get_cities():
-    """List all supported cities (79 global + 14 Gujarat with real GEE data)."""
-    from app.utils.city_generator import get_available_cities
-    return get_available_cities()
+    """List the 14 supported Gujarat cities shown in the frontend."""
+    from app.utils.cities import CITIES
+
+    return [
+        {
+            "key": key,
+            "name": city["name"],
+            "state": city["state"],
+            "country": city["country"],
+            "center": city["center"],
+            "bbox": city["bbox"],
+            "zoom": city["zoom"],
+            "has_data": True,
+            "data_source": "gee",
+        }
+        for key, city in CITIES.items()
+    ]
 
 
 @router.post("/generate-city")
@@ -254,6 +269,48 @@ async def get_last_synced():
         "last_synced": cache_service.get_last_synced() or "2026-03-22T02:00:00",
         "cache": cache_service.info(),
     }
+
+
+@router.get("/llm-status")
+async def get_llm_status(live: bool = False):
+    """Return safe Gemini configuration status. Does not expose API keys."""
+    from app.services import action_plan_service
+
+    settings = get_settings()
+    api_key = settings.gemini_api_key or settings.google_api_key
+    model = action_plan_service.normalize_model_name(settings.gemini_model)
+    status = {
+        "configured": bool(api_key),
+        "key_source": "GEMINI_API_KEY" if settings.gemini_api_key else ("GOOGLE_API_KEY" if settings.google_api_key else None),
+        "model": model,
+        "package_available": False,
+        "live_check": "not_requested",
+    }
+
+    try:
+        from google import genai  # noqa: F401
+        status["package_available"] = True
+    except Exception as exc:
+        status["package_error"] = type(exc).__name__
+        return status
+
+    if live and api_key:
+        try:
+            text = action_plan_service._generate_model_content(
+                model_name=model,
+                api_key=api_key,
+                prompt='Return exactly: {"ok": true}',
+                temperature=0,
+                expect_json=False,
+            )
+            status["live_check"] = "ok"
+            status["response_preview"] = text[:80]
+        except Exception as exc:
+            status["live_check"] = "failed"
+            status["error_type"] = type(exc).__name__
+            status["error"] = str(exc)[:500]
+
+    return status
 
 
 @router.get("/cache-info")

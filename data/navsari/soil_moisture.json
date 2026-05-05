@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "date": "2020-01-03",
     "lat": 20.9083,
@@ -4023,5 +4023,1790 @@
     "lng": 72.9926,
     "value": 0.2008,
     "parameter": "SOIL_MOISTURE"
-  }
+  },
+{
+        "date":  "2024-01-01",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2934,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-01",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3111,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-01",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3116,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-01",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3118,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-01",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3115,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-17",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2992,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-17",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3166,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-17",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3166,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-17",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.316,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-01-17",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3147,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-02",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3215,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-02",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3212,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-02",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3203,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-02",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3187,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-02",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3163,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-18",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3257,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-18",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3245,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-18",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3225,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-18",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3197,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-02-18",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.333,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-05",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2935,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-05",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2911,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-05",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2879,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-05",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2838,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-05",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2958,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-21",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2946,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-21",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.291,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-21",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2865,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-21",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2811,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-03-21",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2919,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-06",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2939,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-06",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.289,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-06",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2832,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-06",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2766,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-06",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2864,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-22",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2913,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-22",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2851,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-22",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2782,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-22",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2877,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-04-22",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2796,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-08",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2869,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-08",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2797,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-08",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2719,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-08",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2806,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-08",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2721,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-24",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.281,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-24",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.273,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-24",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2646,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-24",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2729,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-05-24",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2642,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-09",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.384,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-09",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3755,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-09",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3668,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-09",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3751,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-09",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3666,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-25",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3764,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-25",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3676,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-25",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.376,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-25",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3676,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-06-25",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3596,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-11",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3685,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-11",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.36,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-11",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3687,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-11",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.361,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-11",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3538,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-27",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.361,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-27",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.353,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-27",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3625,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-27",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3556,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-07-27",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3496,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-12",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3543,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-12",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3471,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-12",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3576,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-12",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3519,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-12",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3471,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-28",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3489,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-28",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3597,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-28",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3544,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-28",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.35,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-08-28",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3465,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-13",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.345,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-13",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3571,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-13",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3531,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-13",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.35,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-13",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3477,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-29",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.343,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-29",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3564,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-29",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3537,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-29",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3518,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-09-29",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3506,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-15",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2679,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-15",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2825,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-15",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.281,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-15",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2801,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-15",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2799,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-31",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2865,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-31",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2853,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-31",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2848,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-31",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2848,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-10-31",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2852,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-11-16",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2898,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-11-16",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2895,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-11-16",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2898,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-11-16",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2903,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-11-16",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.308,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-02",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2944,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-02",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2948,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-02",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2954,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-02",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2961,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-02",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3138,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-18",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2999,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-18",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3006,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-18",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3013,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-18",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3018,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2024-12-18",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3191,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-03",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2963,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-03",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.314,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-03",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3144,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-03",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3145,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-03",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3141,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-19",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.302,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-19",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3193,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-19",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3192,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-19",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3185,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-01-19",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3171,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-04",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3072,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-04",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3238,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-04",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3228,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-04",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.321,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-04",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3184,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-20",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3112,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-20",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3269,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-20",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3248,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-20",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3218,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-02-20",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3179,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-08",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2959,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-08",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2934,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-08",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.29,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-08",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2857,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-08",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2806,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-24",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2967,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-24",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.293,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-24",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2883,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-24",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2828,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-03-24",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2934,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-09",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2958,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-09",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2907,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-09",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2848,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-09",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2781,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-09",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2877,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-25",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2929,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-25",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2867,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-25",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2796,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-25",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.272,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-04-25",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2808,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-11",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2884,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-11",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2811,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-11",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2732,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-11",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2648,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-11",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2732,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-27",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2823,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-27",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2742,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-27",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2658,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-27",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2741,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-05-27",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2654,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-12",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3852,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-12",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3766,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-12",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3679,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-12",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3762,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-12",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3678,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-28",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3775,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-28",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3688,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-28",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3602,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-28",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3688,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-06-28",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3609,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-14",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3697,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-14",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3612,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-14",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.353,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-14",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3624,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-14",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3553,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-30",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3622,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-30",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3543,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-30",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3639,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-30",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3572,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-07-30",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3513,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-15",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3557,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-15",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3486,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-15",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3592,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-15",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3537,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-15",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.349,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-31",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3504,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-31",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3444,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-31",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3563,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-31",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.352,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-08-31",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3486,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-09-16",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3468,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-09-16",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3421,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-09-16",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3552,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-09-16",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3522,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-09-16",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3501,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-02",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.27,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-02",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2836,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-02",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.281,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-02",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2792,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-02",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2782,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-18",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2701,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-18",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2849,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-18",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2835,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-18",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2828,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-10-18",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2827,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-03",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.272,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-03",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2879,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-03",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2875,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-03",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2876,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-03",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.288,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-19",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2755,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-19",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2923,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-19",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2926,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-19",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2931,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-11-19",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2939,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-05",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2972,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-05",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2976,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-05",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.2983,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-05",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.299,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-05",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2996,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-21",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3027,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-21",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3034,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-21",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3041,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-21",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3046,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2025-12-21",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3218,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-06",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3006,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-06",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3012,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-06",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3186,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-06",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3186,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-06",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.318,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-22",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3062,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-22",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3065,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-22",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3232,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-22",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3223,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-01-22",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3207,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-07",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.3112,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-07",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3107,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-07",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3265,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-07",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3245,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-07",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3217,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-23",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.315,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-23",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.3305,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-23",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.3281,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-23",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.3249,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-02-23",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.3208,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-03-11",
+        "lat":  20.9467,
+        "lng":  72.952,
+        "value":  0.2823,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-03-11",
+        "lat":  20.9817,
+        "lng":  72.987,
+        "value":  0.2966,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-03-11",
+        "lat":  20.9117,
+        "lng":  72.977,
+        "value":  0.293,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-03-11",
+        "lat":  20.9717,
+        "lng":  72.917,
+        "value":  0.2885,
+        "parameter":  "SOIL_MOISTURE"
+    },
+    {
+        "date":  "2026-03-11",
+        "lat":  20.9217,
+        "lng":  72.927,
+        "value":  0.2831,
+        "parameter":  "SOIL_MOISTURE"
+    }
 ]

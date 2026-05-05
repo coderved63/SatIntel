@@ -2,10 +2,16 @@
 node_modules/
 frontend/node_modules/
 
-# Env files
+# Env files (never commit secrets)
 .env
+.env.*
+!.env.example
 backend/.env
+backend/.env.*
+!backend/.env.example
 frontend/.env
+frontend/.env.*
+!frontend/.env.example
 
 # Python
 __pycache__/
@@ -44,3 +50,14 @@ backend/gee_service_account.json
 # Logs
 *.log
 claude.md
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Local / Cursor
+.cursor/
+agent-transcripts/
+
+# Optional: large notebook exports (uncomment if you don't want plots in git)
+# notebooks/outputs/
