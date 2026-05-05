@@ -129,6 +129,24 @@ _raw_cache: dict = {}
 _data_cache: dict = {}
 
 
+def _safe_load_json(filepath: Path, label: str) -> list[dict]:
+    if not filepath.exists():
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as file_handle:
+            data = json.load(file_handle)
+        if isinstance(data, list):
+            return data
+        logger.warning(f"{label} JSON is not a list: {filepath}")
+        return []
+    except json.JSONDecodeError as exc:
+        logger.error(f"{label} JSON decode failed at {filepath}: {exc}")
+        return []
+    except OSError as exc:
+        logger.error(f"{label} file read failed at {filepath}: {exc}")
+        return []
+
+
 def _load_raw(parameter: str, city: str = "ahmedabad") -> list[dict]:
     from app.utils.city_generator import ensure_city_data
 
@@ -146,8 +164,10 @@ def _load_raw(parameter: str, city: str = "ahmedabad") -> list[dict]:
         logger.warning(f"Data file not found: {filepath}")
         return []
 
-    with open(filepath, "r") as file_handle:
-        data = json.load(file_handle)
+    data = _safe_load_json(filepath, f"Raw {parameter}/{city}")
+    if not data:
+        logger.warning(f"Raw data empty/invalid for {parameter}/{city}: {filepath}")
+        return []
 
     _raw_cache[cache_key] = data
     return data
@@ -165,11 +185,14 @@ def _load_data(parameter: str, city: str = "ahmedabad") -> list[dict]:
 
     harmonized_file = _get_data_dir(city) / f"{parameter.lower()}_harmonized.json"
     if harmonized_file.exists():
-        with open(harmonized_file, "r") as file_handle:
-            harmonized = json.load(file_handle)
-        _data_cache[cache_key] = harmonized
-        logger.info(f"Loaded pre-harmonized {parameter}/{city}: {len(harmonized)} points")
-        return harmonized
+        harmonized = _safe_load_json(harmonized_file, f"Harmonized {parameter}/{city}")
+        if harmonized:
+            _data_cache[cache_key] = harmonized
+            logger.info(f"Loaded pre-harmonized {parameter}/{city}: {len(harmonized)} points")
+            return harmonized
+        logger.warning(
+            f"Pre-harmonized file invalid/empty for {parameter}/{city}, falling back to raw source"
+        )
 
     raw_data = _load_raw(parameter, city)
     if not raw_data:
