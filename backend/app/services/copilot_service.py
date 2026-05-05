@@ -26,6 +26,14 @@ PAGE_PARAMETERS = {
 }
 
 
+def _safe_evidence_call(label: str, func):
+    try:
+        return func()
+    except Exception as exc:
+        logger.warning(f"Saarthi evidence call failed for {label}: {exc}")
+        return {"error": f"{label} unavailable", "detail": str(exc)}
+
+
 def _page_evidence(page: str, city: str, parameter: str | None, date_range: dict) -> dict:
     active_parameter = parameter or (PAGE_PARAMETERS.get(page, ["LST"])[0])
     if page == "analytics":
@@ -39,15 +47,17 @@ def _page_evidence(page: str, city: str, parameter: str | None, date_range: dict
     if page == "action-plan":
         return {"summary": ml_service.get_city_summary(city, date_range)}
     if page == "saarthi":
+        # Keep dedicated Saarthi context broad but lightweight/resilient for fast responses.
         return {
-            "summary": ml_service.get_city_summary(city, date_range),
-            "heat": heat_service.analyse(city, date_range),
-            "vegetation": vegetation_service.analyse(city, date_range),
-            "green_gap": green_gap_service.analyse(city, date_range),
-            "trends_lst": ml_service.predict_trend("LST", city, date_range=date_range),
-            "trends_ndvi": ml_service.predict_trend("NDVI", city, date_range=date_range),
-            "trends_no2": ml_service.predict_trend("NO2", city, date_range=date_range),
-            "trends_soil_moisture": ml_service.predict_trend("SOIL_MOISTURE", city, date_range=date_range),
+            "summary": _safe_evidence_call("summary", lambda: ml_service.get_city_summary(city, date_range)),
+            "heat": _safe_evidence_call("heat", lambda: heat_service.analyse(city, date_range)),
+            "vegetation": _safe_evidence_call("vegetation", lambda: vegetation_service.analyse(city, date_range)),
+            "green_gap": _safe_evidence_call("green_gap", lambda: green_gap_service.analyse(city, date_range)),
+            # Include one active-parameter trend path instead of four model runs to reduce latency.
+            "active_trend": _safe_evidence_call(
+                f"trend_{active_parameter}",
+                lambda: ml_service.predict_trend(active_parameter, city, date_range=date_range),
+            ),
         }
     if page == "time-machine":
         return {"comparison": time_machine_service.get_comparison(active_parameter, city, date_range)}

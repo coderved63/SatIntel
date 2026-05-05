@@ -403,6 +403,8 @@ def get_statistics(parameter: str, city: str = "ahmedabad", date_range: dict | N
         return {}
 
     values = np.array([item["value"] for item in data])
+    synthetic_count = sum(1 for item in data if item.get("synthetic"))
+    synthetic_ratio = synthetic_count / len(data) if data else 0.0
     return {
         "parameter": parameter,
         "count": len(values),
@@ -412,6 +414,8 @@ def get_statistics(parameter: str, city: str = "ahmedabad", date_range: dict | N
         "max": round(float(np.max(values)), 4),
         "median": round(float(np.median(values)), 4),
         "unit": PARAMETERS[parameter]["unit"],
+        "synthetic_count": synthetic_count,
+        "synthetic_ratio": round(float(synthetic_ratio), 4),
         "analysis_window": resolved,
         "data_coverage": evidence_service.summarize_coverage(data),
     }
