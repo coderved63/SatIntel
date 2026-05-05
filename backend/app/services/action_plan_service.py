@@ -216,6 +216,103 @@ def _generate_model_json(model_name: str, api_key: str, prompt: str, temperature
     )
 
 
+def _apply_hybrid_gemma_enhancement(plan: dict, city: str, analysis: dict) -> dict:
+    """
+    Enhance selected sections only (not full report generation) using Gemma.
+    Keeps deterministic Python template as base and applies minimal safe overrides.
+    """
+    settings = get_settings()
+    api_key = settings.gemini_api_key or settings.google_api_key
+    if not api_key:
+        plan["llm_status"] = "template"
+        plan["llm_model"] = None
+        return plan
+
+    model_name = normalize_model_name(settings.gemini_model)
+    context = {
+        "city": city,
+        "summary_statistics": plan.get("summary_statistics", {}),
+        "key_findings": [
+            {
+                "title": item.get("title"),
+                "severity": item.get("severity"),
+                "parameter": item.get("parameter"),
+                "trend": item.get("trend"),
+            }
+            for item in plan.get("findings", [])[:5]
+        ],
+        "top_recommendations": [
+            {
+                "id": item.get("id"),
+                "title": item.get("title"),
+                "priority": item.get("priority"),
+                "estimated_impact": item.get("estimated_impact"),
+            }
+            for item in plan.get("recommendations", [])[:5]
+        ],
+        "analysis_snapshot": {
+            param: {
+                "anomaly_count": details.get("anomaly_count", 0),
+                "hotspot_count": details.get("hotspot_count", 0),
+                "statistics": details.get("statistics", {}),
+            }
+            for param, details in (analysis or {}).items()
+        },
+    }
+    prompt = f"""
+You are SatIntel's policy language assistant using Gemma.
+Do NOT create a full report. Only refine two sections in concise, official tone.
+Return strict JSON with keys:
+- executive_summary (string, <= 110 words)
+- recommendation_overrides (array of objects: id, description; max 3)
+
+Rules:
+- Preserve all facts and numbers from context.
+- No invented measurements, dates, agencies, or coordinates.
+- If unsure, keep language cautious and evidence-led.
+
+Context JSON:
+{json.dumps(context, ensure_ascii=False, default=str)}
+"""
+    try:
+        payload = _generate_model_json(
+            model_name=model_name,
+            api_key=api_key,
+            prompt=prompt,
+            temperature=0.2,
+        )
+        if isinstance(payload.get("executive_summary"), str) and payload["executive_summary"].strip():
+            plan["executive_summary"] = payload["executive_summary"].strip()
+
+        overrides = payload.get("recommendation_overrides")
+        if isinstance(overrides, list) and overrides:
+            by_id = {
+                str(item.get("id")): str(item.get("description", "")).strip()
+                for item in overrides
+                if isinstance(item, dict) and item.get("id") and item.get("description")
+            }
+            if by_id:
+                updated = []
+                for rec in plan.get("recommendations", []):
+                    rec_id = str(rec.get("id"))
+                    if rec_id in by_id and by_id[rec_id]:
+                        rec = dict(rec)
+                        rec["description"] = by_id[rec_id]
+                    updated.append(rec)
+                plan["recommendations"] = updated
+
+        plan["llm_status"] = "hybrid"
+        plan["llm_model"] = model_name
+        plan["source"] = "satellite_ml_pipeline_hybrid"
+        return plan
+    except Exception as exc:
+        logger.warning(f"Gemma hybrid enhancement unavailable; keeping Python template sections: {exc}")
+        plan["llm_status"] = "template"
+        plan["llm_model"] = model_name
+        plan["llm_error"] = str(exc)
+        return plan
+
+
 def _normalize_ai_plan(ai_plan: dict, fallback_plan: dict, city: str) -> dict:
     """Keep the frontend contract stable even if the model omits a field."""
     if not isinstance(ai_plan, dict):
@@ -905,7 +1002,7 @@ async def generate_action_plan(city: str, parameters: list[str], date_range: dic
 
 
 async def generate_action_plan_from_analysis(city: str, parameters: list[str], date_range: dict, analysis: dict) -> dict:
-    """Generate an action plan from prepared analysis, preferring Gemini when configured."""
+    """Generate an action plan from prepared analysis using deterministic template + optional Gemma section enhancement."""
     analysis_context = evidence_service.build_analysis_context(city, parameters, date_range, default_window="action_plan")
     plan = _generate_template_plan(city, analysis)
     plan["analysis_window"] = analysis_context["analysis_window"]
@@ -924,16 +1021,10 @@ async def generate_action_plan_from_analysis(city: str, parameters: list[str], d
     }
     plan["source"] = "satellite_ml_pipeline_template"
 
-    # Hackathon-safe: when LLM output is unreliable or not configured, stay on deterministic Python template.
-    if os.getenv("DISABLE_LLM", "1").lower() in ("1", "true", "yes"):
-        plan["llm_status"] = "python_fallback"
-        plan["llm_note"] = "LLM generation disabled; using deterministic Python template fallback."
+    if os.getenv("DISABLE_LLM", "0").lower() in ("1", "true", "yes"):
+        plan["llm_status"] = "template"
+        plan["llm_model"] = None
         return plan
 
-    try:
-        return await _generate_gemini_plan(city, parameters, date_range, analysis, plan)
-    except Exception as e:
-        logger.warning(f"Gemini action-plan generation unavailable; using template fallback: {e}")
-        plan["llm_status"] = "fallback"
-        plan["llm_error"] = str(e)
-        return plan
+    # Hybrid mode: keep the Python report structure, use Gemma only to improve selected prose sections.
+    return _apply_hybrid_gemma_enhancement(plan, city, analysis)

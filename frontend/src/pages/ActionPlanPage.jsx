@@ -58,11 +58,11 @@ export default function ActionPlanPage() {
   const [showExportMenu, setShowExportMenu] = useState(false);
 
   const generationSummary = plan ? {
-    statusLabel: plan.llm_status === 'fallback' ? 'Python fallback' : 'LLM generated',
-    statusTone: plan.llm_status === 'fallback'
-      ? { bg: 'rgba(245,158,11,0.12)', color: '#F59E0B' }
-      : { bg: 'rgba(16,185,129,0.12)', color: '#10B981' },
-    engineLabel: plan.llm_model || 'Deterministic Python template',
+    statusLabel: plan.llm_status === 'hybrid' ? 'AI-assisted report' : 'Template-generated report',
+    statusTone: plan.llm_status === 'hybrid'
+      ? { bg: 'rgba(16,185,129,0.12)', color: '#10B981' }
+      : { bg: 'rgba(59,130,246,0.12)', color: '#3B82F6' },
+    engineLabel: plan.llm_model || 'Structured report engine',
     sourceLabel: plan.source || 'unknown',
   } : null;
 
