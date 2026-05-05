@@ -7,7 +7,7 @@ const COLOR_MAP = {
   amber: { text: '#F59E0B', bg: 'rgba(245,158,11,0.08)' },
 };
 
-export default function StatsCard({ title, value, icon: Icon, color = 'cyan', subtitle, trend }) {
+export default function StatsCard({ title, value, icon: Icon, color = 'cyan', subtitle, trend, coverage, note }) {
   const c = COLOR_MAP[color] || COLOR_MAP.cyan;
 
   return (
@@ -21,6 +21,8 @@ export default function StatsCard({ title, value, icon: Icon, color = 'cyan', su
           <p className="text-2xl font-bold mt-1.5 tracking-tight" style={{ color: 'var(--text-primary)' }}>{value}</p>
           {subtitle && <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{subtitle}</p>}
           {trend && <p className="text-xs mt-1.5 font-medium" style={{ color: c.text }}>{trend}</p>}
+          {coverage && <p className="text-[11px] mt-1" style={{ color: 'var(--text-faint)' }}>{coverage}</p>}
+          {note && <p className="text-[11px] mt-1" style={{ color: 'var(--text-faint)' }}>{note}</p>}
         </div>
         {Icon && (
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: c.bg }}>

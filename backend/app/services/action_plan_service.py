@@ -4,12 +4,45 @@ Produces municipal-commissioner-grade reports backed by real ML analytics.
 City-dynamic: adapts to any Gujarat city using cities.py config.
 """
 import logging
+import asyncio
+import json
+import re
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 from app.config import get_settings
-from app.services import ml_service, satellite_service
+from app.services import evidence_service, ml_service, satellite_service
 
 logger = logging.getLogger(__name__)
+
+
+REQUIRED_PLAN_KEYS = [
+    "city",
+    "report_title",
+    "report_number",
+    "generated_at",
+    "classification",
+    "prepared_for",
+    "prepared_by",
+    "methodology",
+    "executive_summary",
+    "summary_statistics",
+    "data_sources",
+    "findings",
+    "risk_matrix",
+    "priority_zones",
+    "recommendations",
+    "priority_actions",
+    "monitoring_framework",
+    "disclaimer",
+]
+
+
+def model_supports_json_mode(model_name: str | None) -> bool:
+    """Gemma chat models do not support API-enforced JSON mode."""
+    normalized = (model_name or "").strip().lower()
+    if not normalized:
+        return True
+    return "gemma" not in normalized
 
 
 def _get_city_areas(city: str) -> dict:
@@ -36,6 +69,339 @@ def _get_city_areas(city: str) -> dict:
         "residential_str": ", ".join(residential[:4]) if residential else f"{name} residential areas",
         "state": cfg.get("state", "Gujarat"),
     }
+
+
+def _safe_get(label: str, fn, fallback: Any) -> Any:
+    try:
+        return fn()
+    except Exception as e:
+        logger.warning(f"Unable to load {label} context: {e}")
+        return fallback
+
+
+def _build_llm_context(city: str, parameters: list[str], date_range: dict, analysis: dict) -> dict:
+    """Build a compact, evidence-first context packet for the action-plan LLM."""
+    c = _get_city_areas(city)
+
+    parameter_metadata = {}
+    for param in parameters:
+        meta = satellite_service.PARAMETERS.get(param, {})
+        parameter_metadata[param] = {
+            "name": meta.get("name", param),
+            "unit": meta.get("unit", ""),
+            "source": meta.get("source", ""),
+            "resolution": meta.get("resolution", ""),
+            "frequency": meta.get("frequency", ""),
+            "description": meta.get("description", ""),
+        }
+
+    trend_summary = {}
+    for param in parameters:
+        trend_summary[param] = _safe_get(
+            f"{param} trend",
+            lambda p=param: ml_service.predict_trend(p, city),
+            {},
+        )
+
+    # These specialized analyses give the LLM more policy-grade context without
+    # sending raw grid files or huge time-series arrays.
+    land_conversion = _safe_get(
+        "land conversion",
+        lambda: satellite_service.get_land_use_change(city).get("change_summary", {}),
+        {},
+    )
+    green_gap = _safe_get(
+        "green gap",
+        lambda: __import__("app.services.green_gap_service", fromlist=["analyse"]).analyse(city),
+        {},
+    )
+
+    compact_green_gap = {}
+    if green_gap and not green_gap.get("error"):
+        compact_green_gap = {
+            "city_mean_lst": green_gap.get("city_mean_lst"),
+            "city_mean_ndvi": green_gap.get("city_mean_ndvi"),
+            "total_candidate_cells": green_gap.get("total_candidate_cells"),
+            "critical_sites": green_gap.get("critical_sites"),
+            "avg_projected_cooling": green_gap.get("avg_projected_cooling"),
+            "max_projected_cooling": green_gap.get("max_projected_cooling"),
+            "top_sites": green_gap.get("top_50_sites", [])[:8],
+        }
+
+    return {
+        "city": c,
+        "request": {
+            "parameters": parameters,
+            "date_range": date_range or {"start_date": "2023-01-01", "end_date": "2024-12-31"},
+        },
+        "parameter_metadata": parameter_metadata,
+        "ml_analysis": analysis,
+        "trend_summary": {
+            param: {
+                "trend_direction": data.get("trend_direction"),
+                "forecast": data.get("forecast", {}),
+                "historical_points": len(data.get("historical", {})) if isinstance(data.get("historical"), dict) else 0,
+            }
+            for param, data in trend_summary.items()
+            if data
+        },
+        "specialized_analysis": {
+            "land_use_change_2020_2024": land_conversion,
+            "green_infrastructure_gap": compact_green_gap,
+        },
+        "output_contract": {
+            "required_top_level_keys": REQUIRED_PLAN_KEYS,
+            "finding_fields": ["id", "title", "description", "severity", "parameter", "evidence", "affected_population", "trend"],
+            "recommendation_fields": ["id", "title", "description", "priority", "timeline", "location", "estimated_impact", "responsible_authority", "budget_category"],
+            "risk_fields": ["hazard", "likelihood", "impact", "risk_level", "affected_areas"],
+        },
+    }
+
+
+def _json_from_model_text(text: str) -> dict:
+    """Parse JSON from Gemini output, tolerating occasional fenced blocks."""
+    if not text:
+        raise ValueError("Gemini returned an empty response")
+
+    cleaned = text.strip()
+    fenced = re.search(r"```(?:json)?\s*(.*?)```", cleaned, re.DOTALL | re.IGNORECASE)
+    if fenced:
+        cleaned = fenced.group(1).strip()
+
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        start = cleaned.find("{")
+        if start == -1:
+            raise
+        decoder = json.JSONDecoder()
+        obj, _ = decoder.raw_decode(cleaned[start:])
+        return obj
+
+
+def _generate_model_content(model_name: str, api_key: str, prompt: str, temperature: float = 0.2, expect_json: bool = False) -> str:
+    from google import genai
+    from google.genai import types
+
+    client = genai.Client(api_key=api_key)
+    config_kwargs = {
+        "temperature": temperature,
+    }
+    if expect_json and model_supports_json_mode(model_name):
+        config_kwargs["response_mime_type"] = "application/json"
+    response = client.models.generate_content(
+        model=model_name,
+        contents=prompt,
+        config=types.GenerateContentConfig(**config_kwargs),
+    )
+    return (response.text or "").strip()
+
+
+def _generate_model_json(model_name: str, api_key: str, prompt: str, temperature: float = 0.2) -> dict:
+    return _json_from_model_text(
+        _generate_model_content(
+            model_name=model_name,
+            api_key=api_key,
+            prompt=prompt,
+            temperature=temperature,
+            expect_json=True,
+        )
+    )
+
+
+def _normalize_ai_plan(ai_plan: dict, fallback_plan: dict, city: str) -> dict:
+    """Keep the frontend contract stable even if the model omits a field."""
+    if not isinstance(ai_plan, dict):
+        raise ValueError("Gemini response was not a JSON object")
+
+    normalized = dict(fallback_plan)
+    for key in REQUIRED_PLAN_KEYS:
+        value = ai_plan.get(key)
+        if value not in (None, "", [], {}):
+            normalized[key] = value
+
+    list_defaults = {
+        "data_sources": list,
+        "findings": list,
+        "risk_matrix": list,
+        "priority_zones": list,
+        "recommendations": list,
+        "priority_actions": list,
+    }
+    for key, expected_type in list_defaults.items():
+        if not isinstance(normalized.get(key), expected_type):
+            normalized[key] = fallback_plan.get(key, [])
+
+    if not isinstance(normalized.get("summary_statistics"), dict):
+        normalized["summary_statistics"] = fallback_plan.get("summary_statistics", {})
+    if not isinstance(normalized.get("monitoring_framework"), dict):
+        normalized["monitoring_framework"] = fallback_plan.get("monitoring_framework", {})
+
+    def _text(value, fallback=""):
+        if isinstance(value, str):
+            return value
+        if value is None:
+            return fallback
+        if isinstance(value, (int, float, bool)):
+            return str(value)
+        return fallback
+
+    def _number(value, fallback=0):
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return value
+        try:
+            return float(value)
+        except Exception:
+            return fallback
+
+    def _dict_list(value, fallback):
+        if not isinstance(value, list):
+            return fallback
+        return [item for item in value if isinstance(item, dict)]
+
+    normalized["city"] = _text(normalized.get("city"), _get_city_areas(city)["name"])
+    normalized["report_title"] = _text(normalized.get("report_title"), fallback_plan.get("report_title", ""))
+    normalized["report_number"] = _text(normalized.get("report_number"), fallback_plan.get("report_number", ""))
+    normalized["classification"] = _text(normalized.get("classification"), fallback_plan.get("classification", ""))
+    normalized["prepared_for"] = _text(normalized.get("prepared_for"), fallback_plan.get("prepared_for", ""))
+    normalized["prepared_by"] = _text(normalized.get("prepared_by"), fallback_plan.get("prepared_by", ""))
+    normalized["methodology"] = _text(normalized.get("methodology"), fallback_plan.get("methodology", ""))
+    normalized["executive_summary"] = _text(normalized.get("executive_summary"), fallback_plan.get("executive_summary", ""))
+    normalized["disclaimer"] = _text(normalized.get("disclaimer"), fallback_plan.get("disclaimer", ""))
+
+    normalized["data_sources"] = _dict_list(normalized.get("data_sources"), fallback_plan.get("data_sources", []))
+    normalized["findings"] = _dict_list(normalized.get("findings"), fallback_plan.get("findings", []))
+    normalized["risk_matrix"] = _dict_list(normalized.get("risk_matrix"), fallback_plan.get("risk_matrix", []))
+    normalized["priority_zones"] = _dict_list(normalized.get("priority_zones"), fallback_plan.get("priority_zones", []))
+    normalized["recommendations"] = _dict_list(normalized.get("recommendations"), fallback_plan.get("recommendations", []))
+    if not isinstance(normalized.get("priority_actions"), list):
+        normalized["priority_actions"] = fallback_plan.get("priority_actions", [])
+    normalized["priority_actions"] = [_text(item) for item in normalized["priority_actions"] if _text(item)]
+
+    summary_stats = dict(fallback_plan.get("summary_statistics", {}))
+    summary_stats.update(normalized.get("summary_statistics", {}))
+    normalized["summary_statistics"] = {
+        "total_data_points_analyzed": int(_number(summary_stats.get("total_data_points_analyzed"), fallback_plan.get("summary_statistics", {}).get("total_data_points_analyzed", 0))),
+        "satellite_missions_used": int(_number(summary_stats.get("satellite_missions_used"), fallback_plan.get("summary_statistics", {}).get("satellite_missions_used", 0))),
+        "parameters_monitored": int(_number(summary_stats.get("parameters_monitored"), fallback_plan.get("summary_statistics", {}).get("parameters_monitored", 0))),
+        "total_anomalies_detected": int(_number(summary_stats.get("total_anomalies_detected"), fallback_plan.get("summary_statistics", {}).get("total_anomalies_detected", 0))),
+        "total_hotspot_clusters": int(_number(summary_stats.get("total_hotspot_clusters"), fallback_plan.get("summary_statistics", {}).get("total_hotspot_clusters", 0))),
+        "analysis_period": _text(summary_stats.get("analysis_period"), fallback_plan.get("summary_statistics", {}).get("analysis_period", "")),
+        "spatial_coverage": _text(summary_stats.get("spatial_coverage"), fallback_plan.get("summary_statistics", {}).get("spatial_coverage", "")),
+        "spatial_resolution": _text(summary_stats.get("spatial_resolution"), fallback_plan.get("summary_statistics", {}).get("spatial_resolution", "")),
+    }
+
+    monitoring = dict(fallback_plan.get("monitoring_framework", {}))
+    monitoring.update(normalized.get("monitoring_framework", {}))
+    monitoring_schedule = monitoring.get("schedule", [])
+    monitoring_kpis = monitoring.get("kpis", [])
+    normalized["monitoring_framework"] = {
+        "description": _text(monitoring.get("description"), fallback_plan.get("monitoring_framework", {}).get("description", "")),
+        "schedule": [item for item in monitoring_schedule if isinstance(item, dict)],
+        "kpis": [item for item in monitoring_kpis if isinstance(item, dict)],
+    }
+
+    normalized["generated_at"] = datetime.now().isoformat()
+    normalized["source"] = "llm_generated_action_plan"
+    normalized["llm_model"] = get_settings().gemini_model
+    return normalized
+
+
+async def _generate_gemini_plan(city: str, parameters: list[str], date_range: dict, analysis: dict, fallback_plan: dict) -> dict:
+    settings = get_settings()
+    api_key = settings.gemini_api_key or settings.google_api_key
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY or GOOGLE_API_KEY is not configured")
+
+    try:
+        from google import genai  # noqa: F401
+    except ImportError as e:
+        raise RuntimeError("google-genai is not installed. Run pip install -r backend/requirements.txt") from e
+
+    context = _build_llm_context(city, parameters, date_range, analysis)
+    specialist_prompts = {
+        "thermal_risk_analyst": f"""
+You are SatIntel's thermal risk analyst.
+Review the supplied context and produce a concise operational brief focused on heat stress, hotspot patterns, exposed zones, and defensible interventions.
+Use only evidence in the context. Mention uncertainty when needed.
+
+Context JSON:
+{json.dumps(context, ensure_ascii=False, default=str)}
+""",
+        "green_infrastructure_analyst": f"""
+You are SatIntel's green infrastructure analyst.
+Review the supplied context and produce a concise operational brief focused on vegetation deficit, green-gap intervention opportunities, land-cover stress, and where planting/shading would matter most.
+Use only evidence in the context. Mention uncertainty when needed.
+
+Context JSON:
+{json.dumps(context, ensure_ascii=False, default=str)}
+""",
+        "air_water_resilience_analyst": f"""
+You are SatIntel's air quality and water resilience analyst.
+Review the supplied context and produce a concise operational brief focused on NO2, soil moisture, land-use change, and operational environmental risks that a municipality should prioritize.
+Use only evidence in the context. Mention uncertainty when needed.
+
+Context JSON:
+{json.dumps(context, ensure_ascii=False, default=str)}
+""",
+    }
+    prompt = f"""
+You are SatIntel's municipal environmental planning analyst.
+
+Generate a robust, evidence-backed Environment Action Plan as VALID JSON only.
+Use the supplied satellite/ML context. Do not invent measurements, dates, coordinates, populations, or agencies.
+When a metric is unavailable, say "not available" and recommend field validation rather than fabricating precision.
+
+Audience: Municipal Commissioner and department heads in Gujarat, India.
+Tone: professional, specific, operational, policy-ready.
+
+Requirements:
+- Return exactly one JSON object. No markdown, no prose outside JSON.
+- Preserve the requested output contract so the existing frontend can render it.
+- Include 4 to 6 findings, 4 to 6 recommendations, 3 to 6 priority actions, and a KPI monitoring framework.
+- Tie each finding to satellite evidence, ML anomalies/hotspots/trends, and named city areas when supported by context.
+- Recommendations must include responsible authorities, timelines, expected measurable impact, and implementation priority.
+- Include a short disclaimer about validating satellite-derived evidence with ground observations.
+- You are receiving specialist briefs from sub-agents. Reconcile overlaps and contradictions conservatively.
+
+Context JSON:
+{json.dumps(context, ensure_ascii=False, default=str)}
+
+Fallback template JSON:
+{json.dumps(fallback_plan, ensure_ascii=False, default=str)}
+
+Specialist briefs:
+{{specialist_briefs}}
+"""
+
+    def _call_gemini() -> dict:
+        specialist_briefs = {}
+        for role, specialist_prompt in specialist_prompts.items():
+            try:
+                specialist_briefs[role] = _generate_model_content(
+                    model_name=settings.gemini_model,
+                    api_key=api_key,
+                    prompt=specialist_prompt,
+                    temperature=0.15,
+                    expect_json=False,
+                )
+            except Exception as exc:
+                logger.warning(f"Specialist agent {role} failed: {exc}")
+                specialist_briefs[role] = f"{role} unavailable: {exc}"
+
+        final_prompt = prompt.replace(
+            "{specialist_briefs}",
+            json.dumps(specialist_briefs, ensure_ascii=False, default=str),
+        )
+        return _generate_model_json(
+            model_name=settings.gemini_model,
+            api_key=api_key,
+            prompt=final_prompt,
+            temperature=0.25,
+        )
+
+    ai_plan = await asyncio.to_thread(_call_gemini)
+    return _normalize_ai_plan(ai_plan, fallback_plan, city)
 
 
 def _generate_template_plan(city: str, analysis: dict) -> dict:
@@ -503,12 +869,13 @@ def _generate_template_plan(city: str, analysis: dict) -> dict:
 
 async def generate_action_plan(city: str, parameters: list[str], date_range: dict) -> dict:
     """Generate an Environment Action Plan using satellite data + ML analysis."""
+    resolved = evidence_service.resolve_date_range(date_range, default_window="action_plan")
     analysis = {}
     for param in parameters:
         try:
-            stats = satellite_service.get_statistics(param, city)
-            anomaly_result = ml_service.detect_anomalies(param, city)
-            hotspot_result = ml_service.find_hotspots(param, city)
+            stats = satellite_service.get_statistics(param, city, resolved)
+            anomaly_result = ml_service.detect_anomalies(param, city, date_range=resolved)
+            hotspot_result = ml_service.find_hotspots(param, city, date_range=resolved)
 
             analysis[param] = {
                 "statistics": stats,
@@ -516,11 +883,44 @@ async def generate_action_plan(city: str, parameters: list[str], date_range: dic
                 "anomaly_count": anomaly_result.get("anomaly_count", 0),
                 "hotspots": hotspot_result.get("hotspots", [])[:5],
                 "hotspot_count": hotspot_result.get("cluster_count", 0),
+                "analysis_window": stats.get("analysis_window", resolved),
+                "data_coverage": stats.get("data_coverage", {}),
+                "methodology": {
+                    "anomalies": anomaly_result.get("methodology"),
+                    "hotspots": hotspot_result.get("methodology"),
+                },
             }
         except Exception as e:
             logger.error(f"Error analyzing {param}: {e}")
             analysis[param] = {"error": str(e), "statistics": {}, "anomalies": [], "anomaly_count": 0, "hotspots": [], "hotspot_count": 0}
 
+    return await generate_action_plan_from_analysis(city, parameters, resolved, analysis)
+
+
+async def generate_action_plan_from_analysis(city: str, parameters: list[str], date_range: dict, analysis: dict) -> dict:
+    """Generate an action plan from prepared analysis, preferring Gemini when configured."""
+    analysis_context = evidence_service.build_analysis_context(city, parameters, date_range, default_window="action_plan")
     plan = _generate_template_plan(city, analysis)
-    plan["source"] = "satellite_ml_pipeline"
-    return plan
+    plan["analysis_window"] = analysis_context["analysis_window"]
+    plan["display_window_label"] = analysis_context["display_window_label"]
+    plan["data_freshness"] = analysis_context["data_freshness"]
+    plan["coverage_summary"] = analysis_context["coverage_summary"]
+    plan["evidence_basis"] = {
+        "time_window_used": analysis_context["display_window_label"],
+        "datasets_used": [satellite_service.PARAMETERS.get(param, {}).get("name", param) for param in parameters],
+        "date_freshness": analysis_context["data_freshness"],
+        "confidence_note": "Satellite-driven planning evidence for operational prioritization; validate on the ground before enforcement or capital sanction.",
+        "limitations": [
+            "Headline numbers summarize the selected analysis window rather than every raw scene.",
+            "Hotspots and anomalies are screening outputs that should be paired with local verification.",
+        ],
+    }
+    plan["source"] = "satellite_ml_pipeline_template"
+
+    try:
+        return await _generate_gemini_plan(city, parameters, date_range, analysis, plan)
+    except Exception as e:
+        logger.warning(f"Gemini action-plan generation unavailable; using template fallback: {e}")
+        plan["llm_status"] = "fallback"
+        plan["llm_error"] = str(e)
+        return plan

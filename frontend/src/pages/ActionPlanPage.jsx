@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Component, useState } from 'react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import Card from '../components/common/Card';
 import Loader from '../components/common/Loader';
@@ -8,21 +8,63 @@ import { exportAsPDF, exportAsJSON } from '../components/action-plan/ExportPlan'
 import { actionPlanService } from '../services/actionPlanService';
 import { FileText, Sparkles, Download, FileDown, FileJson, Satellite, Brain, BarChart3, FileCheck } from 'lucide-react';
 import { useCity } from '../context/CityContext';
+import { useAnalysisContext } from '../context/AnalysisContext';
 
 const PIPELINE_STEPS = [
   { icon: Satellite, label: 'Fetching satellite data', sub: 'MODIS, Sentinel-5P, SMAP' },
   { icon: Brain, label: 'Running anomaly detection', sub: 'Isolation Forest' },
-  { icon: BarChart3, label: 'Analyzing trends', sub: 'ARIMA forecasting' },
-  { icon: FileCheck, label: 'Generating action plan', sub: 'Evidence-backed recommendations' },
+  { icon: BarChart3, label: 'Preparing evidence brief', sub: 'Trends, hotspots, land-use change' },
+  { icon: FileCheck, label: 'Generating AI action plan', sub: 'Gemini 2.5 Flash recommendations' },
 ];
+
+class PlanErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.plan !== this.props.plan && this.state.hasError) {
+      this.setState({ hasError: false });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="rounded-xl p-4" style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+          <p className="text-red-400 text-sm">
+            The generated report had an unexpected format and could not be rendered. Please try generating it again.
+          </p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 export default function ActionPlanPage() {
   const { city } = useCity();
+  const { dateRange } = useAnalysisContext();
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [error, setError] = useState(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
+
+  const generationSummary = plan ? {
+    statusLabel: plan.llm_status === 'fallback' ? 'Python fallback' : 'LLM generated',
+    statusTone: plan.llm_status === 'fallback'
+      ? { bg: 'rgba(245,158,11,0.12)', color: '#F59E0B' }
+      : { bg: 'rgba(16,185,129,0.12)', color: '#10B981' },
+    engineLabel: plan.llm_model || 'Deterministic Python template',
+    sourceLabel: plan.source || 'unknown',
+  } : null;
 
   const generatePlan = async () => {
     setLoading(true);
@@ -35,7 +77,7 @@ export default function ActionPlanPage() {
     }, 2000);
 
     try {
-      const result = await actionPlanService.generatePlan(city.key);
+      const result = await actionPlanService.generatePlan(city.key, ['LST', 'NDVI', 'NO2', 'SOIL_MOISTURE'], dateRange);
       setPlan(result);
     } catch (err) {
       setError(err.message || 'Failed to generate action plan');
@@ -164,8 +206,41 @@ export default function ActionPlanPage() {
           </div>
         )}
 
+        {plan && generationSummary && (
+          <Card>
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
+                style={{ background: generationSummary.statusTone.bg, color: generationSummary.statusTone.color }}
+              >
+                {generationSummary.statusLabel}
+              </span>
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                Engine: <span style={{ color: 'var(--text-primary)' }}>{generationSummary.engineLabel}</span>
+              </span>
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                Source: <span style={{ color: 'var(--text-primary)' }}>{generationSummary.sourceLabel}</span>
+              </span>
+              {plan.analysis_window && (
+                <span className="text-xs" style={{ color: 'var(--text-faint)' }}>
+                  Window: {plan.analysis_window.start_date} to {plan.analysis_window.end_date}
+                </span>
+              )}
+            </div>
+            {plan.llm_error && (
+              <p className="text-[11px] mt-2" style={{ color: 'var(--text-faint)' }}>
+                Fallback reason: {plan.llm_error}
+              </p>
+            )}
+          </Card>
+        )}
+
         {/* Plan */}
-        {plan && <PlanViewer plan={plan} />}
+        {plan && (
+          <PlanErrorBoundary plan={plan}>
+            <PlanViewer plan={plan} />
+          </PlanErrorBoundary>
+        )}
       </div>
     </DashboardLayout>
   );

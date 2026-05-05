@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { CityProvider } from './context/CityContext';
+import { AnalysisProvider } from './context/AnalysisContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -14,7 +15,6 @@ import AboutPage from './pages/AboutPage';
 import GreenGapPage from './pages/GreenGapPage';
 import ResearchPage from './pages/ResearchPage';
 import CityRankingPage from './pages/CityRankingPage';
-import ModelEvaluationPage from './pages/ModelEvaluationPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -23,6 +23,7 @@ export default function App() {
       <ThemeProvider>
       <AuthProvider>
         <CityProvider>
+        <AnalysisProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -35,9 +36,9 @@ export default function App() {
           <Route path="/green-gap" element={<ProtectedRoute><GreenGapPage /></ProtectedRoute>} />
           <Route path="/research" element={<ProtectedRoute><ResearchPage /></ProtectedRoute>} />
           <Route path="/rankings" element={<ProtectedRoute><CityRankingPage /></ProtectedRoute>} />
-          <Route path="/models" element={<ProtectedRoute><ModelEvaluationPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </AnalysisProvider>
         </CityProvider>
       </AuthProvider>
       </ThemeProvider>

@@ -40,7 +40,6 @@ export default function TrendChart({ data }) {
     type: 'forecast',
   }));
 
-  // Bridge: last historical point gets forecast value too
   if (historicalEntries.length > 0 && forecastEntries.length > 0) {
     const lastHist = historicalEntries[historicalEntries.length - 1];
     lastHist.forecast = lastHist.value;
@@ -48,7 +47,6 @@ export default function TrendChart({ data }) {
 
   const chartData = [...historicalEntries, ...forecastEntries];
   const tickInterval = Math.max(1, Math.floor(chartData.length / 12));
-
   const TrendIcon = trend_direction === 'increasing' ? TrendingUp : TrendingDown;
   const trendColor = trend_direction === 'increasing' ? 'text-red-400' : 'text-emerald-400';
 
@@ -57,7 +55,10 @@ export default function TrendChart({ data }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Trend Prediction</h3>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{model || 'ARIMA'} — {parameter}</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{model || 'Directional trend estimate'} - {parameter}</p>
+          <p className="text-[10px] mt-1" style={{ color: 'var(--text-faint)' }}>
+            {data.date_range?.start || '--'} to {data.date_range?.end || '--'} &middot; {data.historical_points || historicalEntries.length} historical points &middot; {data.forecast_days || 0}-day forecast
+          </p>
         </div>
         <div className={`flex items-center gap-2 ${trendColor}`}>
           <TrendIcon className="h-5 w-5" />

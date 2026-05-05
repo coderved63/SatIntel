@@ -29,9 +29,14 @@ async def run(city: str, analysis: dict) -> dict:
             "hotspot_count": hotspot_data.get("cluster_count", 0),
         }
 
-    # Use the action plan service's template generator
-    plan = action_plan_service._generate_template_plan(city, plan_analysis)
-    plan["source"] = "agent_pipeline"
+    # Prefer the Gemini-backed generator while preserving the same frontend schema.
+    plan = await action_plan_service.generate_action_plan_from_analysis(
+        city,
+        list(plan_analysis.keys()) or ["LST", "NDVI", "NO2", "SOIL_MOISTURE"],
+        {"start_date": "2023-01-01", "end_date": "2024-12-31"},
+        plan_analysis,
+    )
+    plan["source_pipeline"] = "agent_pipeline"
 
     logger.info(f"[ActionPlanAgent] Generated plan with {len(plan.get('findings', []))} findings, "
                 f"{len(plan.get('recommendations', []))} recommendations")

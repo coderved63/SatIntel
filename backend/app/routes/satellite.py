@@ -15,8 +15,8 @@ async def fetch_data(req: SatelliteDataRequest, user: dict = Depends(get_current
     return data
 
 @router.get("/timeseries/{parameter}")
-async def get_timeseries(parameter: str, city: str = "Ahmedabad"):
-    return satellite_service.get_timeseries(parameter, city)
+async def get_timeseries(parameter: str, city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None):
+    return satellite_service.get_timeseries(parameter, city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/grid")
@@ -121,6 +121,7 @@ async def research_query(
         nearby_cities = [nearest_city]
 
     results = {}
+    search_notes = []
 
     for param in param_list:
         all_points = []
@@ -152,6 +153,7 @@ async def research_query(
                 # Take closest points (up to 500)
                 dated.sort(key=lambda x: x["_dist_km"])
                 all_points = dated[:500]
+                search_notes.append(f"{param}: no points inside {radius_km} km, so closest observations from {nearest_city} were used.")
             except Exception:
                 pass
 
@@ -175,11 +177,29 @@ async def research_query(
                 "max": round(max(all_vals), 6),
             }
 
+        top_locations = sorted(all_points, key=lambda d: d.get("_dist_km", 9999))[:5]
+        min_distance = min((d.get("_dist_km", 9999) for d in all_points), default=None)
+        max_distance = max((d.get("_dist_km", 0) for d in all_points), default=None)
+
         results[param] = {
             "total_points": len(all_points),
             "timeseries": timeseries,
             "statistics": stats,
             "raw_data": all_points[:300],
+            "top_locations": top_locations,
+            "distance_km": {
+                "nearest": round(min_distance, 2) if min_distance is not None else None,
+                "farthest": round(max_distance, 2) if max_distance is not None else None,
+            },
+            "date_coverage": {
+                "start": timeseries[0]["date"] if timeseries else None,
+                "end": timeseries[-1]["date"] if timeseries else None,
+                "timestamps": len(timeseries),
+            },
+            "methodology": (
+                "Raw observations were filtered by date and distance from the clicked point. "
+                "The chart shows date-wise averages over all observations found within the query radius."
+            ),
         }
 
     return {
@@ -189,6 +209,11 @@ async def research_query(
         "nearest_city": nearest_city,
         "nearby_cities": nearby_cities,
         "date_range": {"start": start_date, "end": end_date},
+        "methodology": (
+            "Research mode searches raw satellite observations near the selected coordinate. "
+            "If the radius returns nothing, it falls back to the nearest available observations from the nearest city dataset."
+        ),
+        "search_notes": search_notes,
         "parameters": results,
     }
 
@@ -239,9 +264,9 @@ async def get_cache_info():
 
 
 @router.get("/health-score")
-async def get_health_score(city: str = "ahmedabad"):
+async def get_health_score(city: str = "ahmedabad", start_date: str | None = None, end_date: str | None = None):
     from app.services import health_score_service
-    return health_score_service.calculate(city)
+    return health_score_service.calculate(city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/alerts")

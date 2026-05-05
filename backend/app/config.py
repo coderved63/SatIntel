@@ -1,5 +1,8 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from pathlib import Path
+
+BACKEND_DIR = Path(__file__).resolve().parents[1]
 
 class Settings(BaseSettings):
     mongodb_url: str = "mongodb://localhost:27017"
@@ -13,9 +16,12 @@ class Settings(BaseSettings):
     redis_url: str = ""
     anthropic_api_key: str = ""
     openai_api_key: str = ""
+    gemini_api_key: str = ""
+    google_api_key: str = ""
+    gemini_model: str = "gemma-4-31B-it"
 
     class Config:
-        env_file = ".env"
+        env_file = BACKEND_DIR / ".env"
 
 @lru_cache()
 def get_settings() -> Settings:

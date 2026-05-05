@@ -1,15 +1,14 @@
 """
-Urban Heat Island Analysis Service.
-Calculates UHI intensity, identifies heat clusters, and ranks zones by temperature.
+Urban Heat Island analysis with explicit evidence metadata.
 """
-import logging
-import numpy as np
+from __future__ import annotations
+
 from collections import defaultdict
-from app.services import satellite_service
 
-logger = logging.getLogger(__name__)
+import numpy as np
 
-# Approximate Ahmedabad zones
+from app.services import evidence_service, ml_service, satellite_service
+
 ZONE_MAPPING = {
     "City Core": {"lat_range": (23.00, 23.06), "lng_range": (72.53, 72.62)},
     "Industrial East": {"lat_range": (22.95, 23.00), "lng_range": (72.60, 72.70)},
@@ -26,29 +25,24 @@ def _get_zone(lat, lng):
     return "Periphery"
 
 
-def analyse(city: str = "Ahmedabad") -> dict:
-    """Run Urban Heat Island analysis."""
-    lst_data = satellite_service._load_data("LST")
+def analyse(city: str = "Ahmedabad", date_range: dict | None = None) -> dict:
+    resolved = evidence_service.resolve_date_range(date_range, default_window="analytics")
+    lst_data = evidence_service.filter_by_date_range(satellite_service._load_data("LST", city), resolved)
     if not lst_data:
-        return {"city": city, "error": "No LST data available"}
+        return {"city": city, "error": "No LST data available", "analysis_window": resolved}
 
-    # Group by zone
     zone_temps = defaultdict(list)
     all_temps = []
-    for d in lst_data:
-        zone = _get_zone(d["lat"], d["lng"])
-        zone_temps[zone].append(d["value"])
-        all_temps.append(d["value"])
+    for item in lst_data:
+        zone = _get_zone(item["lat"], item["lng"])
+        zone_temps[zone].append(item["value"])
+        all_temps.append(item["value"])
 
-    # UHI intensity: urban core avg - periphery avg
     core_temps = zone_temps.get("City Core", []) + zone_temps.get("Industrial East", [])
     fringe_temps = zone_temps.get("Western Suburbs", []) + zone_temps.get("Periphery", [])
-
     core_avg = np.mean(core_temps) if core_temps else 0
     fringe_avg = np.mean(fringe_temps) if fringe_temps else 0
-    uhi_intensity = round(float(core_avg - fringe_avg), 2)
 
-    # Zone rankings
     zone_rankings = []
     for zone_name, temps in zone_temps.items():
         zone_rankings.append({
@@ -58,22 +52,27 @@ def analyse(city: str = "Ahmedabad") -> dict:
             "min_temp": round(float(np.min(temps)), 1),
             "readings": len(temps),
         })
-    zone_rankings.sort(key=lambda z: z["avg_temp"], reverse=True)
+    zone_rankings.sort(key=lambda zone: zone["avg_temp"], reverse=True)
 
-    # Anomalies and hotspots
-    from app.services import ml_service
-    anomaly_result = ml_service.detect_anomalies("LST", city)
-    hotspot_result = ml_service.find_hotspots("LST", city)
-
-    # Peak temperature
-    peak_temp = round(float(np.max(all_temps)), 1)
-    city_avg = round(float(np.mean(all_temps)), 1)
+    anomaly_result = ml_service.detect_anomalies("LST", city, date_range=resolved)
+    hotspot_result = ml_service.find_hotspots("LST", city, date_range=resolved)
 
     return {
+        **evidence_service.standard_evidence_block(
+            city=city,
+            parameters=["LST"],
+            date_range=resolved,
+            methodology="Zone-based UHI comparison using filtered LST observations plus anomaly and hotspot screening.",
+            interpretation="Urban Heat Island intensity compares core and fringe temperature behavior inside the selected analysis window.",
+            limitations="Administrative zones are approximate and serve as operational screening areas rather than precise ward boundaries.",
+            spatial_basis="Harmonized LST grid grouped into indicative urban zones.",
+            confidence="Moderate confidence for urban heat prioritization; validate micro-climate interventions on the ground.",
+            default_window="analytics",
+        ),
         "city": city,
-        "uhi_intensity_celsius": uhi_intensity,
-        "peak_temp": peak_temp,
-        "city_avg_temp": city_avg,
+        "uhi_intensity_celsius": round(float(core_avg - fringe_avg), 2),
+        "peak_temp": round(float(np.max(all_temps)), 1),
+        "city_avg_temp": round(float(np.mean(all_temps)), 1),
         "urban_avg": round(float(core_avg), 1),
         "fringe_avg": round(float(fringe_avg), 1),
         "zone_rankings": zone_rankings,

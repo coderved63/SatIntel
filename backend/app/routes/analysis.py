@@ -9,38 +9,39 @@ router = APIRouter()
 
 
 @router.get("/vegetation")
-async def vegetation_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
+async def vegetation_analysis(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     from app.services import vegetation_service
-    return vegetation_service.analyse(city)
+    return vegetation_service.analyse(city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/land-conversion")
-async def land_conversion_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
+async def land_conversion_analysis(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     from app.services import land_conversion_service
-    return land_conversion_service.analyse(city)
+    return land_conversion_service.analyse(city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/farmland")
-async def farmland_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
+async def farmland_analysis(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     from app.services import farmland_service
-    return farmland_service.analyse(city)
+    return farmland_service.analyse(city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/heat")
-async def heat_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
+async def heat_analysis(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     from app.services import heat_service
-    return heat_service.analyse(city)
+    return heat_service.analyse(city, {"start_date": start_date, "end_date": end_date})
 
 
 @router.get("/full-report")
-async def full_analysis(city: str = "Ahmedabad", user: dict = Depends(get_current_user)):
+async def full_analysis(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     """Run all 4 analyses and return combined result."""
     from app.services import vegetation_service, land_conversion_service, farmland_service, heat_service
 
+    date_range = {"start_date": start_date, "end_date": end_date}
     return {
         "city": city,
-        "vegetation": vegetation_service.analyse(city),
-        "land_conversion": land_conversion_service.analyse(city),
-        "farmland": farmland_service.analyse(city),
-        "heat": heat_service.analyse(city),
+        "vegetation": vegetation_service.analyse(city, date_range),
+        "land_conversion": land_conversion_service.analyse(city, date_range),
+        "farmland": farmland_service.analyse(city, date_range),
+        "heat": heat_service.analyse(city, date_range),
     }

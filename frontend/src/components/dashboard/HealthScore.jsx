@@ -2,17 +2,20 @@ import { useState, useEffect } from 'react';
 import { useCity } from '../../context/CityContext';
 import { Activity } from 'lucide-react';
 import api from '../../services/api';
+import { useAnalysisContext } from '../../context/AnalysisContext';
+import { displayWindow } from '../../utils/dateRange';
 
 export default function HealthScore() {
   const { city } = useCity();
+  const { dateRange } = useAnalysisContext();
   const [data, setData] = useState(null);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    api.get(`/satellite/health-score?city=${city.key}`)
+    api.get(`/satellite/health-score?city=${city.key}&start_date=${dateRange.start_date}&end_date=${dateRange.end_date}`)
       .then(r => setData(r.data))
       .catch(() => setData(null));
-  }, [city.key]);
+  }, [city.key, dateRange.start_date, dateRange.end_date]);
 
   if (!data) return null;
 
@@ -22,7 +25,7 @@ export default function HealthScore() {
 
   return (
     <div
-      className="rounded-2xl p-4 transition-all duration-300"
+      className="rounded-2xl p-4 transition-all duration-300 space-y-4"
       style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}
     >
       <div className="flex items-center gap-4">
@@ -62,6 +65,9 @@ export default function HealthScore() {
               <span className="text-lg font-bold" style={{ color: data.overall_color }}>{data.overall_grade}</span>
               <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{data.overall_label}</span>
             </div>
+            <p className="text-[11px] mt-1" style={{ color: 'var(--text-faint)' }}>
+              Score window: {displayWindow(data.analysis_window || dateRange)}
+            </p>
           </div>
         </div>
 
@@ -90,6 +96,61 @@ export default function HealthScore() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <div className="rounded-xl p-3" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--bg-card-border)' }}>
+          <p className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
+            How this score is measured
+          </p>
+          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+            {data.score_formula}
+          </p>
+          <p className="text-[11px] mt-2" style={{ color: 'var(--text-faint)' }}>
+            {data.methodology}
+          </p>
+        </div>
+        <div className="rounded-xl p-3" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--bg-card-border)' }}>
+          <p className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
+            How to read it
+          </p>
+          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+            {data.interpretation_summary}
+          </p>
+          <p className="text-[11px] mt-2" style={{ color: 'var(--text-faint)' }}>
+            {data.limitations}
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {data.parameter_scores?.map(metric => (
+          <div
+            key={metric.parameter}
+            className="rounded-xl p-3"
+            style={{ background: 'var(--bg-secondary)', border: '1px solid var(--bg-card-border)' }}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{metric.name}</p>
+                <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{metric.metric_label}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-semibold" style={{ color: metric.color }}>{Math.round(metric.score)}/100</p>
+                <p className="text-[11px]" style={{ color: 'var(--text-faint)' }}>Weight {Math.round(metric.weight * 100)}%</p>
+              </div>
+            </div>
+            <p className="text-xs mt-2" style={{ color: 'var(--text-secondary)' }}>
+              Mean observed value: {metric.mean_value == null ? 'No valid observations in selected window' : `${metric.mean_value} ${metric.unit || ''}`}
+            </p>
+            <p className="text-[11px] mt-1" style={{ color: 'var(--text-faint)' }}>
+              Coverage: {metric.data_coverage?.start_date || '--'} to {metric.data_coverage?.end_date || '--'} | {metric.data_coverage?.timestamp_count || 0} timestamps
+            </p>
+            <p className="text-[11px] mt-1" style={{ color: 'var(--text-faint)' }}>
+              {metric.how_calculated}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

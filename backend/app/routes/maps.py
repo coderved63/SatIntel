@@ -5,12 +5,12 @@ from app.services import satellite_service
 router = APIRouter()
 
 @router.get("/heatmap/{parameter}")
-async def get_heatmap(parameter: str, city: str = "Ahmedabad"):
-    return satellite_service.get_heatmap_data(parameter, city)
+async def get_heatmap(parameter: str, city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None):
+    return satellite_service.get_heatmap_data(parameter, city, {"start_date": start_date, "end_date": end_date})
 
 @router.get("/layers")
-async def get_layers(city: str = "Ahmedabad"):
-    return satellite_service.get_all_layers(city)
+async def get_layers(city: str = "Ahmedabad", start_date: str | None = None, end_date: str | None = None):
+    return satellite_service.get_all_layers(city, {"start_date": start_date, "end_date": end_date})
 
 @router.get("/land-use-change")
 async def get_land_use_change(city: str = "Ahmedabad"):

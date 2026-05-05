@@ -24,7 +24,7 @@ export default function AboutPage() {
           <h2 className="text-lg font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Multi-Agent Architecture</h2>
           <div className="space-y-3" style={{ color: 'var(--text-secondary)' }}>
             <p><span className="text-cyan-400 font-medium">Data Agent</span> — Fetches and harmonizes satellite data from Google Earth Engine</p>
-            <p><span className="text-emerald-400 font-medium">Analysis Agent</span> — Runs Isolation Forest, ARIMA, and DBSCAN ML models</p>
+            <p><span className="text-emerald-400 font-medium">Analysis Agent</span> — Runs anomaly screening, hotspot clustering, and evidence synthesis across harmonized satellite layers</p>
             <p><span className="text-amber-400 font-medium">Action Plan Agent</span> — Generates city-specific recommendations using LLM</p>
           </div>
         </Card>

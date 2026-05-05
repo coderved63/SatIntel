@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, users, satellite, analytics, maps, action_plan, data, health, analysis, green_gap, time_machine
+from app.routes import auth, users, satellite, analytics, maps, action_plan, data, health, analysis, green_gap, time_machine, copilot
 
 app = FastAPI(
     title="Satellite Environmental Intelligence Platform",
@@ -27,6 +27,7 @@ app.include_router(data.router, prefix="/api/v1/data", tags=["Data"])
 app.include_router(analysis.router, prefix="/api/v1/analysis", tags=["Specialized Analysis"])
 app.include_router(green_gap.router, prefix="/api/v1/green-gap", tags=["Green Gap Analysis"])
 app.include_router(time_machine.router, prefix="/api/v1/time-machine", tags=["Time Machine"])
+app.include_router(copilot.router, prefix="/api/v1/copilot", tags=["Saarthi Copilot"])
 
 @app.on_event("startup")
 async def startup():

@@ -6,6 +6,6 @@ router = APIRouter()
 
 
 @router.get("/analyse")
-async def analyse_green_gap(city: str = "ahmedabad", user: dict = Depends(get_current_user)):
+async def analyse_green_gap(city: str = "ahmedabad", start_date: str | None = None, end_date: str | None = None, user: dict = Depends(get_current_user)):
     from app.services import green_gap_service
-    return green_gap_service.analyse(city)
+    return green_gap_service.analyse(city, {"start_date": start_date, "end_date": end_date})

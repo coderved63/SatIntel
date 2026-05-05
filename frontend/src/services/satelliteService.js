@@ -1,4 +1,5 @@
 import api from './api';
+import { toApiParams } from '../utils/dateRange';
 
 export const satelliteService = {
   async fetchData(city = 'ahmedabad', parameters = ['LST', 'NDVI', 'NO2', 'SOIL_MOISTURE'], dateRange = {}) {
@@ -11,8 +12,8 @@ export const satelliteService = {
     return data;
   },
 
-  async getTimeSeries(parameter, city = 'ahmedabad') {
-    const { data } = await api.get(`/satellite/timeseries/${parameter}?city=${city}`);
+  async getTimeSeries(parameter, city = 'ahmedabad', dateRange) {
+    const { data } = await api.get(`/satellite/timeseries/${parameter}`, { params: { city, ...toApiParams(dateRange) } });
     return data;
   },
 };

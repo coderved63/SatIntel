@@ -12,3 +12,4 @@ scikit-learn>=1.4.0
 statsmodels>=0.14.0
 python-dotenv>=1.0.0
 redis
+google-genai>=1.0.0

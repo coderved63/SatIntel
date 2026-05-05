@@ -43,7 +43,6 @@ export default function HotspotMap({ data }) {
     if (!data?.hotspots?.length) return [];
 
     return [
-      // Outer glow ring
       new ScatterplotLayer({
         id: 'hotspot-outer',
         data: data.hotspots,
@@ -56,7 +55,6 @@ export default function HotspotMap({ data }) {
         pickable: true,
         radiusUnits: 'meters',
       }),
-      // Inner point
       new ScatterplotLayer({
         id: 'hotspot-center',
         data: data.hotspots,
@@ -75,8 +73,9 @@ export default function HotspotMap({ data }) {
       html: `<div style="padding:8px;font-size:12px;">
         <b>Cluster #${object.cluster_id}</b><br/>
         Severity: <span style="text-transform:capitalize">${object.severity}</span><br/>
-        Points: ${object.num_points}<br/>
+        Cells: ${object.num_points}<br/>
         Avg Value: ${object.avg_value}<br/>
+        Value Range: ${object.min_value} to ${object.max_value}<br/>
         Center: (${object.center_lat}, ${object.center_lng})
       </div>`,
       style: {
@@ -98,7 +97,10 @@ export default function HotspotMap({ data }) {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Hotspot Clusters</h3>
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>DBSCAN Clustering — {parameter}</p>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>DBSCAN clustering - {parameter}</p>
+            <p className="text-[10px] mt-1" style={{ color: 'var(--text-faint)' }}>
+              Threshold {data.threshold ?? '--'} &middot; extreme cells {data.hot_points ?? '--'} &middot; years {data.date_basis?.start_year || '--'} to {data.date_basis?.end_year || '--'}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-orange-400">{cluster_count}</p>
@@ -124,7 +126,6 @@ export default function HotspotMap({ data }) {
         </div>
       </Card>
 
-      {/* Hotspot List */}
       {hotspots.length > 0 && (
         <Card>
           <h3 className="text-sm font-medium mb-3" style={{ color: 'var(--text-muted)' }}>Cluster Details</h3>
@@ -135,6 +136,9 @@ export default function HotspotMap({ data }) {
                 <div className="flex-1">
                   <span className="text-sm" style={{ color: 'var(--text-primary)' }}>Cluster #{h.cluster_id}</span>
                   <span className="text-xs ml-2" style={{ color: 'var(--text-muted)' }}>({h.center_lat}, {h.center_lng})</span>
+                  <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-faint)' }}>
+                    Avg {h.avg_value} | Range {h.min_value} to {h.max_value} | {h.months_covered || 0} months
+                  </p>
                 </div>
                 <span className="text-xs px-2 py-0.5 rounded-full capitalize" style={{
                   backgroundColor: `${severityHex[h.severity]}20`,
@@ -142,7 +146,7 @@ export default function HotspotMap({ data }) {
                 }}>
                   {h.severity}
                 </span>
-                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{h.num_points} pts</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{h.num_points} cells</span>
               </div>
             ))}
           </div>

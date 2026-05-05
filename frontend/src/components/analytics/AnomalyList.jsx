@@ -8,22 +8,22 @@ const SEVERITY = {
 };
 
 function describeAnomaly(parameter, value, severity) {
-  const s = severity === 'critical' ? 'extreme' : severity === 'high' ? 'significant' : 'notable';
+  const scale = severity === 'critical' ? 'extreme' : severity === 'high' ? 'significant' : 'notable';
   const descriptions = {
-    LST: `${s} surface temperature of ${value}°C — indicates urban heat island stress`,
+    LST: `${scale} surface temperature of ${value}°C - indicates urban heat island stress`,
     NDVI: value < 0.2
-      ? `${s} vegetation decline (NDVI ${value}) — possible deforestation or drought`
-      : `${s} NDVI spike (${value}) — unusual greening event detected`,
-    NO2: `${s} NO₂ concentration (${value} mol/m²) — elevated pollution from industrial/traffic sources`,
-    SO2: `${s} SO₂ level (${value} mol/m²) — industrial emission spike detected`,
-    CO: `${s} CO level (${value} mol/m²) — combustion or biomass burning indicator`,
-    O3: `${s} ozone column (${value} mol/m²) — atmospheric chemistry anomaly`,
-    AEROSOL: `${s} aerosol index (${value}) — dust storm, haze, or smoke event`,
+      ? `${scale} vegetation decline (NDVI ${value}) - possible deforestation or drought`
+      : `${scale} NDVI spike (${value}) - unusual greening event detected`,
+    NO2: `${scale} NO2 concentration (${value} mol/m²) - elevated pollution from industrial or traffic sources`,
+    SO2: `${scale} SO2 level (${value} mol/m²) - industrial emission spike detected`,
+    CO: `${scale} CO level (${value} mol/m²) - combustion or biomass burning indicator`,
+    O3: `${scale} ozone column (${value} mol/m²) - atmospheric chemistry anomaly`,
+    AEROSOL: `${scale} aerosol index (${value}) - dust storm, haze, or smoke event`,
     SOIL_MOISTURE: value < 0.1
-      ? `${s} soil moisture deficit (${value} m³/m³) — drought risk for agriculture`
-      : `${s} soil saturation (${value} m³/m³) — potential waterlogging or flood risk`,
+      ? `${scale} soil moisture deficit (${value} m³/m³) - drought risk for agriculture`
+      : `${scale} soil saturation (${value} m³/m³) - potential waterlogging or flood risk`,
   };
-  return descriptions[parameter] || `${s} anomaly detected — value ${value} deviates from expected range`;
+  return descriptions[parameter] || `${scale} anomaly detected - value ${value} deviates from expected range`;
 }
 
 export default function AnomalyList({ data }) {
@@ -32,24 +32,29 @@ export default function AnomalyList({ data }) {
   if (!data) return null;
   const { anomalies = [], total_points, anomaly_count, parameter } = data;
 
-  // Count by severity
   const counts = useMemo(() => {
-    const c = { critical: 0, high: 0, moderate: 0 };
-    anomalies.forEach(a => { if (c[a.severity] !== undefined) c[a.severity]++; });
-    return c;
+    const summary = { critical: 0, high: 0, moderate: 0 };
+    anomalies.forEach(anomaly => {
+      if (summary[anomaly.severity] !== undefined) summary[anomaly.severity] += 1;
+    });
+    return summary;
   }, [anomalies]);
 
   const filtered = activeFilter === 'all'
     ? anomalies
-    : anomalies.filter(a => a.severity === activeFilter);
+    : anomalies.filter(anomaly => anomaly.severity === activeFilter);
 
   return (
     <div className="space-y-5">
-      {/* Header */}
       <div className="flex items-end justify-between">
         <div>
           <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Anomaly Detection</h3>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-faint)' }}>Isolation Forest &middot; {parameter} &middot; {total_points?.toLocaleString()} data points analyzed</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-faint)' }}>
+            Isolation Forest &middot; {parameter} &middot; {total_points?.toLocaleString()} data points analyzed
+          </p>
+          <p className="text-[10px] mt-1" style={{ color: 'var(--text-faint)' }}>
+            Date range: {data.date_range?.start || '--'} to {data.date_range?.end || '--'} &middot; baseline mean {data.baseline_mean ?? '--'} &middot; std {data.baseline_std ?? '--'}
+          </p>
         </div>
         <div className="text-right">
           <p className="text-3xl font-bold tracking-tight" style={{ color: anomaly_count > 100 ? '#EF4444' : '#EAB308' }}>
@@ -59,7 +64,6 @@ export default function AnomalyList({ data }) {
         </div>
       </div>
 
-      {/* Severity Filter Pills */}
       <div className="flex items-center gap-2">
         <Filter className="h-3.5 w-3.5" style={{ color: 'var(--text-faint)' }} />
         <button
@@ -89,7 +93,6 @@ export default function AnomalyList({ data }) {
         ))}
       </div>
 
-      {/* Anomaly List */}
       {filtered.length === 0 ? (
         <div className="text-center py-12 text-sm" style={{ color: 'var(--text-faint)' }}>No anomalies in this category</div>
       ) : (
@@ -102,8 +105,12 @@ export default function AnomalyList({ data }) {
                 key={idx}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
                 style={{ borderLeft: `3px solid ${cfg.color}30` }}
-                onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-card-hover)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--bg-card-hover)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent';
+                }}
               >
                 <div className="flex items-center justify-center w-8 h-8 rounded-lg" style={{ background: `${cfg.color}10` }}>
                   <Icon className="h-4 w-4" style={{ color: cfg.color }} />

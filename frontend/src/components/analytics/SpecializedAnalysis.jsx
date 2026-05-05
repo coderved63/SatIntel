@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Leaf, Building2, Wheat, Thermometer, Info } from 'lucide-react';
 import Loader from '../common/Loader';
 import { analysisService } from '../../services/analysisService';
-import { Leaf, Building2, Wheat, Thermometer, TrendingDown, TrendingUp, AlertTriangle } from 'lucide-react';
+import { useCity } from '../../context/CityContext';
+import { useAnalysisContext } from '../../context/AnalysisContext';
 
 function MetricCard({ label, value, color, sub }) {
   return (
@@ -13,7 +15,7 @@ function MetricCard({ label, value, color, sub }) {
   );
 }
 
-function AnalysisSection({ title, icon: Icon, color, metrics, insights }) {
+function AnalysisSection({ title, icon: Icon, color, metrics, insights, notes }) {
   return (
     <div className="rounded-2xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
       <div className="flex items-center gap-2.5 mb-4">
@@ -23,11 +25,9 @@ function AnalysisSection({ title, icon: Icon, color, metrics, insights }) {
         <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
       </div>
       <div className="grid grid-cols-3 gap-2 mb-3">
-        {metrics.map((m, i) => (
-          <MetricCard key={i} label={m.label} value={m.value} color={m.color || 'var(--text-primary)'} sub={m.sub} />
-        ))}
+        {metrics.map((metric, i) => <MetricCard key={i} label={metric.label} value={metric.value} color={metric.color || 'var(--text-primary)'} sub={metric.sub} />)}
       </div>
-      {insights && (
+      {insights?.length > 0 && (
         <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--bg-card-border)' }}>
           {insights.map((insight, i) => (
             <div key={i} className="flex items-center gap-2 py-1">
@@ -37,11 +37,24 @@ function AnalysisSection({ title, icon: Icon, color, metrics, insights }) {
           ))}
         </div>
       )}
+      {notes?.length > 0 && (
+        <div className="mt-3 rounded-xl p-3" style={{ background: 'var(--bg-card-hover)' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <Info className="h-3.5 w-3.5" style={{ color: 'var(--text-faint)' }} />
+            <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-faint)' }}>How To Read This Section</p>
+          </div>
+          <div className="space-y-1.5">
+            {notes.map((note, i) => <p key={i} className="text-xs" style={{ color: 'var(--text-muted)' }}>{note}</p>)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function SpecializedAnalysis() {
+  const { city } = useCity();
+  const { dateRange } = useAnalysisContext();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,7 +63,7 @@ export default function SpecializedAnalysis() {
     (async () => {
       setLoading(true);
       try {
-        const result = await analysisService.getFullReport();
+        const result = await analysisService.getFullReport(city.key, dateRange);
         setData(result);
       } catch (err) {
         setError(err.message || 'Failed to load analysis');
@@ -58,7 +71,7 @@ export default function SpecializedAnalysis() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [city.key, dateRange.start_date, dateRange.end_date]);
 
   if (loading) return <div className="py-16"><Loader text="Running specialized analyses..." /></div>;
   if (error) return <p className="text-red-400 text-sm py-8">{error}</p>;
@@ -70,77 +83,103 @@ export default function SpecializedAnalysis() {
   const heat = data.heat || {};
 
   return (
-    <div className="grid md:grid-cols-2 gap-4">
-      <AnalysisSection
-        title="Vegetation Loss"
-        icon={Leaf}
-        color="#10B981"
-        metrics={[
-          { label: 'NDVI Decline', value: `${veg.ndvi_decline_pct || 0}%`, color: veg.ndvi_decline_pct > 0 ? '#EF4444' : '#10B981' },
-          { label: 'Area Lost', value: `${veg.area_lost_sqkm || 0} km\u00B2`, color: '#F59E0B' },
-          { label: 'Current NDVI', value: veg.current_city_ndvi || '--', color: '#10B981' },
-        ]}
-        insights={[
-          { text: `${veg.critical_zones || 0} critical zones identified`, color: '#EF4444' },
-          { text: `${veg.anomaly_count || 0} anomalies detected`, color: '#F59E0B' },
-          { text: `${(veg.clusters || []).length} spatial clusters`, color: '#3B82F6' },
-        ]}
-      />
+    <div className="space-y-4">
+      <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)' }}>
+        <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Domain analysis context</p>
+        <div className="grid md:grid-cols-3 gap-3 text-xs">
+          <div>
+            <p style={{ color: 'var(--text-secondary)' }}>Coverage</p>
+            <p style={{ color: 'var(--text-muted)' }}>These panels summarize city-scale diagnostics derived from the backend analytics pipeline for the active city and window.</p>
+          </div>
+          <div>
+            <p style={{ color: 'var(--text-secondary)' }}>What the metrics mean</p>
+            <p style={{ color: 'var(--text-muted)' }}>Each card turns satellite indicators into interpretable counts, areas, and stress signals rather than leaving them as raw raster values.</p>
+          </div>
+          <div>
+            <p style={{ color: 'var(--text-secondary)' }}>How to use them</p>
+            <p style={{ color: 'var(--text-muted)' }}>Use these sections to identify the dominant environmental issue, then pair them with hotspots, rankings, and action plans for intervention design.</p>
+          </div>
+        </div>
+      </div>
 
-      <AnalysisSection
-        title="Land Conversion"
-        icon={Building2}
-        color="#94A3B8"
-        metrics={[
-          { label: 'Cells Changed', value: land.total_cells_changed || 0, color: '#F59E0B' },
-          { label: 'Area Changed', value: `${land.total_area_sqkm || 0} km\u00B2`, color: '#EF4444' },
-          { label: 'Rapid Conv.', value: land.rapid_conversions || 0, color: '#EF4444' },
-        ]}
-        insights={
-          land.conversion_breakdown
-            ? Object.entries(land.conversion_breakdown).slice(0, 4).map(([key, count]) => ({
-                text: `${key.replace(/_/g, ' ')}: ${count}`,
-                color: '#94A3B8',
-              }))
-            : []
-        }
-      />
+      <div className="grid md:grid-cols-2 gap-4">
+        <AnalysisSection
+          title="Vegetation Loss"
+          icon={Leaf}
+          color="#10B981"
+          metrics={[
+            { label: 'NDVI Decline', value: `${veg.ndvi_decline_pct || 0}%`, color: veg.ndvi_decline_pct > 0 ? '#EF4444' : '#10B981' },
+            { label: 'Area Lost', value: `${veg.area_lost_sqkm || 0} km²`, color: '#F59E0B' },
+            { label: 'Current NDVI', value: veg.current_city_ndvi || '--', color: '#10B981' },
+          ]}
+          insights={[
+            { text: `${veg.critical_zones || 0} critical zones identified`, color: '#EF4444' },
+            { text: `${veg.anomaly_count || 0} anomalies detected`, color: '#F59E0B' },
+            { text: `${(veg.clusters || []).length} spatial clusters`, color: '#3B82F6' },
+          ]}
+          notes={[
+            'NDVI decline compares earlier and later portions of the selected window to highlight sustained greening loss rather than one noisy date.',
+            'Critical zones indicate places where vegetation stress is both spatially concentrated and materially below expected city conditions.',
+          ]}
+        />
 
-      <AnalysisSection
-        title="Farmland Analysis"
-        icon={Wheat}
-        color="#EAB308"
-        metrics={[
-          { label: 'Zones Analyzed', value: farm.total_zones_analyzed || 0, color: '#3B82F6' },
-          { label: 'Suspicious', value: farm.total_suspicious_zones || 0, color: '#EF4444' },
-          { label: 'Susp. Area', value: `${farm.total_suspicious_area_sqkm || 0} km\u00B2`, color: '#F97316' },
-        ]}
-        insights={[
-          { text: `Active farmland: ${farm.classifications?.active_farmland || 0}`, color: '#10B981' },
-          { text: `Idle land: ${farm.classifications?.idle_land || 0}`, color: '#EAB308' },
-          { text: `Barren/converted: ${farm.classifications?.barren_or_converted || 0}`, color: '#EF4444' },
-        ]}
-      />
+        <AnalysisSection
+          title="Land Conversion"
+          icon={Building2}
+          color="#94A3B8"
+          metrics={[
+            { label: 'Cells Changed', value: land.total_cells_changed || 0, color: '#F59E0B' },
+            { label: 'Area Changed', value: `${land.total_area_sqkm || 0} km²`, color: '#EF4444' },
+            { label: 'Rapid Conv.', value: land.rapid_conversions || 0, color: '#EF4444' },
+          ]}
+          insights={land.conversion_breakdown ? Object.entries(land.conversion_breakdown).slice(0, 4).map(([key, count]) => ({ text: `${key.replace(/_/g, ' ')}: ${count}`, color: '#94A3B8' })) : []}
+          notes={[
+            'Land-conversion totals summarize grid cells whose class changed meaningfully across the annual comparison period.',
+            'Rapid conversions deserve extra review because they can indicate abrupt construction, clearance, or other high-impact land transitions.',
+          ]}
+        />
 
-      <AnalysisSection
-        title="Urban Heat Island"
-        icon={Thermometer}
-        color="#EF4444"
-        metrics={[
-          { label: 'UHI Intensity', value: `${heat.uhi_intensity_celsius || 0}°C`, color: '#EF4444' },
-          { label: 'Peak Temp', value: `${heat.peak_temp || '--'}°C`, color: '#F97316' },
-          { label: 'City Average', value: `${heat.city_avg_temp || '--'}°C`, color: '#EAB308' },
-        ]}
-        insights={[
-          { text: `Urban core: ${heat.urban_avg || '--'}°C | Fringe: ${heat.fringe_avg || '--'}°C`, color: '#F97316' },
-          { text: `${heat.anomaly_count || 0} heat anomalies`, color: '#EF4444' },
-          { text: `${heat.hotspot_count || 0} hotspot clusters`, color: '#EAB308' },
-          ...(heat.zone_rankings || []).slice(0, 2).map(z => ({
-            text: `${z.zone}: ${z.avg_temp}°C`,
-            color: z.avg_temp > 35 ? '#EF4444' : '#94A3B8',
-          })),
-        ]}
-      />
+        <AnalysisSection
+          title="Farmland Analysis"
+          icon={Wheat}
+          color="#EAB308"
+          metrics={[
+            { label: 'Zones Analyzed', value: farm.total_zones_analyzed || 0, color: '#3B82F6' },
+            { label: 'Suspicious', value: farm.total_suspicious_zones || 0, color: '#EF4444' },
+            { label: 'Susp. Area', value: `${farm.total_suspicious_area_sqkm || 0} km²`, color: '#F97316' },
+          ]}
+          insights={[
+            { text: `Active farmland: ${farm.classifications?.active_farmland || 0}`, color: '#10B981' },
+            { text: `Idle land: ${farm.classifications?.idle_land || 0}`, color: '#EAB308' },
+            { text: `Barren or converted: ${farm.classifications?.barren_or_converted || 0}`, color: '#EF4444' },
+          ]}
+          notes={[
+            'Suspicious farmland zones are places where vegetation and land-surface behavior no longer resemble healthy agricultural cycles.',
+            'This is a screening layer, so flagged areas should be cross-checked with land-conversion outputs and local knowledge before enforcement decisions.',
+          ]}
+        />
+
+        <AnalysisSection
+          title="Urban Heat Island"
+          icon={Thermometer}
+          color="#EF4444"
+          metrics={[
+            { label: 'UHI Intensity', value: `${heat.uhi_intensity_celsius || 0}°C`, color: '#EF4444' },
+            { label: 'Peak Temp', value: `${heat.peak_temp || '--'}°C`, color: '#F97316' },
+            { label: 'City Average', value: `${heat.city_avg_temp || '--'}°C`, color: '#EAB308' },
+          ]}
+          insights={[
+            { text: `Urban core: ${heat.urban_avg || '--'}°C | Fringe: ${heat.fringe_avg || '--'}°C`, color: '#F97316' },
+            { text: `${heat.anomaly_count || 0} heat anomalies`, color: '#EF4444' },
+            { text: `${heat.hotspot_count || 0} hotspot clusters`, color: '#EAB308' },
+            ...(heat.zone_rankings || []).slice(0, 2).map(zone => ({ text: `${zone.zone}: ${zone.avg_temp}°C`, color: zone.avg_temp > 35 ? '#EF4444' : '#94A3B8' })),
+          ]}
+          notes={[
+            'UHI intensity compares the urban core against surrounding fringe conditions to estimate how much extra heat the built-up surface is retaining.',
+            'Hotspot counts and anomalies should be read together: clusters show spatial concentration, while anomalies show unusual dates in the city timeline.',
+          ]}
+        />
+      </div>
     </div>
   );
 }

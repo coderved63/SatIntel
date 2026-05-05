@@ -11,6 +11,7 @@ import ExportButton from '../components/common/ExportButton';
 import { exportToCsv } from '../utils/exportCsv';
 
 const severityColor = (s) => s === 'critical' ? '#dc2626' : s === 'high' ? '#f59e0b' : '#16a34a';
+const fmt = (value, digits = 1) => Number(value ?? 0).toFixed(digits);
 
 export default function GreenGapPage() {
   const { city } = useCity();
@@ -22,8 +23,12 @@ export default function GreenGapPage() {
   useEffect(() => {
     setLoading(true);
     setSelected(null);
+    setError(null);
     greenGapService.analyse(city.key)
-      .then(setData)
+      .then(result => {
+        setData(result);
+        setSelected(result?.top_50_sites?.[0] || null);
+      })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, [city.key]);
@@ -44,6 +49,7 @@ export default function GreenGapPage() {
 
   const top50 = data?.top_50_sites || [];
   const reg = data?.regression;
+  const targetNdvi = data?.target_ndvi ?? 0.45;
 
   return (
     <DashboardLayout>
@@ -65,12 +71,12 @@ export default function GreenGapPage() {
           </Card>
           <Card padding="p-4 text-center">
             <TrendingDown className="h-5 w-5 text-emerald-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.avg_projected_cooling || 0}°C</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{fmt(data?.avg_projected_cooling, 2)}°C</p>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Avg Projected Cooling</p>
           </Card>
           <Card padding="p-4 text-center">
             <Thermometer className="h-5 w-5 text-emerald-400 mx-auto mb-1" />
-            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data?.max_projected_cooling || 0}°C</p>
+            <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{fmt(data?.max_projected_cooling, 2)}°C</p>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Max Possible Cooling</p>
           </Card>
           <Card padding="p-4 text-center">
@@ -92,6 +98,7 @@ export default function GreenGapPage() {
               <span>Slope ({'\u03B2\u2081'}) = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.beta1}</span></span>
               <span>R² = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.r_squared}</span></span>
               <span>Sample = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{reg.sample_size} cells</span></span>
+              <span>Target NDVI = <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{targetNdvi}</span></span>
             </div>
           </Card>
         )}
@@ -127,8 +134,9 @@ export default function GreenGapPage() {
                     <Popup>
                       <div className="text-xs">
                         <strong>#{i + 1} — {site.severity}</strong><br />
-                        Cooling: -{site.projected_cooling}°C<br />
-                        NDVI: {site.current_ndvi} | Temp: {site.current_lst}°C
+                        Cooling: -{fmt(site.projected_cooling, 2)}°C<br />
+                        NDVI: {site.current_ndvi} to {site.target_ndvi || targetNdvi}<br />
+                        Temp: {fmt(site.current_lst)}°C to {fmt(site.projected_new_lst)}°C
                       </div>
                     </Popup>
                   </CircleMarker>
@@ -162,19 +170,19 @@ export default function GreenGapPage() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <div className="bg-red-500/10 rounded-lg p-3 text-center">
                     <p className="text-xs text-red-400">Current</p>
-                    <p className="text-xl font-bold text-red-400">{selected.current_lst}°C</p>
+                    <p className="text-xl font-bold text-red-400">{fmt(selected.current_lst)}°C</p>
                     <p className="text-xs text-red-400/60">NDVI {selected.current_ndvi}</p>
                   </div>
                   <div className="bg-emerald-500/10 rounded-lg p-3 text-center">
                     <p className="text-xs text-emerald-400">After Planting</p>
-                    <p className="text-xl font-bold text-emerald-400">{selected.projected_new_lst}°C</p>
-                    <p className="text-xs text-emerald-400/60">NDVI target 0.35</p>
+                    <p className="text-xl font-bold text-emerald-400">{fmt(selected.projected_new_lst)}°C</p>
+                    <p className="text-xs text-emerald-400/60">NDVI target {selected.target_ndvi || targetNdvi}</p>
                   </div>
                 </div>
 
                 {/* Impact */}
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 mb-3 text-center">
-                  <p className="text-3xl font-bold text-emerald-400">-{selected.projected_cooling}°C</p>
+                  <p className="text-3xl font-bold text-emerald-400">-{fmt(selected.projected_cooling, 2)}°C</p>
                   <p className="text-xs text-emerald-400/60 mt-1">Projected surface temperature reduction</p>
                 </div>
 
@@ -212,7 +220,10 @@ export default function GreenGapPage() {
                   { key: 'lng', label: 'Longitude' },
                   { key: 'current_ndvi', label: 'Current NDVI' },
                   { key: 'current_lst', label: 'Current LST (C)' },
+                  { key: 'target_ndvi', label: 'Target NDVI' },
+                  { key: 'ndvi_gap', label: 'NDVI Gap' },
                   { key: 'projected_cooling', label: 'Projected Cooling (C)' },
+                  { key: 'projected_new_lst', label: 'Projected LST After Planting (C)' },
                   { key: 'priority_score', label: 'Priority Score' },
                   { key: 'severity', label: 'Severity' },
                   { key: 'recommended_species', label: 'Recommended Species' },
@@ -237,10 +248,10 @@ export default function GreenGapPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between">
                         <span className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>{site.lat.toFixed(3)}°N, {site.lng.toFixed(3)}°E</span>
-                        <span className="text-xs font-semibold text-emerald-400">-{site.projected_cooling}°C</span>
+                        <span className="text-xs font-semibold text-emerald-400">-{fmt(site.projected_cooling, 2)}°C</span>
                       </div>
                       <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                        NDVI: {site.current_ndvi} | {site.current_lst}°C | {site.land_class}
+                        NDVI: {site.current_ndvi} to {site.target_ndvi || targetNdvi} | {fmt(site.current_lst)}°C | {site.land_class}
                       </div>
                     </div>
                   </button>

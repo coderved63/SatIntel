@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(du -sh \"c:/Users/Vedantnew/OneDrive/Desktop/ps4/data/\"/*/)",
+      "Read(//c/Users/Vedantnew/**)",
+      "Bash(cp -r c:/Users/Vedantnew/OneDrive/Desktop/ps4/backend/app c:/Users/Vedantnew/OneDrive/Desktop/Satintel/app)",
+      "Bash(cp c:/Users/Vedantnew/OneDrive/Desktop/ps4/backend/requirements.txt c:/Users/Vedantnew/OneDrive/Desktop/Satintel/requirements.txt)",
+      "Bash(cp c:/Users/Vedantnew/OneDrive/Desktop/ps4/backend/Dockerfile c:/Users/Vedantnew/OneDrive/Desktop/Satintel/Dockerfile)",
+      "Bash(cp -r c:/Users/Vedantnew/OneDrive/Desktop/ps4/data c:/Users/Vedantnew/OneDrive/Desktop/Satintel/data)",
+      "Bash(rm -rf c:/Users/Vedantnew/OneDrive/Desktop/Satintel/data/raw c:/Users/Vedantnew/OneDrive/Desktop/Satintel/data/processed c:/Users/Vedantnew/OneDrive/Desktop/Satintel/data/generate_data.py)",
+      "Bash(find c:/Users/Vedantnew/OneDrive/Desktop/Satintel -type d -name __pycache__ -exec rm -rf '{}' +)",
+      "Bash(find . -name \".env*\" -not -path \"./.git/*\")",
+      "Bash(find . -name \"*.json\" -path \"*/gee*\")",
+      "Bash(curl -s \"http://localhost:8000/api/v1/maps/heatmap/LST?city=ahmedabad\")",
+      "Bash(curl -s \"http://localhost:8000/api/v1/maps/heatmap/NDVI?city=ahmedabad\")",
+      "Bash(curl -s \"http://localhost:5173/api/v1/maps/heatmap/LST?city=ahmedabad\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://mv63-satintel.hf.space/api/v1/health\")",
+      "Bash(curl -s \"https://mv63-satintel.hf.space/api/v1/maps/heatmap/LST?city=ahmedabad\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Vedantnew\\OneDrive\\Desktop\\Satintel"
+    ]
+  }
+}

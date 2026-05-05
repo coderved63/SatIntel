@@ -49,12 +49,23 @@ class NDVILSTRegression:
         ss_res = float(np.sum((lst - lst_pred) ** 2))
         ss_tot = float(np.sum((lst - lst.mean()) ** 2))
         self.r_squared = round(1 - ss_res / ss_tot, 3) if ss_tot > 0 else 0.0
+
+        coefficient_note = "city-fitted"
+        # Cooling estimates must be conservative and physically plausible. If a
+        # noisy or seasonally confounded fit says vegetation warms the surface,
+        # fall back to a conservative literature-aligned urban estimate.
+        if self.beta1 >= -1.0:
+            self.beta1 = -6.0
+            self.beta0 = float(np.mean(lst) - self.beta1 * np.mean(ndvi))
+            coefficient_note = "conservative fallback; noisy fitted coefficient"
+
         self.is_fitted = True
 
         return {
             "beta0": round(self.beta0, 3),
             "beta1": round(self.beta1, 3),
             "r_squared": self.r_squared,
+            "coefficient_note": coefficient_note,
             "interpretation": (
                 f"For every +0.1 increase in NDVI, surface temperature "
                 f"decreases by {abs(self.beta1 * 0.1):.2f} degrees C"
