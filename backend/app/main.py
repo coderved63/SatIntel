@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.routes import auth, users, satellite, analytics, maps, action_plan, data, health, analysis, green_gap, time_machine
 
 app = FastAPI(
@@ -15,6 +16,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    # Keep the API demo-friendly: return JSON instead of HTML 500 pages.
+    # Avoid exposing full stack traces to clients; log the full exception server-side.
+    try:
+        import logging
+
+        logging.getLogger(__name__).exception("Unhandled error on %s %s", request.method, request.url.path)
+    except Exception:
+        pass
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Internal Server Error",
+            "path": request.url.path,
+            "error": str(exc),
+        },
+    )
 
 app.include_router(health.router, prefix="/api/v1", tags=["Health"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
