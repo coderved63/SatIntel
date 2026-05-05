@@ -212,18 +212,22 @@ Specialist briefs:
 
         def _call():
             specialist_briefs = {}
-            for role, specialist_prompt in _build_specialist_prompts(page, city, question, parameter, prompt_context).items():
-                try:
-                    specialist_briefs[role] = action_plan_service._generate_model_content(
-                        model_name=settings.gemini_model,
-                        api_key=api_key,
-                        prompt=specialist_prompt,
-                        temperature=0.15,
-                        expect_json=False,
-                    )
-                except Exception as exc:
-                    logger.warning(f"Saarthi specialist {role} failed: {exc}")
-                    specialist_briefs[role] = f"{role} unavailable: {exc}"
+            # Dedicated Saarthi page should prioritize responsiveness over deep multi-agent synthesis.
+            if page != "saarthi":
+                for role, specialist_prompt in _build_specialist_prompts(page, city, question, parameter, prompt_context).items():
+                    try:
+                        specialist_briefs[role] = action_plan_service._generate_model_content(
+                            model_name=settings.gemini_model,
+                            api_key=api_key,
+                            prompt=specialist_prompt,
+                            temperature=0.15,
+                            expect_json=False,
+                        )
+                    except Exception as exc:
+                        logger.warning(f"Saarthi specialist {role} failed: {exc}")
+                        specialist_briefs[role] = f"{role} unavailable: {exc}"
+            else:
+                specialist_briefs["mode"] = "fast_path_single_pass"
 
             final_prompt = prompt.replace(
                 "{specialist_briefs}",
@@ -237,7 +241,13 @@ Specialist briefs:
             )
             return _sanitize_response(parsed, page, analysis_context)
 
-        return await asyncio.to_thread(_call)
+        return await asyncio.wait_for(asyncio.to_thread(_call), timeout=30)
+    except asyncio.TimeoutError:
+        logger.warning("Saarthi LLM timeout; returning fallback response")
+        fallback = _fallback_answer(page, city, question, evidence, analysis_context)
+        fallback["llm_status"] = "timeout_fallback"
+        fallback["confidence_note"] = "LLM response timed out; returned deterministic evidence-based fallback."
+        return fallback
     except Exception as exc:
         logger.warning(f"Saarthi Gemini chat fallback: {exc}")
         fallback = _fallback_answer(page, city, question, evidence, analysis_context)
