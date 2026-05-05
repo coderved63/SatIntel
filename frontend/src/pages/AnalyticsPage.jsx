@@ -67,7 +67,7 @@ function AnalyticsContext({ activeTab, activeParam, anomalies, trends, hotspots 
           <div>
             <p style={{ color: 'var(--text-secondary)' }}>Active window</p>
             <p style={{ color: 'var(--text-muted)' }}>
-              {trends.historical_points || Object.keys(trends.historical || {}).length} city-mean points from {trends.date_range?.start || '--'} to {trends.date_range?.end || '--'}, plus up to {trends.forecast_days || 30} continuation steps on the same axis.
+              {trends.historical_points || Object.keys(trends.historical || {}).length} city-mean points from {trends.date_range?.start || '--'} to {trends.date_range?.end || '--'}, plus a {trends.forecast_days || 30}-day projection sampled every {trends.forecast_step_days || 1} day(s).
             </p>
           </div>
           <div>

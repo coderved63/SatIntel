@@ -71,7 +71,7 @@ export default function DashboardForecastChart({
       <div className="mb-2 space-y-0.5">
         <h3 className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</h3>
         <p className="text-[10px] leading-relaxed" style={{ color: 'var(--text-faint)' }}>
-          {data.date_range?.start || '—'} → {hasForecast ? `${data.date_range?.end || '—'} + ${data.forecast_days || 0}d continuation` : (data.date_range?.end || '—')}
+          {data.date_range?.start || '—'} → {hasForecast ? `${data.date_range?.end || '—'} + ${data.forecast_days || 0}d projection (${data.forecast_step_days || 1}-day cadence)` : (data.date_range?.end || '—')}
           {hasForecast ? '' : blocked ? ' · Projection requires more timestamps in range.' : ' · No forward projection for this slice.'}
         </p>
       </div>

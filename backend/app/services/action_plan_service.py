@@ -7,6 +7,7 @@ import logging
 import asyncio
 import json
 import re
+import os
 from datetime import datetime
 from typing import Any, Optional
 from app.config import get_settings
@@ -922,6 +923,12 @@ async def generate_action_plan_from_analysis(city: str, parameters: list[str], d
         ],
     }
     plan["source"] = "satellite_ml_pipeline_template"
+
+    # Hackathon-safe: when LLM output is unreliable or not configured, stay on deterministic Python template.
+    if os.getenv("DISABLE_LLM", "1").lower() in ("1", "true", "yes"):
+        plan["llm_status"] = "python_fallback"
+        plan["llm_note"] = "LLM generation disabled; using deterministic Python template fallback."
+        return plan
 
     try:
         return await _generate_gemini_plan(city, parameters, date_range, analysis, plan)

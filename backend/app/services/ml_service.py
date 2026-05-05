@@ -5,6 +5,7 @@ and city summaries. All outputs are explicit about time window and evidence basi
 from __future__ import annotations
 
 import logging
+import math
 from collections import defaultdict
 
 import numpy as np
@@ -19,6 +20,101 @@ logger = logging.getLogger(__name__)
 _ml_cache: dict = {}
 _file_cache_loaded: set = set()
 _summary_cache: dict = {}
+
+
+def _median_step_days(dates: list[str]) -> int:
+    if len(dates) < 2:
+        return 1
+    ts = pd.to_datetime(pd.Series(dates), errors="coerce").dropna().sort_values()
+    if len(ts) < 2:
+        return 1
+    deltas = ts.diff().dropna().dt.days
+    if deltas.empty:
+        return 1
+    # Satellite composites are often 8-16 day cadence; preserve that cadence in forecasts.
+    return max(1, int(round(float(deltas.median()))))
+
+
+def _train_lstm_forecast(values: np.ndarray, steps: int) -> tuple[list[float], str] | None:
+    """
+    Lightweight LSTM forecaster using PyTorch when available.
+    Returns (forecast_values, model_name) or None if unavailable/fails.
+    """
+    try:
+        import torch
+        import torch.nn as nn
+    except Exception:
+        return None
+
+    if len(values) < 24 or steps <= 0:
+        return None
+
+    class _LSTMRegressor(nn.Module):
+        def __init__(self, hidden_size: int = 24):
+            super().__init__()
+            self.lstm = nn.LSTM(input_size=1, hidden_size=hidden_size, num_layers=2, batch_first=True, dropout=0.1)
+            self.head = nn.Linear(hidden_size, 1)
+
+        def forward(self, tensor_x):
+            out, _ = self.lstm(tensor_x)
+            return self.head(out[:, -1, :])
+
+    seq_len = min(14, max(8, len(values) // 10))
+    min_v = float(values.min())
+    max_v = float(values.max())
+    scale = (max_v - min_v) or 1.0
+    normalized = (values - min_v) / scale
+
+    xs, ys = [], []
+    for idx in range(len(normalized) - seq_len):
+        xs.append(normalized[idx : idx + seq_len])
+        ys.append(normalized[idx + seq_len])
+    if len(xs) < 10:
+        return None
+
+    x_t = torch.FloatTensor(np.array(xs)).unsqueeze(-1)
+    y_t = torch.FloatTensor(np.array(ys)).unsqueeze(-1)
+    model = _LSTMRegressor()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    loss_fn = nn.MSELoss()
+
+    model.train()
+    for _ in range(80):
+        prediction = model(x_t)
+        loss = loss_fn(prediction, y_t)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    model.eval()
+    window = normalized[-seq_len:].copy()
+    forecast_values: list[float] = []
+    with torch.no_grad():
+        for _ in range(steps):
+            in_t = torch.FloatTensor(window.reshape(1, seq_len, 1))
+            next_norm = float(model(in_t).item())
+            next_norm = float(np.clip(next_norm, 0.0, 1.0))
+            next_val = next_norm * scale + min_v
+            forecast_values.append(next_val)
+            window = np.append(window[1:], next_norm)
+
+    return forecast_values, "lstm_pytorch"
+
+
+def _arima_forecast(values: np.ndarray, steps: int) -> tuple[list[float], str]:
+    from statsmodels.tsa.arima.model import ARIMA
+
+    if steps <= 0:
+        return [], "arima_2_1_1"
+    try:
+        fitted = ARIMA(values, order=(2, 1, 1)).fit()
+        forecast = fitted.forecast(steps=steps)
+        return [float(v) for v in forecast], "arima_2_1_1"
+    except Exception:
+        # Stable fallback if ARIMA fit is singular/noisy for a narrow window.
+        lookback = min(6, len(values) - 1)
+        slope = 0.0 if lookback <= 0 else float((values[-1] - values[-1 - lookback]) / lookback)
+        return [float(values[-1] + slope * step) for step in range(1, steps + 1)], "windowed_linear_direction"
 
 
 def _year(date_value: str) -> int:
@@ -302,32 +398,42 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
             "model": "directional_trend",
         }, date_range)
 
-    model_name = "windowed_linear_direction"
     values = list(timeseries.values())
     dates = list(timeseries.keys())
-    last_value = values[-1]
-    lookback = min(6, len(values) - 1)
-    slope = 0.0 if lookback <= 0 else (values[-1] - values[-1 - lookback]) / lookback
+    value_arr = np.array(values, dtype=float)
+    step_days = _median_step_days(dates)
+    # Preserve satellite cadence (e.g. 8-day composites) instead of pretending daily points.
+    forecast_steps = max(1, int(math.ceil(forecast_days / step_days)))
+    lstm_result = _train_lstm_forecast(value_arr, forecast_steps)
+    if lstm_result:
+        forecast_values, model_name = lstm_result
+    else:
+        forecast_values, model_name = _arima_forecast(value_arr, forecast_steps)
+
+    trend_delta = forecast_values[-1] - values[-1] if forecast_values else 0.0
+    trend_direction = "increasing" if trend_delta > 0 else "decreasing"
     last_date = pd.to_datetime(dates[-1])
     forecast = {}
-    for step in range(1, forecast_days + 1):
-        next_date = last_date + pd.Timedelta(days=step)
-        forecast[str(next_date.date())] = round(last_value + slope * step, 4)
-    trend_direction = "increasing" if slope > 0 else "decreasing"
+    for idx, predicted_value in enumerate(forecast_values, start=1):
+        next_date = last_date + pd.Timedelta(days=idx * step_days)
+        forecast[str(next_date.date())] = round(float(predicted_value), 4)
 
     result = {
         **evidence_service.standard_evidence_block(
             city=city,
             parameters=[parameter],
             date_range=analysis_window,
-            methodology="Directional trend estimate using recent-window slope on date-aggregated city means",
+            methodology=(
+                "Sequence forecast on date-aggregated city means using PyTorch LSTM when available; "
+                "ARIMA fallback otherwise. Forecast cadence follows median observation spacing."
+            ),
             interpretation=(
                 f"The trend view summarizes how city-level {_describe_parameter(parameter)} evolved during the selected window and "
-                f"projects the next {forecast_days} days as a directional continuation of the recent slope."
+                f"projects the next {forecast_days} days using the same temporal cadence as observed satellite composites."
             ),
-            limitations="Forecast values are directional screening outputs based on recent slope, not a formal forecasting model or guaranteed daily measurements.",
+            limitations="Forecast values are screening outputs from a compact sequence model; they should be interpreted as directional planning guidance, not guaranteed daily measurements.",
             spatial_basis="City-wide temporal signal derived from date-aggregated harmonized grid values.",
-            confidence="Moderate confidence for direction-of-change interpretation; low confidence for point-value forecasting.",
+            confidence="Moderate confidence for direction-of-change interpretation; low-to-moderate confidence for point-value forecasting.",
             default_window="analytics",
         ),
         "parameter": parameter,
@@ -336,6 +442,7 @@ def predict_trend(parameter: str, city: str = "Ahmedabad", forecast_days: int = 
         "trend_direction": trend_direction,
         "model": model_name,
         "forecast_days": forecast_days,
+        "forecast_step_days": step_days,
         "date_range": coverage,
         "historical_points": len(timeseries),
     }
