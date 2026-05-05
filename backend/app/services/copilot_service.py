@@ -18,6 +18,7 @@ PAGE_PARAMETERS = {
     "dashboard": ["LST", "NDVI", "NO2", "SOIL_MOISTURE"],
     "analytics": ["LST", "NDVI", "NO2", "SOIL_MOISTURE"],
     "action-plan": ["LST", "NDVI", "NO2", "SOIL_MOISTURE"],
+    "saarthi": ["LST", "NDVI", "NO2", "SOIL_MOISTURE"],
     "green-gap": ["NDVI", "LST"],
     "research": ["LST", "NDVI", "NO2"],
     "time-machine": ["LST"],
@@ -37,6 +38,17 @@ def _page_evidence(page: str, city: str, parameter: str | None, date_range: dict
         return {"green_gap": green_gap_service.analyse(city, date_range)}
     if page == "action-plan":
         return {"summary": ml_service.get_city_summary(city, date_range)}
+    if page == "saarthi":
+        return {
+            "summary": ml_service.get_city_summary(city, date_range),
+            "heat": heat_service.analyse(city, date_range),
+            "vegetation": vegetation_service.analyse(city, date_range),
+            "green_gap": green_gap_service.analyse(city, date_range),
+            "trends_lst": ml_service.predict_trend("LST", city, date_range=date_range),
+            "trends_ndvi": ml_service.predict_trend("NDVI", city, date_range=date_range),
+            "trends_no2": ml_service.predict_trend("NO2", city, date_range=date_range),
+            "trends_soil_moisture": ml_service.predict_trend("SOIL_MOISTURE", city, date_range=date_range),
+        }
     if page == "time-machine":
         return {"comparison": time_machine_service.get_comparison(active_parameter, city, date_range)}
     if page == "research":

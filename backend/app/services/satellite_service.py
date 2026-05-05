@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import os
 from pathlib import Path
 from typing import Optional
@@ -129,11 +130,53 @@ _raw_cache: dict = {}
 _data_cache: dict = {}
 
 
+def _generate_soil_moisture_fallback(city: str) -> list[dict]:
+    city_dir = _get_data_dir(city)
+    seed = sum(ord(ch) for ch in city.lower())
+    # Reuse local spatial/temporal structure from available parameters for consistency.
+    refs = [
+        city_dir / "lst_timeseries.json",
+        city_dir / "ndvi_timeseries.json",
+        city_dir / "no2_timeseries.json",
+    ]
+    reference_points: list[dict] = []
+    for ref in refs:
+        reference_points = _safe_load_json(ref, f"Soil fallback reference {city}")
+        if reference_points:
+            break
+    if not reference_points:
+        return []
+
+    generated: list[dict] = []
+    for point in reference_points:
+        date = str(point.get("date", "2024-01-01"))
+        lat = float(point.get("lat", 0.0))
+        lng = float(point.get("lng", 0.0))
+        month = int(date[5:7]) if len(date) >= 7 and date[5:7].isdigit() else 1
+        seasonal = 0.11 + 0.06 * math.sin((month - 6) * math.pi / 6.0)
+        spatial = 0.015 * math.cos((lat + lng) * 7.0)
+        noise = 0.01 * math.sin((seed + lat * 100.0 + lng * 100.0) * 0.37)
+        value = max(0.03, min(0.42, seasonal + spatial + noise))
+        generated.append(
+            {
+                "date": date,
+                "lat": round(lat, 4),
+                "lng": round(lng, 4),
+                "value": round(value, 4),
+                "parameter": "SOIL_MOISTURE",
+                "synthetic": True,
+            }
+        )
+    logger.warning(f"Using synthetic SOIL_MOISTURE fallback for {city}: {len(generated)} points")
+    return generated
+
+
 def _safe_load_json(filepath: Path, label: str) -> list[dict]:
     if not filepath.exists():
         return []
     try:
-        with open(filepath, "r", encoding="utf-8") as file_handle:
+        # Use utf-8-sig so JSON files with BOM (common in exported files) still parse.
+        with open(filepath, "r", encoding="utf-8-sig") as file_handle:
             data = json.load(file_handle)
         if isinstance(data, list):
             return data
@@ -162,11 +205,21 @@ def _load_raw(parameter: str, city: str = "ahmedabad") -> list[dict]:
     filepath = _get_data_dir(city) / meta["file"]
     if not filepath.exists():
         logger.warning(f"Data file not found: {filepath}")
+        if parameter == "SOIL_MOISTURE":
+            synthetic = _generate_soil_moisture_fallback(city)
+            _raw_cache[cache_key] = synthetic
+            return synthetic
+        _raw_cache[cache_key] = []
         return []
 
     data = _safe_load_json(filepath, f"Raw {parameter}/{city}")
     if not data:
         logger.warning(f"Raw data empty/invalid for {parameter}/{city}: {filepath}")
+        if parameter == "SOIL_MOISTURE":
+            synthetic = _generate_soil_moisture_fallback(city)
+            _raw_cache[cache_key] = synthetic
+            return synthetic
+        _raw_cache[cache_key] = []
         return []
 
     _raw_cache[cache_key] = data

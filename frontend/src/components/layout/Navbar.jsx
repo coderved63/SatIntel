@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCity } from '../../context/CityContext';
-import { Satellite, LogOut, User, ChevronDown, LayoutDashboard, BarChart3, FileText, TreePine, Trophy, Menu, X, Sun, Moon } from 'lucide-react';
+import { Satellite, LogOut, User, ChevronDown, LayoutDashboard, BarChart3, FileText, TreePine, Trophy, Menu, X, Sun, Moon, Bot } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -13,6 +13,7 @@ const navLinks = [
   { to: '/action-plan', label: 'Action Plan', icon: FileText },
   { to: '/green-gap', label: 'Green Gap', icon: TreePine },
   { to: '/rankings', label: 'Rankings', icon: Trophy },
+  { to: '/saarthi', label: 'Saarthi', icon: Bot },
 ];
 
 export default function Navbar() {
