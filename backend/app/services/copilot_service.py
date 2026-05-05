@@ -34,6 +34,75 @@ def _safe_evidence_call(label: str, func):
         return {"error": f"{label} unavailable", "detail": str(exc)}
 
 
+def _compact_analysis_context(analysis_context: dict) -> dict:
+    return {
+        "analysis_window": analysis_context.get("analysis_window"),
+        "display_window_label": analysis_context.get("display_window_label"),
+        "parameters": analysis_context.get("parameters", []),
+        "city": analysis_context.get("city"),
+    }
+
+
+def _compact_evidence(page: str, evidence: dict) -> dict:
+    if page in {"dashboard", "action-plan", "saarthi"} and isinstance(evidence, dict):
+        summary = evidence.get("summary", {})
+        params = (summary.get("parameters") or {}) if isinstance(summary, dict) else {}
+        compact_params = {}
+        for key in ("LST", "NDVI", "NO2", "SOIL_MOISTURE"):
+            p = params.get(key, {}) if isinstance(params, dict) else {}
+            stats = p.get("statistics", {}) if isinstance(p, dict) else {}
+            compact_params[key] = {
+                "mean": stats.get("mean"),
+                "min": stats.get("min"),
+                "max": stats.get("max"),
+                "unit": p.get("unit"),
+            }
+        compact = {"summary": {"parameters": compact_params}}
+        if "active_trend" in evidence:
+            trend = evidence.get("active_trend", {}) or {}
+            compact["active_trend"] = {
+                "trend_direction": trend.get("trend_direction"),
+                "forecast_days": trend.get("forecast_days"),
+                "forecast_step_days": trend.get("forecast_step_days"),
+            }
+        if "green_gap" in evidence and isinstance(evidence.get("green_gap"), dict):
+            sites = evidence["green_gap"].get("top_50_sites", []) or []
+            compact["green_gap"] = {"top_site": sites[0] if sites else None}
+        return compact
+
+    if page == "analytics" and isinstance(evidence, dict):
+        anomalies = evidence.get("anomalies", {}) or {}
+        trends = evidence.get("trends", {}) or {}
+        hotspots = evidence.get("hotspots", {}) or {}
+        return {
+            "anomalies": {
+                "anomaly_count": anomalies.get("anomaly_count"),
+                "dates_analyzed": anomalies.get("dates_analyzed"),
+            },
+            "trends": {
+                "trend_direction": trends.get("trend_direction"),
+                "forecast_days": trends.get("forecast_days"),
+                "forecast_step_days": trends.get("forecast_step_days"),
+            },
+            "hotspots": {
+                "cluster_count": hotspots.get("cluster_count"),
+                "total_hotspot_points": hotspots.get("total_hotspot_points"),
+            },
+        }
+
+    if page == "green-gap" and isinstance(evidence, dict):
+        gg = evidence.get("green_gap", {}) or {}
+        sites = gg.get("top_50_sites", []) or []
+        return {
+            "green_gap": {
+                "candidate_count": len(sites),
+                "top_site": sites[0] if sites else None,
+            }
+        }
+
+    return {"note": "Compact evidence unavailable for this page."}
+
+
 def _page_evidence(page: str, city: str, parameter: str | None, date_range: dict) -> dict:
     active_parameter = parameter or (PAGE_PARAMETERS.get(page, ["LST"])[0])
     if page == "analytics":
@@ -190,8 +259,8 @@ async def chat(city: str, page: str, question: str, parameter: str | None = None
         "city": city,
         "question": question,
         "active_parameter": parameter,
-        "analysis_context": analysis_context,
-        "page_evidence": evidence,
+        "analysis_context": _compact_analysis_context(analysis_context),
+        "page_evidence": _compact_evidence(page, evidence),
     }
     prompt = f"""
 You are Saarthi, SatIntel's environmental analyst copilot.
@@ -199,44 +268,18 @@ Answer using only the supplied structured evidence.
 Never invent dates, counts, coordinates, ranges, or causes not supported by context.
 If evidence is missing, say so clearly.
 Return JSON with keys: answer, sources_used, analysis_window, confidence_note, follow_up_suggestions.
-- You are receiving specialist briefs from sub-agents. Reconcile them conservatively and prefer evidence over fluency.
 
 Context:
 {json.dumps(prompt_context, ensure_ascii=False, default=str)}
-
-Specialist briefs:
-{{specialist_briefs}}
 """
     try:
         from google import genai  # noqa: F401
 
         def _call():
-            specialist_briefs = {}
-            # Dedicated Saarthi page should prioritize responsiveness over deep multi-agent synthesis.
-            if page != "saarthi":
-                for role, specialist_prompt in _build_specialist_prompts(page, city, question, parameter, prompt_context).items():
-                    try:
-                        specialist_briefs[role] = action_plan_service._generate_model_content(
-                            model_name=settings.gemini_model,
-                            api_key=api_key,
-                            prompt=specialist_prompt,
-                            temperature=0.15,
-                            expect_json=False,
-                        )
-                    except Exception as exc:
-                        logger.warning(f"Saarthi specialist {role} failed: {exc}")
-                        specialist_briefs[role] = f"{role} unavailable: {exc}"
-            else:
-                specialist_briefs["mode"] = "fast_path_single_pass"
-
-            final_prompt = prompt.replace(
-                "{specialist_briefs}",
-                json.dumps(specialist_briefs, ensure_ascii=False, default=str),
-            )
             parsed = action_plan_service._generate_model_json(
                 model_name=settings.gemini_model,
                 api_key=api_key,
-                prompt=final_prompt,
+                prompt=prompt,
                 temperature=0.2,
             )
             return _sanitize_response(parsed, page, analysis_context)
